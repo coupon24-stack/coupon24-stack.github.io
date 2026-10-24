@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COUPON24 — Tes coupons de football, chaque jour !</title>
+  <meta name="description" content="Découvre tes coupons football du jour. Pronostics gratuits et premium, analyses de matchs et abonnements adaptés." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0A1F44;
+      --blue: #1E4FD8;
+      --blue-gradient: linear-gradient(135deg, #0A1F44 0%, #1E4FD8 100%);
+      --sky: #E8F0FE;
+      --white: #FFFFFF;
+      --gray-text: #4A5568;
+      --gray-light: #F7F9FC;
+      --green: #27AE60;
+      --gold: #F5A623;
+      --radius: 16px;
+      --radius-pill: 999px;
+      --shadow: 0 4px 20px rgba(10, 31, 68, 0.06);
+      --shadow-hover: 0 8px 30px rgba(10, 31, 68, 0.12);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; color: var(--navy); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; line-height: 1.2; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { max-width: 100%; display: block; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .logo { display: flex; align-items: center; gap: 10px; font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--navy); letter-spacing: -0.5px; }
+    .logo-ball { width: 34px; height: 34px; background: var(--blue-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(30, 79, 216, 0.3); }
+
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(10, 31, 68, 0.06); transition: 0.25s ease; }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a { font-size: 0.95rem; font-weight: 500; color: var(--gray-text); transition: color 0.25s ease; }
+    .nav-links a:hover, .nav-links a.active { color: var(--blue); }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 28px; border-radius: var(--radius-pill); font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.25s ease; white-space: nowrap; }
+    .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid rgba(10, 31, 68, 0.15); }
+    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-primary { background: var(--blue-gradient); color: white; box-shadow: 0 4px 14px rgba(30, 79, 216, 0.35); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(30, 79, 216, 0.45); }
+    .btn-white { background: white; color: var(--navy); }
+    .btn-white:hover { background: var(--sky); }
+    .btn-large { padding: 16px 36px; font-size: 1.05rem; }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 8px; }
+    .hamburger span { width: 26px; height: 2.5px; background: var(--navy); border-radius: 2px; transition: 0.25s ease; }
+
+    .hero { position: relative; min-height: 92vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 80px; overflow: hidden; background: var(--navy); }
+    .hero-bg { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; opacity: 0.45; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10, 31, 68, 0.85) 0%, rgba(10, 31, 68, 0.6) 50%, rgba(10, 31, 68, 0.9) 100%); }
+    .hero-content { position: relative; z-index: 2; max-width: 800px; animation: fadeInUp 0.8s ease both; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 8px 20px; border-radius: var(--radius-pill); font-size: 0.85rem; font-weight: 500; margin-bottom: 28px; backdrop-filter: blur(8px); }
+    .hero h1 { font-size: clamp(2.2rem, 5.5vw, 4rem); font-weight: 800; color: white; letter-spacing: -1.5px; margin-bottom: 20px; text-transform: uppercase; }
+    .hero h1 .highlight { background: linear-gradient(135deg, #4A8CFF, #8AB4FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: clamp(1rem, 2vw, 1.2rem); color: rgba(255, 255, 255, 0.85); max-width: 600px; margin: 0 auto 40px; line-height: 1.7; }
+    .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    section { padding: 80px 0; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header h2 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 700; color: var(--navy); margin-bottom: 12px; letter-spacing: -0.8px; }
+    .section-header p { font-size: 1.05rem; color: var(--gray-text); max-width: 600px; margin: 0 auto; }
+    .section-header .underline { width: 60px; height: 4px; background: var(--blue-gradient); border-radius: 4px; margin: 16px auto 0; }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+
+    .coupon-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; transition: all 0.25s ease; display: flex; flex-direction: column; position: relative; }
+    .coupon-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+    .coupon-image { height: 160px; background-size: cover; background-position: center; position: relative; }
+    .coupon-image::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(10, 31, 68, 0.7) 100%); }
+    .coupon-badge { position: absolute; top: 12px; left: 12px; z-index: 2; padding: 5px 14px; border-radius: var(--radius-pill); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-gratuit { background: var(--green); color: white; }
+    .badge-premium { background: var(--gold); color: var(--navy); }
+    .coupon-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+    .coupon-title { font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; line-height: 1.3; }
+    .coupon-meta { display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.85rem; color: var(--gray-text); margin-bottom: 16px; }
+    .coupon-stats { display: flex; gap: 16px; padding: 14px 0; border-top: 1px solid rgba(10, 31, 68, 0.08); border-bottom: 1px solid rgba(10, 31, 68, 0.08); margin-bottom: 18px; }
+    .coupon-stat { flex: 1; text-align: center; }
+    .coupon-stat .value { font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--blue); }
+    .coupon-stat .label { font-size: 0.75rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.3px; }
+    .coupon-status { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: var(--radius-pill); font-size: 0.78rem; font-weight: 600; margin-bottom: 16px; }
+    .status-disponible { background: #E6F9EF; color: #1E7E45; }
+    .status-bientot { background: var(--sky); color: var(--blue); }
+    .coupon-card .btn { margin-top: auto; width: 100%; }
+    .lock-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3; background: rgba(10, 31, 68, 0.85); backdrop-filter: blur(4px); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; border: 2px solid rgba(255, 255, 255, 0.3); }
+
+    .advantage-card { background: var(--white); border-radius: var(--radius); padding: 36px 28px; text-align: center; box-shadow: var(--shadow); transition: all 0.25s ease; border: 1px solid rgba(10, 31, 68, 0.04); }
+    .advantage-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+    .advantage-icon { width: 64px; height: 64px; margin: 0 auto 20px; border-radius: 18px; background: var(--sky); display: flex; align-items: center; justify-content: center; font-size: 1.7rem; }
+    .advantage-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+    .advantage-card p { font-size: 0.92rem; color: var(--gray-text); line-height: 1.6; }
+
+    .pricing-card { background: var(--white); border-radius: var(--radius); padding: 40px 32px; text-align: center; box-shadow: var(--shadow); transition: all 0.25s ease; border: 1.5px solid rgba(10, 31, 68, 0.08); display: flex; flex-direction: column; position: relative; }
+    .pricing-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+    .pricing-card.featured { border-color: var(--blue); background: var(--navy); color: white; }
+    .pricing-card.featured .pricing-price, .pricing-card.featured .pricing-duration, .pricing-card.featured .pricing-features li { color: white; }
+    .pricing-card.featured .pricing-features li::before { color: #8AB4FF; }
+    .popular-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--navy); padding: 6px 20px; border-radius: var(--radius-pill); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+    .pricing-duration { font-size: 0.95rem; font-weight: 600; color: var(--gray-text); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .pricing-price { font-family: 'Poppins', sans-serif; font-size: 2.8rem; font-weight: 800; color: var(--navy); line-height: 1; margin-bottom: 4px; }
+    .pricing-price .currency { font-size: 1.1rem; font-weight: 600; vertical-align: super; margin-left: 2px; }
+    .pricing-period { font-size: 0.85rem; color: var(--gray-text); margin-bottom: 28px; }
+    .pricing-features { text-align: left; margin-bottom: 32px; flex: 1; }
+    .pricing-features li { padding: 8px 0; font-size: 0.92rem; color: var(--gray-text); display: flex; align-items: flex-start; gap: 10px; }
+    .pricing-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .pricing-card .btn { width: 100%; }
+
+    footer { background: var(--navy); color: rgba(255, 255, 255, 0.8); padding: 64px 0 32px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand .logo { color: white; margin-bottom: 16px; }
+    .footer-brand p { font-size: 0.9rem; line-height: 1.7; max-width: 300px; color: rgba(255, 255, 255, 0.65); }
+    .footer-col h4 { color: white; font-size: 0.95rem; font-weight: 600; margin-bottom: 18px; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a { font-size: 0.88rem; color: rgba(255, 255, 255, 0.65); transition: color 0.25s ease; }
+    .footer-col ul li a:hover { color: white; }
+    .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.82rem; color: rgba(255, 255, 255, 0.5); }
+    .footer-warning { background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); border-radius: 12px; padding: 16px 20px; margin-bottom: 40px; font-size: 0.85rem; color: #F5D9A0; display: flex; gap: 12px; align-items: flex-start; }
+    .footer-warning strong { color: var(--gold); }
+
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 968px) {
+      .nav-links { display: none; }
+      .nav-actions .btn-outline { display: none; }
+      .hamburger { display: flex; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+    @media (max-width: 640px) {
+      section { padding: 56px 0; }
+      .hero { min-height: 80vh; padding: 100px 20px 60px; }
+      .hero-buttons { flex-direction: column; align-items: stretch; }
+      .hero-buttons .btn { width: 100%; }
+      .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .navbar .container { height: 64px; }
+      .logo { font-size: 1.35rem; }
+      .logo-ball { width: 30px; height: 30px; font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/index.html" class="logo" aria-label="COUPON24 - Accueil">
+      <span class="logo-ball">⚽</span>
+      <span>COUPON<span style="color: var(--blue);">24</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="/index.html" class="active">Accueil</a>
+      <a href="/coupons.html">Coupons du jour</a>
+      <a href="/abonnements.html">Abonnements</a>
+      <a href="#comment-ca-marche">Comment ça marche ?</a>
+    </div>
+    <div class="nav-actions">
+      <a href="/connexion.html" class="btn btn-outline">Connexion</a>
+      <a href="/inscription.html" class="btn btn-primary">Créer un compte</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-bg" role="img" aria-label="Stade de football illuminé"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">⚽ Pronostics football quotidiens</div>
+    <h1>Découvre tes coupons<br /><span class="highlight">football du jour</span></h1>
+    <p>Accède à nos sélections quotidiennes de pronostics football et retrouve tous tes coupons au même endroit.</p>
+    <div class="hero-buttons">
+      <a href="#coupons-du-jour" class="btn btn-primary btn-large">Découvrir les coupons</a>
+      <a href="#abonnements" class="btn btn-white btn-large">Voir les abonnements</a>
+    </div>
+  </div>
+</header>
+
+<section id="coupons-du-jour" style="background: var(--gray-light);">
+  <div class="container">
+    <div class="section-header">
+      <h2>Coupons du jour</h2>
+      <p>Découvre nos sélections de pronostics publiées par l'administrateur.</p>
+      <div class="underline"></div>
+    </div>
+    <div class="grid-3">
+      <article class="coupon-card">
+        <div class="coupon-image" style="background-image: url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=80');">
+          <span class="coupon-badge badge-gratuit">Gratuit</span>
+        </div>
+        <div class="coupon-body">
+          <h3 class="coupon-title">Coupon Gratuit du Jour — Serie A</h3>
+          <div class="coupon-meta">
+            <span>📅 Publié récemment</span>
+            <span>⚽ 3 matchs</span>
+          </div>
+          <div class="coupon-stats">
+            <div class="coupon-stat">
+              <div class="value">3</div>
+              <div class="label">Matchs</div>
+            </div>
+            <div class="coupon-stat">
+              <div class="value">2.45</div>
+              <div class="label">Cote totale</div>
+            </div>
+          </div>
+          <span class="coupon-status status-disponible">● Disponible</span>
+          <a href="/coupons.html" class="btn btn-primary">Voir le coupon</a>
+        </div>
+      </article>
+
+      <article class="coupon-card">
+        <div class="coupon-image" style="background-image: url('https://images.unsplash.com/photo-1553778263-73a83bab9b0c?auto=format&fit=crop&w=600&q=80');">
+          <span class="coupon-badge badge-gratuit">Gratuit</span>
+        </div>
+        <div class="coupon-body">
+          <h3 class="coupon-title">Coupon Gratuit — Ligue 1</h3>
+          <div class="coupon-meta">
+            <span>📅 Publié récemment</span>
+            <span>⚽ 2 matchs</span>
+          </div>
+          <div class="coupon-stats">
+            <div class="coupon-stat">
+              <div class="value">2</div>
+              <div class="label">Matchs</div>
+            </div>
+            <div class="coupon-stat">
+              <div class="value">1.85</div>
+              <div class="label">Cote totale</div>
+            </div>
+          </div>
+          <span class="coupon-status status-disponible">● Disponible</span>
+          <a href="/coupons.html" class="btn btn-primary">Voir le coupon</a>
+        </div>
+      </article>
+
+      <article class="coupon-card" style="opacity: 0.92;">
+        <div class="coupon-image" style="background-image: url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80');">
+          <span class="coupon-badge badge-premium">Premium</span>
+          <div class="lock-icon">🔒</div>
+        </div>
+        <div class="coupon-body">
+          <h3 class="coupon-title">Coupon Premium — Champions League</h3>
+          <div class="coupon-meta">
+            <span>📅 Publié récemment</span>
+            <span>⚽ 5 matchs</span>
+          </div>
+          <div class="coupon-stats">
+            <div class="coupon-stat">
+              <div class="value">5</div>
+              <div class="label">Matchs</div>
+            </div>
+            <div class="coupon-stat">
+              <div class="value">🔒</div>
+              <div class="label">Cote totale</div>
+            </div>
+          </div>
+          <span class="coupon-status status-bientot">🔒 Réservé aux abonnés</span>
+          <a href="/abonnements.html" class="btn btn-primary">S'abonner pour voir</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="avantages">
+  <div class="container">
+    <div class="section-header">
+      <h2>Pourquoi COUPON24 ?</h2>
+      <p>Une plateforme pensée pour les amateurs de football et de pronostics.</p>
+      <div class="underline"></div>
+    </div>
+    <div class="grid-4">
+      <div class="advantage-card">
+        <div class="advantage-icon">📅</div>
+        <h3>Coupons quotidiens</h3>
+        <p>Des sélections de pronostics publiées chaque jour par notre équipe.</p>
+      </div>
+      <div class="advantage-card">
+        <div class="advantage-icon">⚡</div>
+        <h3>Simple et rapide</h3>
+        <p>Interface intuitive, chargement rapide, accès immédiat à tes coupons.</p>
+      </div>
+      <div class="advantage-card">
+        <div class="advantage-icon">🔓</div>
+        <h3>Premium par abonnement</h3>
+        <p>Accède aux coupons premium via un abonnement adapté à ton budget.</p>
+      </div>
+      <div class="advantage-card">
+        <div class="advantage-icon">👤</div>
+        <h3>Espace personnel</h3>
+        <p>Retrouve tous tes accès, ton abonnement et ton historique au même endroit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comment-ca-marche" style="background: var(--gray-light);">
+  <div class="container">
+    <div class="section-header">
+      <h2>Comment ça marche ?</h2>
+      <p>Trois étapes simples pour accéder à tes coupons.</p>
+      <div class="underline"></div>
+    </div>
+    <div class="grid-3">
+      <div class="advantage-card">
+        <div class="advantage-icon" style="background: var(--navy); color: white; font-family: 'Poppins'; font-weight: 800;">1</div>
+        <h3>Crée ton compte</h3>
+        <p>Inscris-toi gratuitement en quelques secondes avec ton email et ton numéro de téléphone.</p>
+      </div>
+      <div class="advantage-card">
+        <div class="advantage-icon" style="background: var(--navy); color: white; font-family: 'Poppins'; font-weight: 800;">2</div>
+        <h3>Choisis ton abonnement</h3>
+        <p>Sélectionne la formule qui te convient et paie en toute sécurité via mobile money.</p>
+      </div>
+      <div class="advantage-card">
+        <div class="advantage-icon" style="background: var(--navy); color: white; font-family: 'Poppins'; font-weight: 800;">3</div>
+        <h3>Accède aux coupons</h3>
+        <p>Consulte les coupons gratuits et premium directement depuis ton espace personnel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="abonnements">
+  <div class="container">
+    <div class="section-header">
+      <h2>Nos formules d'abonnement</h2>
+      <p>Choisis la formule qui te convient. L'accès premium est activé après confirmation du paiement.</p>
+      <div class="underline"></div>
+    </div>
+    <div class="grid-3">
+      <div class="pricing-card">
+        <div class="pricing-duration">7 jours</div>
+        <div class="pricing-price">1 500<span class="currency">FCFA</span></div>
+        <div class="pricing-period">Accès premium pendant 7 jours</div>
+        <ul class="pricing-features">
+          <li>Accès à tous les coupons premium</li>
+          <li>Coupons gratuits inclus</li>
+          <li>Support par email</li>
+        </ul>
+        <a href="/abonnements.html" class="btn btn-outline">Choisir cette formule</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="popular-badge">Le plus populaire</div>
+        <div class="pricing-duration">30 jours</div>
+        <div class="pricing-price">5 000<span class="currency">FCFA</span></div>
+        <div class="pricing-period">Accès premium pendant 30 jours</div>
+        <ul class="pricing-features">
+          <li>Tous les avantages de la formule 7 jours</li>
+          <li>Économie de 1 000 FCFA vs 4 semaines</li>
+          <li>Support prioritaire</li>
+        </ul>
+        <a href="/abonnements.html" class="btn btn-primary">Choisir cette formule</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-duration">Annuel</div>
+        <div class="pricing-price">45 000<span class="currency">FCFA</span></div>
+        <div class="pricing-period">Accès premium pendant 12 mois</div>
+        <ul class="pricing-features">
+          <li>Tous les avantages de la formule 30 jours</li>
+          <li>Économie de 15 000 FCFA vs 12 mois mensuels</li>
+          <li>Accès prioritaire aux nouveaux coupons</li>
+        </ul>
+        <a href="/abonnements.html" class="btn btn-outline">Choisir cette formule</a>
+      </div>
+    </div>
+    <p style="text-align: center; margin-top: 32px; font-size: 0.88rem; color: var(--gray-text);">
+      💳 Paiement sécurisé via Orange Money, MTN MoMo, Wave et cartes bancaires. L'accès est activé après confirmation authentique du paiement.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-warning">
+      <span style="font-size: 1.3rem;">⚠️</span>
+      <p><strong>Avertissement :</strong> Les paris sportifs comportent des risques de perte financière. Les coupons publiés sur COUPON24 sont des pronostics et ne garantissent aucun gain. Jouez de manière responsable.</p>
+    </div>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/index.html" class="logo">
+          <span class="logo-ball">⚽</span>
+          <span style="color: white;">COUPON<span style="color: #4A8CFF;">24</span></span>
+        </a>
+        <p>COUPON24 est une plateforme de publication de pronostics football. Découvre des coupons gratuits et premium, chaque jour.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="/index.html">Accueil</a></li>
+          <li><a href="/coupons.html">Coupons du jour</a></li>
+          <li><a href="/abonnements.html">Abonnements</a></li>
+          <li><a href="#comment-ca-marche">Comment ça marche ?</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Légal</h4>
+        <ul>
+          <li><a href="/legal/cgu.html">Conditions générales</a></li>
+          <li><a href="/legal/confidentialite.html">Politique de confidentialité</a></li>
+          <li><a href="/legal/remboursement.html">Politique de remboursement</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="/legal/contact.html">Contact et assistance</a></li>
+          <li><a href="/legal/contact.html">Signaler un problème</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 COUPON24. Tous droits réservés.</span>
+      <span>Fait pour la Côte d'Ivoire et l'Afrique 🌍</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.querySelector('.nav-links');
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      const isOpen = navLinks.style.display === 'flex';
+      navLinks.style.display = isOpen ? 'none' : 'flex';
+      navLinks.style.position = 'absolute';
+      navLinks.style.top = '72px';
+      navLinks.style.left = '0';
+      navLinks.style.right = '0';
+      navLinks.style.background = 'white';
+      navLinks.style.flexDirection = 'column';
+      navLinks.style.padding = '24px';
+      navLinks.style.gap = '16px';
+      navLinks.style.boxShadow = '0 8px 30px rgba(10,31,68,0.12)';
+      hamburger.setAttribute('aria-expanded', String(!isOpen));
+    });
+  }
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (navbar) navbar.style.boxShadow = window.scrollY > 20 ? '0 4px 20px rgba(10,31,68,0.08)' : 'none';
+  });
+</script>
+</body>
+</html>
