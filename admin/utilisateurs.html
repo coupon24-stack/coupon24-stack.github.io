@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Utilisateurs — COUPON24 Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <style>
+    .user-actions { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(10,31,68,0.7);
+      z-index: 1000;
+      align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: white;
+      border-radius: var(--radius);
+      padding: 28px;
+      max-width: 480px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal h2 {
+      font-size: 1.25rem;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(10,31,68,0.08);
+    }
+    .modal p { color: var(--gray-text); font-size: 0.9rem; margin-bottom: 20px; }
+    .modal .form-field { margin-bottom: 16px; }
+    .modal .form-field label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .modal .form-field select,
+    .modal .form-field input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 10px;
+      font-family: 'Inter';
+      font-size: 0.92rem;
+    }
+    .modal .form-field select:focus,
+    .modal .form-field input:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 640px) {
+      .modal-actions { flex-direction: column-reverse; }
+      .modal-actions .btn { width: 100%; }
+      .user-actions { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="admin-navbar">
+  <div class="container">
+    <a href="/admin/dashboard.html" class="admin-logo">
+      <span class="ball">⚽</span>
+      <span>COUPON<span style="color: var(--blue);">24</span></span>
+      <span class="badge-admin">Admin</span>
+    </a>
+    <div class="admin-nav-links">
+      <a href="/admin/dashboard.html">Tableau de bord</a>
+      <a href="/admin/coupons.html">Coupons</a>
+      <a href="/admin/utilisateurs.html" class="active">Utilisateurs</a>
+      <a href="/admin/resultats.html">Résultats</a>
+    </div>
+    <div class="admin-nav-actions">
+      <a href="/tableau-de-bord.html" class="btn btn-outline btn-sm">Mon espace</a>
+      <button id="logout-btn" class="btn btn-danger btn-sm">Déconnexion</button>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="admin-header">
+    <h1>Utilisateurs</h1>
+    <p>Gère les comptes, les rôles et les abonnements.</p>
+  </div>
+
+  <div id="page-alert" class="alert"></div>
+
+  <div class="filters-row">
+    <input type="text" id="search-input" placeholder="🔍 Rechercher par nom, email ou téléphone..." style="flex:1;min-width:250px;" />
+    <select id="filter-subscription">
+      <option value="">Tous les statuts</option>
+      <option value="active">Abonnement actif</option>
+      <option value="expired">Abonnement expiré</option>
+      <option value="none">Sans abonnement</option>
+    </select>
+  </div>
+
+  <div id="loading" class="loader"><div class="spinner"></div></div>
+
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Téléphone</th>
+        <th>Inscription</th>
+        <th>Rôle</th>
+        <th>Abonnement</th>
+        <th style="text-align:right;">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="users-body">
+      <tr><td colspan="7" style="text-align:center;padding:40px;">Chargement…</td></tr>
+    </tbody>
+  </table>
+
+  <div id="empty" class="empty-state" style="display:none;margin-top:20px;">
+    <div class="icon">👥</div>
+    <p>Aucun utilisateur trouvé.</p>
+  </div>
+</main>
+
+<!-- Modale d'activation d'abonnement -->
+<div class="modal-overlay" id="sub-modal">
+  <div class="modal">
+    <h2>Activer / prolonger un abonnement</h2>
+    <p>Utilisateur : <strong id="modal-user-name">—</strong><br /><span id="modal-user-email" style="font-size:0.85rem;"></span></p>
+
+    <div class="form-field">
+      <label>Formule</label>
+      <select id="modal-plan">
+        <option value="7j" data-days="7" data-price="1500">7 jours — 1 500 FCFA</option>
+        <option value="30j" data-days="30" data-price="5000" selected>30 jours — 5 000 FCFA</option>
+        <option value="annuel" data-days="365" data-price="45000">Annuel — 45 000 FCFA</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label>Durée personnalisée (jours) — optionnel</label>
+      <input type="number" id="modal-days" min="1" placeholder="Laisser vide pour utiliser la formule" />
+    </div>
+
+    <div class="form-field">
+      <label>Note interne (visible dans le journal d'audit)</label>
+      <input type="text" id="modal-note" placeholder="Ex: Paiement reçu par Wave manuellement" />
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="modal-cancel">Annuler</button>
+      <button class="btn btn-primary" id="modal-confirm">Confirmer l'activation</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/admin-common.js"></script>
+<script src="/assets/js/admin-utilisateurs.js"></script>
+</body>
+</html>
