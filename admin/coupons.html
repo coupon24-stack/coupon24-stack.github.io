@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestion des coupons — COUPON24 Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body>
+
+<nav class="admin-navbar">
+  <div class="container">
+    <a href="/admin/dashboard.html" class="admin-logo">
+      <span class="ball">⚽</span>
+      <span>COUPON<span style="color: var(--blue);">24</span></span>
+      <span class="badge-admin">Admin</span>
+    </a>
+    <div class="admin-nav-links">
+      <a href="/admin/dashboard.html">Tableau de bord</a>
+      <a href="/admin/coupons.html" class="active">Coupons</a>
+      <a href="/admin/utilisateurs.html">Utilisateurs</a>
+      <a href="/admin/resultats.html">Résultats</a>
+    </div>
+    <div class="admin-nav-actions">
+      <a href="/tableau-de-bord.html" class="btn btn-outline btn-sm">Mon espace</a>
+      <button id="logout-btn" class="btn btn-danger btn-sm">Déconnexion</button>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="admin-header" style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;">
+    <div>
+      <h1>Coupons</h1>
+      <p>Gère tous les coupons de la plateforme.</p>
+    </div>
+    <a href="/admin/coupon-edit.html" class="btn btn-primary">+ Nouveau coupon</a>
+  </div>
+
+  <div id="page-alert" class="alert"></div>
+
+  <div class="filters-row">
+    <input type="text" id="search-input" placeholder="🔍 Rechercher par titre..." />
+    <select id="filter-category">
+      <option value="">Toutes catégories</option>
+      <option value="gratuit">Gratuit</option>
+      <option value="premium">Premium</option>
+    </select>
+    <select id="filter-status">
+      <option value="">Tous statuts</option>
+      <option value="brouillon">Brouillon</option>
+      <option value="disponible">Disponible</option>
+      <option value="en_cours">En cours</option>
+      <option value="termine">Terminé</option>
+      <option value="archive">Archivé</option>
+    </select>
+  </div>
+
+  <div id="loading" class="loader"><div class="spinner"></div></div>
+
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th>Catégorie</th>
+        <th>Type</th>
+        <th>Publication</th>
+        <th>Matchs</th>
+        <th>Cote</th>
+        <th>Statut</th>
+        <th style="text-align:right;">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="coupons-body">
+      <tr><td colspan="8" style="text-align:center;padding:40px;">Chargement…</td></tr>
+    </tbody>
+  </table>
+
+  <div id="pagination" style="display:flex;justify-content:center;gap:6px;padding:24px 0;"></div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/admin-common.js"></script>
+<script src="/assets/js/admin-coupons.js"></script>
+</body>
+</html>
