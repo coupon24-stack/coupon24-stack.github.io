@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Détail du coupon — COUPON24</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:#0A1F44; --blue:#1E4FD8;
+      --blue-gradient:linear-gradient(135deg,#0A1F44 0%,#1E4FD8 100%);
+      --sky:#E8F0FE; --gray-text:#4A5568; --gray-light:#F7F9FC;
+      --green:#27AE60; --gold:#F5A623; --red:#E53E3E;
+      --radius:16px; --radius-pill:999px;
+      --shadow:0 4px 20px rgba(10,31,68,0.06);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background:var(--gray-light); color:var(--navy); line-height:1.6; -webkit-font-smoothing:antialiased; }
+    a { text-decoration:none; color:inherit; }
+    .container { max-width:1000px; margin:0 auto; padding:0 24px; }
+    h1,h2,h3 { font-family:'Poppins',sans-serif; line-height:1.2; }
+
+    /* ============ NAVBAR ============ */
+    .navbar { background:white; border-bottom:1px solid rgba(10,31,68,0.06); position:sticky; top:0; z-index:100; }
+    .navbar .container { display:flex; align-items:center; justify-content:space-between; height:72px; gap:12px; }
+    .logo { display:flex; align-items:center; gap:10px; font-family:'Poppins'; font-weight:800; font-size:1.5rem; flex-shrink:0; }
+    .logo-ball { width:32px; height:32px; background:var(--blue-gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1rem; }
+    .nav-right { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 22px; border-radius:var(--radius-pill); font-family:'Inter'; font-size:0.9rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; white-space:nowrap; }
+    .btn-outline { background:transparent; color:var(--navy); border:1.5px solid rgba(10,31,68,0.15); }
+    .btn-outline:hover { border-color:var(--blue); color:var(--blue); }
+    .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
+    .btn-primary:hover { transform:translateY(-2px); }
+
+    /* ============ BREADCRUMB ============ */
+    .breadcrumb { padding:24px 0 16px; font-size:0.85rem; color:var(--gray-text); }
+    .breadcrumb a:hover { color:var(--blue); }
+    .breadcrumb .sep { margin:0 8px; opacity:0.5; }
+
+    /* ============ HEADER COUPON ============ */
+    .coupon-header { background:white; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; margin-bottom:24px; }
+    .coupon-hero { height:200px; background-size:cover; background-position:center; position:relative; background-color:var(--navy); }
+    .coupon-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(10,31,68,0.2),rgba(10,31,68,0.85)); }
+    .coupon-hero-content { position:absolute; bottom:24px; left:28px; right:28px; z-index:2; color:white; }
+    .coupon-badges { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+    .badge { padding:5px 14px; border-radius:var(--radius-pill); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+    .badge-gratuit { background:var(--green); color:white; }
+    .badge-premium { background:var(--gold); color:var(--navy); }
+    .badge-status { background:rgba(255,255,255,0.15); color:white; backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.2); }
+    .coupon-hero h1 { font-size:clamp(1.5rem,3.5vw,2.1rem); }
+    .coupon-meta-block { padding:24px 28px; display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:20px; }
+    .meta-item .label { font-size:0.72rem; text-transform:uppercase; color:var(--gray-text); letter-spacing:0.5px; font-weight:600; margin-bottom:4px; }
+    .meta-item .value { font-weight:600; font-size:1rem; }
+    .meta-item .value.highlight { color:var(--blue); font-family:'Poppins'; font-size:1.3rem; }
+
+    /* ============ CARTES ============ */
+    .card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:28px; margin-bottom:24px; }
+    .card h2 { font-size:1.2rem; margin-bottom:20px; display:flex; align-items:center; gap:8px; }
+
+    /* ============ TABLE SÉLECTIONS ============ */
+    .selections-table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .selections-table thead th { text-align:left; padding:12px 10px; background:var(--gray-light); font-size:0.72rem; text-transform:uppercase; color:var(--gray-text); letter-spacing:0.5px; font-weight:600; }
+    .selections-table thead th:first-child { border-radius:10px 0 0 10px; }
+    .selections-table thead th:last-child { border-radius:0 10px 10px 0; text-align:right; }
+    .selections-table tbody td { padding:14px 10px; border-bottom:1px solid rgba(10,31,68,0.06); vertical-align:top; }
+    .selections-table tbody td:last-child { text-align:right; font-weight:700; color:var(--blue); }
+    .match-teams { font-weight:600; color:var(--navy); display:block; margin-bottom:2px; }
+    .match-comp { font-size:0.78rem; color:var(--gray-text); }
+    .prediction-badge { display:inline-block; padding:4px 10px; background:var(--sky); color:var(--blue); border-radius:8px; font-size:0.8rem; font-weight:600; }
+    .result-badge { display:inline-block; padding:3px 10px; border-radius:6px; font-size:0.72rem; font-weight:700; text-transform:uppercase; margin-left:6px; }
+    .result-gagnee { background:#E6F9EF; color:#1E7E45; }
+    .result-perdue { background:#FED7D7; color:#9B2C2C; }
+    .result-en_attente { background:#FFF4E5; color:#B45309; }
+    .result-annulee { background:#E2E8F0; color:#4A5568; }
+
+    /* ============ TOTAL COTE ============ */
+    .total-odds-box { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; background:linear-gradient(135deg,#F7F9FC,#E8F0FE); border-radius:12px; margin-top:20px; }
+    .total-odds-box .label { font-size:0.85rem; color:var(--gray-text); font-weight:600; }
+    .total-odds-box .value { font-family:'Poppins'; font-size:1.8rem; font-weight:800; color:var(--blue); }
+
+    /* ============ VERROUILLAGE ============ */
+    .locked-panel { text-align:center; padding:60px 32px; }
+    .locked-icon { width:80px; height:80px; margin:0 auto 20px; background:var(--sky); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; }
+    .locked-panel h2 { font-size:1.4rem; margin-bottom:12px; }
+    .locked-panel p { color:var(--gray-text); max-width:450px; margin:0 auto 24px; }
+    .locked-cta { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+    /* ============ ÉTATS ============ */
+    .alert-error { background:#FED7D7; color:#9B2C2C; border:1px solid #FEB2B2; padding:16px; border-radius:12px; margin:20px 0; }
+    .loader { display:flex; justify-content:center; padding:80px 0; }
+    .spinner { width:44px; height:44px; border:3px solid var(--sky); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width:640px) {
+      body { overflow-x:hidden; }
+      .navbar .container { height:auto; min-height:60px; padding:8px 16px; gap:8px; flex-wrap:nowrap; }
+      .logo { font-size:1.2rem; gap:6px; }
+      .logo-ball { width:28px; height:28px; font-size:0.9rem; }
+      .nav-right { gap:6px; margin-left:auto; }
+      .nav-right .btn { padding:10px 14px; font-size:0.82rem; min-height:40px; min-width:44px; }
+      .nav-right .btn-outline { display:none; }
+      .container { padding:0 16px; }
+      .card { padding:20px 16px; }
+      .coupon-meta-block { padding:20px; gap:16px; }
+      .coupon-hero-content { left:20px; right:20px; bottom:20px; }
+      .selections-table thead { display:none; }
+      .selections-table, .selections-table tbody, .selections-table tr, .selections-table td { display:block; width:100%; }
+      .selections-table tr { background:var(--gray-light); border-radius:12px; padding:12px; margin-bottom:12px; }
+      .selections-table td { padding:6px 4px; border:none; text-align:left !important; }
+      .locked-panel { padding:40px 20px; }
+      .locked-cta { flex-direction:column; }
+      .locked-cta .btn { width:100%; }
+    }
+    @media (max-width:360px) {
+      .logo { font-size:1.05rem; }
+      .logo-ball { width:24px; height:24px; font-size:0.8rem; }
+    }
+    @supports (padding: max(0px)) {
+      .navbar .container {
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="/index.html" class="logo">
+      <span class="logo-ball">⚽</span>
+      <span>COUPON<span style="color:var(--blue);">24</span></span>
+    </a>
+    <div class="nav-right">
+      <a href="/coupons.html" class="btn btn-outline">Tous les coupons</a>
+      <a href="/tableau-de-bord.html" class="btn btn-primary">Mon espace</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="breadcrumb">
+    <a href="/index.html">Accueil</a>
+    <span class="sep">›</span>
+    <a href="/coupons.html">Coupons</a>
+    <span class="sep">›</span>
+    <span id="breadcrumb-title">Détail</span>
+  </div>
+
+  <div id="loading" class="loader"><div class="spinner"></div></div>
+  <div id="error-box" class="alert-error" style="display:none;"></div>
+  <div id="coupon-container" style="display:none;"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/coupon-detail.js"></script>
+</body>
+</html>
