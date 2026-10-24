@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin — COUPON24</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body>
+
+<nav class="admin-navbar">
+  <div class="container">
+    <a href="/admin/dashboard.html" class="admin-logo">
+      <span class="ball">⚽</span>
+      <span>COUPON<span style="color: var(--blue);">24</span></span>
+      <span class="badge-admin">Admin</span>
+    </a>
+    <div class="admin-nav-links">
+      <a href="/admin/dashboard.html" class="active">Tableau de bord</a>
+      <a href="/admin/coupons.html">Coupons</a>
+      <a href="/admin/utilisateurs.html">Utilisateurs</a>
+      <a href="/admin/resultats.html">Résultats</a>
+    </div>
+    <div class="admin-nav-actions">
+      <a href="/tableau-de-bord.html" class="btn btn-outline btn-sm">Mon espace</a>
+      <button id="logout-btn" class="btn btn-danger btn-sm">Déconnexion</button>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="admin-header">
+    <h1>Tableau de bord</h1>
+    <p>Bienvenue, <span id="admin-name">…</span>. Vue d'ensemble de la plateforme.</p>
+  </div>
+
+  <div id="page-alert" class="alert"></div>
+
+  <div id="loading" class="loader"><div class="spinner"></div></div>
+
+  <div id="content" style="display: none;">
+
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <div class="admin-section">
+      <h2>Derniers inscrits</h2>
+      <table class="admin-table" id="recent-users-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Inscription</th>
+            <th>Abonnement</th>
+          </tr>
+        </thead>
+        <tbody id="recent-users-body">
+          <tr><td colspan="4" style="text-align:center;color:var(--gray-text);">Chargement…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="admin-section">
+      <h2>Actions rapides</h2>
+      <div class="stats-grid">
+        <a href="/admin/coupons.html" class="stat-card accent-blue">
+          <div class="stat-icon">📝</div>
+          <div class="stat-label">Gérer les coupons</div>
+          <div class="stat-desc">Créer, modifier, publier</div>
+        </a>
+        <a href="/admin/utilisateurs.html" class="stat-card accent-green">
+          <div class="stat-icon">👥</div>
+          <div class="stat-label">Gérer les utilisateurs</div>
+          <div class="stat-desc">Abonnements, recherche</div>
+        </a>
+        <a href="/admin/resultats.html" class="stat-card accent-gold">
+          <div class="stat-icon">✅</div>
+          <div class="stat-label">Mettre à jour les résultats</div>
+          <div class="stat-desc">Gagnée, perdue, annulée</div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/admin-common.js"></script>
+<script>
+(async function() {
+  const ctx = await requireAdmin();
+  if (!ctx) return;
+
+  const loading = document.getElementById('loading');
+  const content = document.getElementById('content');
+
+  try {
+    const { data: stats, error: statsErr } = await supabaseClient.rpc('admin_stats');
+    if (statsErr) throw new Error('admin_stats : ' + statsErr.message);
+
+    const cards = [
+      { label: 'Utilisateurs', value: stats.total_users, icon: '👥', accent: 'accent-blue' },
+      { label: 'Abonnements actifs', value: stats.active_subscriptions, icon: '💳', accent: 'accent-green' },
+      { label: 'Abonnements expirés', value: stats.expired_subscriptions, icon: '⏱️', accent: 'accent-red' },
+      { label: 'Coupons totaux', value: stats.total_coupons, icon: '⚽', accent: 'accent-blue' },
+      { label: 'Coupons publiés', value: stats.published_coupons, icon: '📣', accent: 'accent-green' },
+      { label: 'Brouillons', value: stats.draft_coupons, icon: '📝', accent: 'accent-gold' },
+    ];
+
+    document.getElementById('stats-grid').innerHTML = cards.map(c => `
+      <div class="stat-card ${c.accent}">
+        <div class="stat-icon">${c.icon}</div>
+        <div class="stat-label">${c.label}</div>
+        <div class="stat-value">${c.value}</div>
+      </div>
+    `).join('');
+
+    const { data: users, error: usersErr } = await supabaseClient.rpc('admin_list_users');
+    if (usersErr) throw new Error('admin_list_users : ' + usersErr.message);
+
+    const recent = (users || []).slice(0, 5);
+    const tbody = document.getElementById('recent-users-body');
+
+    if (recent.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--gray-text);">Aucun utilisateur inscrit.</td></tr>`;
+    } else {
+      tbody.innerHTML = recent.map(u => {
+        const subLabel = u.subscription_status === 'active' ? 'Actif'
+                      : u.subscription_status === 'expired' ? 'Expiré'
+                      : 'Aucun';
+        return `
+          <tr>
+            <td data-label="Nom">${escapeHtml(u.full_name) || '—'}</td>
+            <td data-label="Email">${escapeHtml(u.email)}</td>
+            <td data-label="Inscription">${formatDateFR(u.created_at)}</td>
+            <td data-label="Abonnement"><span class="badge badge-${u.subscription_status}">${subLabel}</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    loading.style.display = 'none';
+    content.style.display = 'block';
+
+  } catch (err) {
+    console.error('[dashboard] erreur:', err);
+    loading.style.display = 'none';
+    showAlert('Erreur de chargement : ' + err.message);
+  }
+})();
+</script>
+</body>
+</html>
