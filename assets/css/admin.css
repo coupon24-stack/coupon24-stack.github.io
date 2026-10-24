@@ -1,0 +1,374 @@
+/* frontend/assets/css/admin.css — styles partagés admin */
+
+:root {
+  --navy: #0A1F44;
+  --navy-light: #132A5E;
+  --blue: #1E4FD8;
+  --blue-gradient: linear-gradient(135deg, #0A1F44 0%, #1E4FD8 100%);
+  --sky: #E8F0FE;
+  --gray-text: #4A5568;
+  --gray-light: #F7F9FC;
+  --green: #27AE60;
+  --gold: #F5A623;
+  --red: #E53E3E;
+  --radius: 16px;
+  --radius-pill: 999px;
+  --shadow: 0 4px 20px rgba(10,31,68,0.06);
+  --shadow-hover: 0 8px 30px rgba(10,31,68,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--gray-light);
+  color: var(--navy);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; line-height: 1.2; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ============ NAVBAR ADMIN ============ */
+.admin-navbar {
+  background: white;
+  border-bottom: 1px solid rgba(10,31,68,0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.admin-navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  gap: 16px;
+}
+.admin-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Poppins';
+  font-weight: 800;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.admin-logo .ball {
+  width: 30px; height: 30px;
+  background: var(--blue-gradient);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 0.9rem;
+}
+.admin-logo .badge-admin {
+  font-size: 0.65rem;
+  background: var(--gold);
+  color: var(--navy);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.admin-nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex: 1;
+  margin-left: 24px;
+}
+.admin-nav-links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--gray-text);
+  padding: 6px 4px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.admin-nav-links a:hover,
+.admin-nav-links a.active {
+  color: var(--blue);
+  border-bottom-color: var(--blue);
+}
+.admin-nav-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+/* ============ BOUTONS ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  font-family: 'Inter';
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--blue-gradient); color: white; box-shadow: 0 4px 14px rgba(30,79,216,0.35); }
+.btn-primary:hover:not(:disabled) { transform: translateY(-2px); }
+.btn-outline { background: transparent; color: var(--navy); border: 1.5px solid rgba(10,31,68,0.15); }
+.btn-outline:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); }
+.btn-danger { background: #FED7D7; color: #9B2C2C; }
+.btn-danger:hover:not(:disabled) { background: #FEB2B2; }
+.btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+
+/* ============ PAGE HEADER ============ */
+.admin-header { padding: 32px 0 24px; }
+.admin-header h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.5px; }
+.admin-header p { color: var(--gray-text); margin-top: 4px; }
+
+/* ============ CARTES STATS ============ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.stat-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s;
+  display: block;
+}
+.stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+.stat-card .stat-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+  background: var(--sky);
+}
+.stat-card .stat-label {
+  font-size: 0.78rem;
+  color: var(--gray-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.stat-card .stat-value {
+  font-family: 'Poppins';
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+}
+.stat-card .stat-desc {
+  font-size: 0.82rem;
+  color: var(--gray-text);
+  margin-top: 8px;
+}
+.stat-card.accent-blue { border-left: 4px solid var(--blue); }
+.stat-card.accent-green { border-left: 4px solid var(--green); }
+.stat-card.accent-gold { border-left: 4px solid var(--gold); }
+.stat-card.accent-red { border-left: 4px solid var(--red); }
+
+/* ============ SECTIONS ============ */
+.admin-section { margin-bottom: 32px; }
+.admin-section h2 { font-size: 1.2rem; margin-bottom: 16px; font-weight: 700; }
+
+/* ============ TABLES ============ */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.admin-table thead th {
+  text-align: left;
+  padding: 14px 16px;
+  background: var(--gray-light);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--gray-text);
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+.admin-table tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(10,31,68,0.06);
+  vertical-align: middle;
+}
+.admin-table tbody tr:last-child td { border-bottom: none; }
+.admin-table tbody tr:hover { background: #FAFBFC; }
+
+/* ============ BADGES ============ */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.badge-gratuit { background: #E6F9EF; color: #1E7E45; }
+.badge-premium { background: #FFF4E5; color: #B45309; }
+.badge-brouillon { background: #E2E8F0; color: #4A5568; }
+.badge-disponible { background: #E6F9EF; color: #1E7E45; }
+.badge-en_cours { background: #FFF4E5; color: #B45309; }
+.badge-termine { background: #E8F0FE; color: var(--blue); }
+.badge-archive { background: #E2E8F0; color: #4A5568; }
+.badge-active { background: #E6F9EF; color: #1E7E45; }
+.badge-expired { background: #FED7D7; color: #9B2C2C; }
+.badge-none { background: #E2E8F0; color: #4A5568; }
+.badge-admin { background: var(--gold); color: var(--navy); }
+
+/* ============ FILTRES ============ */
+.filters-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filters-row input,
+.filters-row select {
+  padding: 10px 14px;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  font-family: 'Inter';
+  font-size: 0.9rem;
+  background: white;
+  min-width: 160px;
+}
+.filters-row input:focus,
+.filters-row select:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+
+/* ============ ÉTATS ============ */
+.loader { display: flex; justify-content: center; padding: 80px 0; }
+.spinner {
+  width: 44px; height: 44px;
+  border: 3px solid var(--sky);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--gray-text);
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+
+.alert {
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  display: none;
+}
+.alert.show { display: block; }
+.alert-error { background: #FED7D7; color: #9B2C2C; border: 1px solid #FEB2B2; }
+.alert-success { background: #C6F6D5; color: #22543D; border: 1px solid #9AE6B4; }
+.alert-info { background: var(--sky); color: var(--blue); border: 1px solid #BFD5FD; }
+
+/* ============ TOAST ============ */
+.toast-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toast {
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 4px 14px rgba(10,31,68,0.15);
+  animation: slideIn 0.3s ease;
+  min-width: 260px;
+}
+.toast-success { background: #C6F6D5; color: #22543D; border-left: 4px solid var(--green); }
+.toast-error { background: #FED7D7; color: #9B2C2C; border-left: 4px solid var(--red); }
+.toast-info { background: var(--sky); color: var(--blue); border-left: 4px solid var(--blue); }
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ============ RESPONSIVE MOBILE ============ */
+@media (max-width: 768px) {
+  body { overflow-x: hidden; }
+  .admin-navbar .container {
+    height: auto;
+    min-height: 60px;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    gap: 10px;
+  }
+  .admin-logo { font-size: 1.2rem; }
+  .admin-logo .ball { width: 26px; height: 26px; font-size: 0.8rem; }
+  .admin-nav-links {
+    margin-left: 0;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    gap: 14px;
+  }
+  .admin-nav-links a { font-size: 0.85rem; }
+  .admin-nav-actions .btn { padding: 8px 14px; font-size: 0.8rem; }
+
+  .admin-header h1 { font-size: 1.5rem; }
+  .container { padding: 0 16px; }
+
+  /* Table → cartes empilées */
+  .admin-table thead { display: none; }
+  .admin-table, .admin-table tbody, .admin-table tr, .admin-table td {
+    display: block;
+    width: 100%;
+  }
+  .admin-table tbody tr {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(10,31,68,0.1);
+  }
+  .admin-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border: none;
+    font-size: 0.85rem;
+  }
+  .admin-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--gray-text);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    margin-right: 12px;
+  }
+
+  .toast-container { right: 12px; left: 12px; top: 12px; }
+  .toast { min-width: auto; }
+}
+
+@supports (padding: max(0px)) {
+  .admin-navbar .container {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+}
