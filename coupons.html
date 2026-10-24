@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coupons du jour — COUPON24</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:#0A1F44; --blue:#1E4FD8;
+      --blue-gradient:linear-gradient(135deg,#0A1F44 0%,#1E4FD8 100%);
+      --sky:#E8F0FE; --gray-text:#4A5568; --gray-light:#F7F9FC;
+      --green:#27AE60; --gold:#F5A623; --red:#E53E3E;
+      --radius:16px; --radius-pill:999px;
+      --shadow:0 4px 20px rgba(10,31,68,0.06);
+      --shadow-hover:0 8px 30px rgba(10,31,68,0.12);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background: var(--gray-light); color:var(--navy); line-height:1.6; -webkit-font-smoothing:antialiased; }
+    a { text-decoration:none; color:inherit; }
+    .container { max-width:1200px; margin:0 auto; padding:0 24px; }
+    h1,h2,h3 { font-family:'Poppins',sans-serif; line-height:1.2; }
+
+    /* ============ NAVBAR ============ */
+    .navbar { background:white; border-bottom:1px solid rgba(10,31,68,0.06); position:sticky; top:0; z-index:100; }
+    .navbar .container { display:flex; align-items:center; justify-content:space-between; height:72px; gap:12px; }
+    .logo { display:flex; align-items:center; gap:10px; font-family:'Poppins'; font-weight:800; font-size:1.5rem; flex-shrink:0; }
+    .logo-ball { width:32px; height:32px; background:var(--blue-gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1rem; }
+    .nav-right { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 22px; border-radius:var(--radius-pill); font-family:'Inter'; font-size:0.9rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; white-space:nowrap; }
+    .btn-outline { background:transparent; color:var(--navy); border:1.5px solid rgba(10,31,68,0.15); }
+    .btn-outline:hover { border-color:var(--blue); color:var(--blue); }
+    .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
+    .btn-primary:hover { transform:translateY(-2px); }
+
+    /* ============ HEADER PAGE ============ */
+    .page-header { background:var(--navy); color:white; padding:60px 0 48px; text-align:center; }
+    .page-header h1 { font-size:clamp(1.8rem,4vw,2.6rem); margin-bottom:10px; letter-spacing:-0.5px; }
+    .page-header p { color:rgba(255,255,255,0.75); max-width:600px; margin:0 auto; }
+
+    /* ============ FILTRES ============ */
+    .filters-bar { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin:-32px auto 32px; max-width:1000px; position:relative; z-index:2; display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:16px; }
+    .filters-bar input, .filters-bar select { width:100%; padding:12px 16px; border:1.5px solid #E2E8F0; border-radius:10px; font-family:'Inter'; font-size:0.9rem; background:white; }
+    .filters-bar input:focus, .filters-bar select:focus { outline:none; border-color:var(--blue); }
+
+    /* ============ GRILLE COUPONS ============ */
+    .coupons-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; padding-bottom:60px; }
+
+    .coupon-card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column; transition:all 0.25s; position:relative; }
+    .coupon-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-hover); }
+    .coupon-card.locked { opacity:0.92; }
+    .coupon-image { height:150px; background:var(--sky); background-size:cover; background-position:center; position:relative; }
+    .coupon-image::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 40%,rgba(10,31,68,0.7) 100%); }
+    .coupon-badge { position:absolute; top:12px; left:12px; z-index:2; padding:5px 14px; border-radius:var(--radius-pill); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+    .badge-gratuit { background:var(--green); color:white; }
+    .badge-premium { background:var(--gold); color:var(--navy); }
+    .lock-icon { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3; background:rgba(10,31,68,0.85); backdrop-filter:blur(4px); width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.4rem; border:2px solid rgba(255,255,255,0.3); }
+    .coupon-body { padding:20px; flex:1; display:flex; flex-direction:column; }
+    .coupon-title { font-size:1.1rem; font-weight:700; margin-bottom:10px; line-height:1.3; word-break:break-word; }
+    .coupon-meta { display:flex; flex-wrap:wrap; gap:10px; font-size:0.82rem; color:var(--gray-text); margin-bottom:14px; }
+    .coupon-stats { display:flex; gap:12px; padding:12px 0; border-top:1px solid rgba(10,31,68,0.08); border-bottom:1px solid rgba(10,31,68,0.08); margin-bottom:14px; }
+    .coupon-stat { flex:1; text-align:center; }
+    .coupon-stat .value { font-family:'Poppins'; font-size:1.1rem; font-weight:700; color:var(--blue); }
+    .coupon-stat .label { font-size:0.7rem; color:var(--gray-text); text-transform:uppercase; }
+    .coupon-status { display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:var(--radius-pill); font-size:0.75rem; font-weight:600; margin-bottom:14px; align-self:flex-start; }
+    .status-disponible { background:#E6F9EF; color:#1E7E45; }
+    .status-en_cours { background:#FFF4E5; color:#B45309; }
+    .status-termine { background:#E8F0FE; color:var(--blue); }
+    .coupon-card .btn { margin-top:auto; width:100%; }
+
+    /* ============ ÉTATS ============ */
+    .empty-state { text-align:center; padding:80px 20px; color:var(--gray-text); }
+    .empty-state .icon { font-size:3rem; margin-bottom:16px; }
+
+    .pagination { display:flex; justify-content:center; gap:8px; padding:24px 0 60px; }
+    .pagination button { width:40px; height:40px; border-radius:8px; border:1px solid rgba(10,31,68,0.1); background:white; cursor:pointer; font-family:'Inter'; font-weight:600; color:var(--navy); transition:all 0.2s; }
+    .pagination button:hover:not(:disabled) { border-color:var(--blue); color:var(--blue); }
+    .pagination button.active { background:var(--blue-gradient); color:white; border-color:transparent; }
+    .pagination button:disabled { opacity:0.4; cursor:not-allowed; }
+
+    .loader { display:flex; justify-content:center; padding:80px 0; }
+    .spinner { width:44px; height:44px; border:3px solid var(--sky); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 768px) {
+      body { overflow-x: hidden; }
+      .navbar .container { height:auto; min-height:60px; padding:8px 16px; gap:8px; flex-wrap:nowrap; }
+      .logo { font-size:1.2rem; gap:6px; }
+      .logo-ball { width:28px; height:28px; font-size:0.9rem; }
+      .nav-right { gap:6px; margin-left:auto; }
+      .nav-right .btn { padding:10px 14px; font-size:0.82rem; min-height:40px; min-width:44px; }
+      .filters-bar { grid-template-columns:1fr; margin:-24px 16px 24px; }
+      .container { padding:0 16px; }
+    }
+    @media (max-width: 360px) {
+      .logo { font-size:1.05rem; }
+      .logo-ball { width:24px; height:24px; font-size:0.8rem; }
+    }
+    @supports (padding: max(0px)) {
+      .navbar .container {
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="/index.html" class="logo">
+      <span class="logo-ball">⚽</span>
+      <span>COUPON<span style="color:var(--blue);">24</span></span>
+    </a>
+    <div class="nav-right">
+      <a href="/index.html" class="btn btn-outline">Accueil</a>
+      <a href="/tableau-de-bord.html" class="btn btn-primary">Mon espace</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Coupons du jour</h1>
+    <p>Découvre tous nos pronostics publiés. Gratuits ou premium, il y en a pour tous les profils.</p>
+  </div>
+</header>
+
+<div class="container">
+  <div class="filters-bar">
+    <input type="text" id="search-input" placeholder="🔍 Rechercher un coupon..." />
+    <select id="filter-category">
+      <option value="">Toutes catégories</option>
+      <option value="gratuit">Gratuits</option>
+      <option value="premium">Premium</option>
+    </select>
+    <select id="filter-status">
+      <option value="">Tous statuts</option>
+      <option value="disponible">Disponible</option>
+      <option value="en_cours">En cours</option>
+      <option value="termine">Terminé</option>
+    </select>
+  </div>
+
+  <div id="loading" class="loader"><div class="spinner"></div></div>
+  <div id="empty" class="empty-state" style="display:none;">
+    <div class="icon">⚽</div>
+    <h3>Aucun coupon pour le moment</h3>
+    <p>Reviens bientôt, de nouveaux coupons sont publiés chaque jour.</p>
+  </div>
+  <div id="coupons-grid" class="coupons-grid"></div>
+  <div id="pagination" class="pagination"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/coupons.js"></script>
+</body>
+</html>
