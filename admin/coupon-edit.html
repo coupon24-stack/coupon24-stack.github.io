@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Éditer un coupon — COUPON24 Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <style>
+    /* ============ FORMULAIRE COUPON ============ */
+    .form-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+    .form-card h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(10,31,68,0.08);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-grid.full { grid-template-columns: 1fr; }
+    .form-field { display: flex; flex-direction: column; }
+    .form-field label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--navy);
+    }
+    .form-field label .req { color: var(--red); }
+    .form-field input[type="text"],
+    .form-field input[type="url"],
+    .form-field input[type="date"],
+    .form-field input[type="datetime-local"],
+    .form-field input[type="number"],
+    .form-field select,
+    .form-field textarea {
+      padding: 10px 14px;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 10px;
+      font-family: 'Inter';
+      font-size: 0.92rem;
+      color: var(--navy);
+      background: white;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .form-field textarea { resize: vertical; min-height: 70px; }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+    .form-field .hint {
+      font-size: 0.75rem;
+      color: var(--gray-text);
+      margin-top: 4px;
+    }
+
+    /* Radios catégorie */
+    .radio-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .radio-group label:hover { border-color: var(--blue); }
+    .radio-group input[type="radio"] { margin: 0; }
+    .radio-group input[type="radio"]:checked + span {
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    /* ============ SÉLECTIONS (matchs) ============ */
+    .selection-card {
+      background: var(--gray-light);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 16px;
+      border: 1.5px solid #E2E8F0;
+      position: relative;
+    }
+    .selection-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(10,31,68,0.08);
+    }
+    .selection-number {
+      font-family: 'Poppins';
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--blue);
+    }
+    .remove-selection {
+      background: #FED7D7;
+      color: #9B2C2C;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .remove-selection:hover { background: #FEB2B2; }
+
+    .selection-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .selection-grid.full { grid-template-columns: 1fr; }
+
+    .add-selection-btn {
+      width: 100%;
+      padding: 14px;
+      border: 2px dashed rgba(30,79,216,0.3);
+      background: rgba(30,79,216,0.03);
+      border-radius: 12px;
+      color: var(--blue);
+      font-family: 'Inter';
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .add-selection-btn:hover {
+      background: rgba(30,79,216,0.08);
+      border-color: var(--blue);
+    }
+
+    /* ============ RÉCAP TOTAL ============ */
+    .recap-box {
+      background: linear-gradient(135deg, #F7F9FC, #E8F0FE);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .recap-box .label {
+      font-size: 0.9rem;
+      color: var(--gray-text);
+      font-weight: 600;
+    }
+    .recap-box .value {
+      font-family: 'Poppins';
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--blue);
+      line-height: 1;
+    }
+
+    /* ============ ACTIONS ============ */
+    .actions-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      padding: 24px 0;
+      border-top: 1px solid rgba(10,31,68,0.08);
+      margin-top: 24px;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 640px) {
+      .form-card { padding: 20px 16px; }
+      .form-grid, .selection-grid { grid-template-columns: 1fr; }
+      .recap-box { flex-direction: column; text-align: center; }
+      .actions-bar { flex-direction: column-reverse; }
+      .actions-bar .btn { width: 100%; }
+      .radio-group { flex-direction: column; }
+      .radio-group label { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="admin-navbar">
+  <div class="container">
+    <a href="/admin/dashboard.html" class="admin-logo">
+      <span class="ball">⚽</span>
+      <span>COUPON<span style="color: var(--blue);">24</span></span>
+      <span class="badge-admin">Admin</span>
+    </a>
+    <div class="admin-nav-links">
+      <a href="/admin/dashboard.html">Tableau de bord</a>
+      <a href="/admin/coupons.html" class="active">Coupons</a>
+      <a href="/admin/utilisateurs.html">Utilisateurs</a>
+      <a href="/admin/resultats.html">Résultats</a>
+    </div>
+    <div class="admin-nav-actions">
+      <a href="/admin/coupons.html" class="btn btn-outline btn-sm">← Retour</a>
+      <button id="logout-btn" class="btn btn-danger btn-sm">Déconnexion</button>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="admin-header">
+    <h1 id="page-title">Nouveau coupon</h1>
+    <p id="page-subtitle">Crée un nouveau coupon de pronostics.</p>
+  </div>
+
+  <div id="page-alert" class="alert"></div>
+  <div id="loading" class="loader"><div class="spinner"></div></div>
+
+  <form id="coupon-form" style="display:none;">
+
+    <!-- SECTION 1 : Informations générales -->
+    <div class="form-card">
+      <h2>📋 Informations générales</h2>
+      <div class="form-grid">
+        <div class="form-field" style="grid-column: 1 / -1;">
+          <label for="title">Titre du coupon <span class="req">*</span></label>
+          <input type="text" id="title" required placeholder="Ex: Coupon du jour — Serie A" />
+        </div>
+
+        <div class="form-field" style="grid-column: 1 / -1;">
+          <label for="description">Description (optionnelle)</label>
+          <textarea id="description" placeholder="Ex: Sélection de pronostics pour les matchs du jour."></textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="publication_date">Date de publication <span class="req">*</span></label>
+          <input type="date" id="publication_date" required />
+        </div>
+
+        <div class="form-field">
+          <label for="matches_date">Date des matchs <span class="req">*</span></label>
+          <input type="date" id="matches_date" required />
+        </div>
+
+        <div class="form-field">
+          <label>Catégorie <span class="req">*</span></label>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="category" value="gratuit" checked />
+              <span>Gratuit</span>
+            </label>
+            <label>
+              <input type="radio" name="category" value="premium" />
+              <span>Premium</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="type">Type de coupon <span class="req">*</span></label>
+          <select id="type" required>
+            <option value="Combiné">Combiné</option>
+            <option value="Simple">Simple</option>
+            <option value="Système">Système</option>
+            <option value="Value Bet">Value Bet</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+
+        <div class="form-field" style="grid-column: 1 / -1;">
+          <label for="cover_image">Image de couverture (URL optionnelle)</label>
+          <input type="url" id="cover_image" placeholder="https://images.unsplash.com/..." />
+          <div class="hint">Colle l'URL d'une image depuis Unsplash, Pexels, etc.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 : Sélections -->
+    <div class="form-card">
+      <h2>⚽ Sélections (matchs)</h2>
+      <div id="selections-container"></div>
+      <button type="button" class="add-selection-btn" id="add-selection-btn">+ Ajouter un match</button>
+
+      <div class="recap-box">
+        <div>
+          <div class="label">Cote totale du coupon</div>
+          <div class="value" id="total-odds-display">—</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="label">Nombre de matchs</div>
+          <div class="value" id="matches-count-display">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 : Actions -->
+    <div class="actions-bar">
+      <a href="/admin/coupons.html" class="btn btn-outline">Annuler</a>
+      <button type="button" class="btn btn-outline" id="save-draft-btn">Enregistrer en brouillon</button>
+      <button type="button" class="btn btn-primary" id="publish-btn">Publier</button>
+    </div>
+
+  </form>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/admin-common.js"></script>
+<script src="/assets/js/admin-coupon-edit.js"></script>
+</body>
+</html>
