@@ -20,7 +20,6 @@
     .container { max-width:1000px; margin:0 auto; padding:0 24px; }
     h1,h2,h3 { font-family:'Poppins',sans-serif; line-height:1.2; }
 
-    /* ============ NAVBAR ============ */
     .navbar { background:white; border-bottom:1px solid rgba(10,31,68,0.06); position:sticky; top:0; z-index:100; }
     .navbar .container { display:flex; align-items:center; justify-content:space-between; height:72px; gap:12px; }
     .logo { display:flex; align-items:center; gap:10px; font-family:'Poppins'; font-weight:800; font-size:1.5rem; flex-shrink:0; }
@@ -32,12 +31,10 @@
     .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
     .btn-primary:hover { transform:translateY(-2px); }
 
-    /* ============ BREADCRUMB ============ */
     .breadcrumb { padding:24px 0 16px; font-size:0.85rem; color:var(--gray-text); }
     .breadcrumb a:hover { color:var(--blue); }
     .breadcrumb .sep { margin:0 8px; opacity:0.5; }
 
-    /* ============ HEADER COUPON ============ */
     .coupon-header { background:white; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; margin-bottom:24px; }
     .coupon-hero { height:200px; background-size:cover; background-position:center; position:relative; background-color:var(--navy); }
     .coupon-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(10,31,68,0.2),rgba(10,31,68,0.85)); }
@@ -53,11 +50,9 @@
     .meta-item .value { font-weight:600; font-size:1rem; }
     .meta-item .value.highlight { color:var(--blue); font-family:'Poppins'; font-size:1.3rem; }
 
-    /* ============ CARTES ============ */
     .card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:28px; margin-bottom:24px; }
     .card h2 { font-size:1.2rem; margin-bottom:20px; display:flex; align-items:center; gap:8px; }
 
-    /* ============ TABLE SÉLECTIONS ============ */
     .selections-table { width:100%; border-collapse:collapse; font-size:0.9rem; }
     .selections-table thead th { text-align:left; padding:12px 10px; background:var(--gray-light); font-size:0.72rem; text-transform:uppercase; color:var(--gray-text); letter-spacing:0.5px; font-weight:600; }
     .selections-table thead th:first-child { border-radius:10px 0 0 10px; }
@@ -73,25 +68,126 @@
     .result-en_attente { background:#FFF4E5; color:#B45309; }
     .result-annulee { background:#E2E8F0; color:#4A5568; }
 
-    /* ============ TOTAL COTE ============ */
     .total-odds-box { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; background:linear-gradient(135deg,#F7F9FC,#E8F0FE); border-radius:12px; margin-top:20px; }
     .total-odds-box .label { font-size:0.85rem; color:var(--gray-text); font-weight:600; }
     .total-odds-box .value { font-family:'Poppins'; font-size:1.8rem; font-weight:800; color:var(--blue); }
 
-    /* ============ VERROUILLAGE ============ */
+    /* ============ CARTE CODE BOOKMAKER ============ */
+    .betting-code-card {
+      background: linear-gradient(135deg, #0B7A3E 0%, #1E88E5 100%);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 24px;
+      color: white;
+      box-shadow: 0 8px 24px rgba(11, 122, 62, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+    .betting-code-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .betting-code-card .bc-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .betting-code-card .bc-logo {
+      background: white;
+      color: #0B7A3E;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-family: 'Poppins';
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-transform: lowercase;
+    }
+    .betting-code-card .bc-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0.95;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .betting-code-card .bc-code-display {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .betting-code-card .bc-code-value {
+      font-family: 'Courier New', monospace;
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: 8px;
+      background: rgba(255,255,255,0.15);
+      border: 2px dashed rgba(255,255,255,0.4);
+      padding: 10px 24px;
+      border-radius: 12px;
+      backdrop-filter: blur(4px);
+    }
+    .betting-code-card .bc-instructions {
+      font-size: 0.88rem;
+      opacity: 0.92;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+      line-height: 1.6;
+    }
+    .betting-code-card .bc-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: white;
+      color: #0B7A3E;
+      padding: 14px 28px;
+      border-radius: var(--radius-pill);
+      font-family: 'Poppins';
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+    .betting-code-card .bc-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .betting-code-card .bc-button:active {
+      transform: translateY(0);
+    }
+    .betting-code-card .bc-button.copied {
+      background: #E6F9EF;
+      color: #0B7A3E;
+    }
+
     .locked-panel { text-align:center; padding:60px 32px; }
     .locked-icon { width:80px; height:80px; margin:0 auto 20px; background:var(--sky); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; }
     .locked-panel h2 { font-size:1.4rem; margin-bottom:12px; }
     .locked-panel p { color:var(--gray-text); max-width:450px; margin:0 auto 24px; }
     .locked-cta { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
 
-    /* ============ ÉTATS ============ */
     .alert-error { background:#FED7D7; color:#9B2C2C; border:1px solid #FEB2B2; padding:16px; border-radius:12px; margin:20px 0; }
     .loader { display:flex; justify-content:center; padding:80px 0; }
     .spinner { width:44px; height:44px; border:3px solid var(--sky); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; }
     @keyframes spin { to { transform:rotate(360deg); } }
 
-    /* ============ RESPONSIVE ============ */
     @media (max-width:640px) {
       body { overflow-x:hidden; }
       .navbar .container { height:auto; min-height:60px; padding:8px 16px; gap:8px; flex-wrap:nowrap; }
@@ -111,6 +207,9 @@
       .locked-panel { padding:40px 20px; }
       .locked-cta { flex-direction:column; }
       .locked-cta .btn { width:100%; }
+      .betting-code-card { padding:20px; }
+      .betting-code-card .bc-code-value { font-size:1.6rem; letter-spacing:5px; padding:8px 18px; }
+      .betting-code-card .bc-button { padding:12px 20px; font-size:0.92rem; }
     }
     @media (max-width:360px) {
       .logo { font-size:1.05rem; }
