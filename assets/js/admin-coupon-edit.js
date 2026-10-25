@@ -1,8 +1,8 @@
 // frontend/assets/js/admin-coupon-edit.js
-// Formulaire de création/édition de coupon — avec matchs dynamiques.
+// Formulaire de création/édition de coupon — avec matchs dynamiques et code bookmaker.
 
 let editingId = null;
-let selections = []; // [{ competition, home_team, away_team, match_date, market, prediction, odds }]
+let selections = [];
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
@@ -67,7 +67,6 @@ function renderSelections() {
     </div>
   `).join('');
 
-  // Attacher les listeners
   container.querySelectorAll('input, select').forEach(el => {
     el.addEventListener('input', handleSelectionChange);
     el.addEventListener('change', handleSelectionChange);
@@ -129,11 +128,11 @@ async function loadCouponForEdit(id) {
     document.getElementById('matches_date').value = coupon.matches_date || tomorrowISO();
     document.getElementById('type').value = coupon.type || 'Combiné';
     document.getElementById('cover_image').value = coupon.cover_image || '';
+    document.getElementById('betting_code').value = coupon.betting_code || '';
 
     const catRadio = document.querySelector(`input[name="category"][value="${coupon.category}"]`);
     if (catRadio) catRadio.checked = true;
 
-    // Charger les sélections
     const { data: sels, error: e2 } = await supabaseClient
       .from('selections')
       .select('*')
@@ -171,6 +170,12 @@ function validateCoupon() {
   if (!matchDate) return 'La date des matchs est requise.';
   if (selections.length === 0) return 'Ajoute au moins un match.';
 
+  // Valider le code bookmaker si renseigné
+  const bettingCode = document.getElementById('betting_code').value.trim();
+  if (bettingCode && bettingCode.length > 5) {
+    return 'Le code bookmaker doit faire 5 caractères maximum.';
+  }
+
   for (let i = 0; i < selections.length; i++) {
     const s = selections[i];
     if (!s.home_team || !s.away_team) {
@@ -205,6 +210,7 @@ async function saveCoupon(status) {
   const category = document.querySelector('input[name="category"]:checked').value;
   const type = document.getElementById('type').value;
   const cover_image = document.getElementById('cover_image').value.trim() || null;
+  const betting_code = document.getElementById('betting_code').value.trim().toUpperCase() || null;
 
   const btnPublish = document.getElementById('publish-btn');
   const btnDraft = document.getElementById('save-draft-btn');
@@ -221,20 +227,19 @@ async function saveCoupon(status) {
       category,
       type,
       cover_image,
+      betting_code,
       status,
     };
 
     let couponId = editingId;
 
     if (editingId) {
-      // Mise à jour
       const { error } = await supabaseClient
         .from('coupons')
         .update(couponData)
         .eq('id', editingId);
       if (error) throw error;
     } else {
-      // Création
       couponData.created_by = user.id;
       const { data: created, error } = await supabaseClient
         .from('coupons')
@@ -246,7 +251,6 @@ async function saveCoupon(status) {
       editingId = couponId;
     }
 
-    // Sélections : on supprime et on réinsère (simple et fiable)
     const { error: delErr } = await supabaseClient
       .from('selections')
       .delete()
@@ -270,14 +274,13 @@ async function saveCoupon(status) {
       if (insErr) throw insErr;
     }
 
-    // Journal d'audit
     try {
       await supabaseClient.from('admin_actions').insert({
         admin_id: user.id,
         action: editingId === couponId && status !== 'brouillon' ? 'publish_coupon' : 'save_coupon',
         target_type: 'coupon',
         target_id: couponId,
-        details: { status, title },
+        details: { status, title, betting_code },
       });
     } catch (e) { console.warn('[audit]', e); }
 
@@ -310,7 +313,6 @@ async function saveCoupon(status) {
   const loading = document.getElementById('loading');
   const form = document.getElementById('coupon-form');
 
-  // Détecter le mode
   const params = new URLSearchParams(window.location.search);
   editingId = params.get('id');
 
@@ -319,15 +321,17 @@ async function saveCoupon(status) {
     document.getElementById('page-subtitle').textContent = 'Modifie les informations du coupon et ses sélections.';
   }
 
-  // Valeurs par défaut
   document.getElementById('publication_date').value = todayISO();
   document.getElementById('matches_date').value = tomorrowISO();
 
-  // Charger si édition
+  // Force l'uppercase à la saisie du code
+  document.getElementById('betting_code')?.addEventListener('input', (e) => {
+    e.target.value = e.target.value.toUpperCase();
+  });
+
   if (editingId) {
     await loadCouponForEdit(editingId);
   } else {
-    // Commencer avec 1 match vide
     selections = [{
       competition: '',
       home_team: '',
@@ -340,7 +344,6 @@ async function saveCoupon(status) {
     renderSelections();
   }
 
-  // Bouton ajouter un match
   document.getElementById('add-selection-btn')?.addEventListener('click', () => {
     selections.push({
       competition: '',
@@ -354,14 +357,11 @@ async function saveCoupon(status) {
     renderSelections();
   });
 
-  // Boutons de sauvegarde
   document.getElementById('save-draft-btn')?.addEventListener('click', () => saveCoupon('brouillon'));
   document.getElementById('publish-btn')?.addEventListener('click', () => saveCoupon('disponible'));
 
-  // Empêcher la soumission native
   form?.addEventListener('submit', (e) => e.preventDefault());
 
-  // Afficher
   if (loading) loading.style.display = 'none';
   if (form) form.style.display = 'block';
 })();
