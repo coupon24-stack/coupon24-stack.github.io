@@ -19,6 +19,7 @@
       --gray-light: #F7F9FC;
       --green: #27AE60;
       --gold: #F5A623;
+      --red: #E53E3E;
       --radius: 16px;
       --radius-pill: 999px;
       --shadow: 0 4px 20px rgba(10, 31, 68, 0.06);
@@ -36,11 +37,12 @@
     .logo-ball { width: 34px; height: 34px; background: var(--blue-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(30, 79, 216, 0.3); }
 
     .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(10, 31, 68, 0.06); transition: 0.25s ease; }
-    .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 12px; }
     .nav-links { display: flex; align-items: center; gap: 32px; }
     .nav-links a { font-size: 0.95rem; font-weight: 500; color: var(--gray-text); transition: color 0.25s ease; }
     .nav-links a:hover, .nav-links a.active { color: var(--blue); }
-    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .nav-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .nav-guest, .nav-auth { display: flex; gap: 12px; align-items: center; }
 
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 28px; border-radius: var(--radius-pill); font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.25s ease; white-space: nowrap; }
     .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid rgba(10, 31, 68, 0.15); }
@@ -49,6 +51,8 @@
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(30, 79, 216, 0.45); }
     .btn-white { background: white; color: var(--navy); }
     .btn-white:hover { background: var(--sky); }
+    .btn-danger { background: #FED7D7; color: #9B2C2C; }
+    .btn-danger:hover { background: #FEB2B2; }
     .btn-large { padding: 16px 36px; font-size: 1.05rem; }
 
     .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 8px; }
@@ -130,7 +134,8 @@
 
     @media (max-width: 968px) {
       .nav-links { display: none; }
-      .nav-actions .btn-outline { display: none; }
+      .nav-actions .nav-guest .btn-outline { display: none; }
+      .nav-actions .nav-auth .btn-outline { display: none; }
       .hamburger { display: flex; }
       .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
     }
@@ -142,9 +147,13 @@
       .grid-3, .grid-4 { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; gap: 32px; }
       .footer-bottom { flex-direction: column; text-align: center; }
-      .navbar .container { height: 64px; }
+      .navbar .container { height: 64px; padding: 8px 16px; gap: 8px; }
       .logo { font-size: 1.35rem; }
       .logo-ball { width: 30px; height: 30px; font-size: 1rem; }
+      .nav-actions .btn { padding: 10px 16px; font-size: 0.85rem; }
+    }
+    @supports (padding: max(0px)) {
+      .navbar .container { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
     }
   </style>
 </head>
@@ -163,8 +172,16 @@
       <a href="#comment-ca-marche">Comment ça marche ?</a>
     </div>
     <div class="nav-actions">
-      <a href="/connexion.html" class="btn btn-outline">Connexion</a>
-      <a href="/inscription.html" class="btn btn-primary">Créer un compte</a>
+      <!-- État NON connecté -->
+      <div class="nav-guest" id="nav-guest">
+        <a href="/connexion.html" class="btn btn-outline">Connexion</a>
+        <a href="/inscription.html" class="btn btn-primary">Créer un compte</a>
+      </div>
+      <!-- État CONNECTÉ (masqué par défaut) -->
+      <div class="nav-auth" id="nav-auth" style="display:none;">
+        <a href="/tableau-de-bord.html" class="btn btn-primary">Mon espace</a>
+        <button id="logout-btn" class="btn btn-danger">Déconnexion</button>
+      </div>
       <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -429,7 +446,45 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+
 <script>
+  // ============ NAVBAR DYNAMIQUE ============
+  (async function initNavbar() {
+    const guestNav = document.getElementById('nav-guest');
+    const authNav = document.getElementById('nav-auth');
+
+    if (!guestNav || !authNav) return;
+
+    try {
+      if (typeof supabaseClient !== 'undefined') {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session) {
+          guestNav.style.display = 'none';
+          authNav.style.display = 'flex';
+        } else {
+          guestNav.style.display = 'flex';
+          authNav.style.display = 'none';
+        }
+      }
+    } catch (e) {
+      console.warn('[navbar] auth check failed:', e);
+    }
+
+    // Déconnexion
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        if (!confirm('Se déconnecter ?')) return;
+        await supabaseClient.auth.signOut();
+        window.location.reload();
+      });
+    }
+  })();
+
+  // ============ MENU HAMBURGER MOBILE ============
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.querySelector('.nav-links');
   if (hamburger && navLinks) {
@@ -448,6 +503,8 @@
       hamburger.setAttribute('aria-expanded', String(!isOpen));
     });
   }
+
+  // ============ NAVBAR OMBRE AU SCROLL ============
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
     if (navbar) navbar.style.boxShadow = window.scrollY > 20 ? '0 4px 20px rgba(10,31,68,0.08)' : 'none';
