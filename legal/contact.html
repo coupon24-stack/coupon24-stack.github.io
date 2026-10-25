@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact et assistance — COUPON24</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --navy: #0A1F44; --blue: #1E4FD8; --blue-gradient: linear-gradient(135deg, #0A1F44 0%, #1E4FD8 100%); --sky: #E8F0FE; --gray-text: #4A5568; --gray-light: #F7F9FC; --gold: #F5A623; --green: #27AE60; --whatsapp: #25D366; --radius: 16px; --radius-pill: 999px; --shadow: 0 4px 20px rgba(10,31,68,0.06); --shadow-hover: 0 8px 30px rgba(10,31,68,0.12); }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-light); color: var(--navy); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: var(--blue); }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; line-height: 1.3; }
+
+    .navbar { background: white; border-bottom: 1px solid rgba(10,31,68,0.06); position: sticky; top: 0; z-index: 100; }
+    .navbar .container { max-width: 1200px; display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 12px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-family: 'Poppins'; font-weight: 800; font-size: 1.5rem; flex-shrink: 0; }
+    .logo-ball { width: 32px; height: 32px; background: var(--blue-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1rem; }
+    .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 22px; border-radius: var(--radius-pill); font-family: 'Inter'; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; white-space: nowrap; }
+    .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid rgba(10,31,68,0.15); }
+    .btn-outline:hover { border-color: var(--blue); color: var(--blue); text-decoration: none; }
+
+    .page-header { background: var(--navy); color: white; padding: 60px 0 48px; text-align: center; }
+    .page-header h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: 10px; }
+    .page-header p { color: rgba(255,255,255,0.75); font-size: 0.95rem; max-width: 600px; margin: 0 auto; }
+
+    .content { padding: 40px 0 60px; }
+
+    /* Cartes de contact rapide */
+    .quick-contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .contact-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 24px;
+      text-align: center;
+      transition: all 0.25s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .contact-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+    .contact-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.7rem;
+      margin-bottom: 16px;
+    }
+    .icon-whatsapp { background: rgba(37, 211, 102, 0.15); color: var(--whatsapp); }
+    .icon-email { background: var(--sky); color: var(--blue); }
+    .contact-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .contact-card .contact-value {
+      font-family: 'Poppins';
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--navy);
+      margin-bottom: 4px;
+      word-break: break-word;
+    }
+    .contact-card .contact-note {
+      font-size: 0.8rem;
+      color: var(--gray-text);
+      margin-bottom: 16px;
+    }
+    .contact-card .btn { width: 100%; padding: 12px 20px; }
+
+    /* Formulaire */
+    .form-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 40px 32px;
+      margin-bottom: 32px;
+    }
+    .form-card h2 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      color: var(--navy);
+    }
+    .form-card > p {
+      color: var(--gray-text);
+      font-size: 0.92rem;
+      margin-bottom: 24px;
+    }
+
+    .form-field { margin-bottom: 18px; }
+    .form-field label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--navy);
+    }
+    .form-field label .req { color: #E53E3E; }
+    .form-field input[type="text"],
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 10px;
+      font-family: 'Inter';
+      font-size: 0.95rem;
+      color: var(--navy);
+      background: white;
+      transition: border-color 0.2s;
+    }
+    .form-field textarea {
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.6;
+    }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+    .form-field .hint {
+      font-size: 0.75rem;
+      color: var(--gray-text);
+      margin-top: 4px;
+    }
+
+    .btn-whatsapp {
+      background: var(--whatsapp);
+      color: white;
+      padding: 14px 24px;
+      font-size: 1rem;
+      width: 100%;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+    }
+    .btn-whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+    }
+
+    /* FAQ */
+    .faq-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+    .faq-card h2 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: var(--navy);
+    }
+    .faq-item {
+      border-bottom: 1px solid rgba(10,31,68,0.08);
+      padding: 16px 0;
+    }
+    .faq-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .faq-item:first-child { padding-top: 0; }
+    .faq-question {
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    .faq-answer {
+      font-size: 0.9rem;
+      color: var(--gray-text);
+      line-height: 1.7;
+    }
+
+    /* Infos pratiques */
+    .info-pratique {
+      background: linear-gradient(135deg, #F7F9FC, #E8F0FE);
+      border-left: 4px solid var(--blue);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .info-pratique h3 {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      color: var(--navy);
+    }
+    .info-pratique ul {
+      list-style: none;
+      padding: 0;
+    }
+    .info-pratique li {
+      padding: 6px 0;
+      font-size: 0.9rem;
+      color: var(--gray-text);
+      display: flex;
+      gap: 10px;
+    }
+    .info-pratique li strong {
+      color: var(--navy);
+      min-width: 90px;
+      display: inline-block;
+    }
+
+    @media (max-width: 640px) {
+      body { overflow-x: hidden; }
+      .navbar .container { height: auto; min-height: 60px; padding: 8px 16px; gap: 8px; }
+      .logo { font-size: 1.2rem; gap: 6px; }
+      .logo-ball { width: 28px; height: 28px; font-size: 0.9rem; }
+      .container { padding: 0 16px; }
+      .quick-contact { grid-template-columns: 1fr; }
+      .form-card { padding: 28px 20px; }
+      .faq-card { padding: 24px 20px; }
+      .content { padding: 24px 0 40px; }
+    }
+    @supports (padding: max(0px)) {
+      .navbar .container {
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="/index.html" class="logo">
+      <span class="logo-ball">⚽</span>
+      <span>COUPON<span style="color:var(--blue);">24</span></span>
+    </a>
+    <div class="nav-right">
+      <a href="/index.html" class="btn btn-outline">Retour à l'accueil</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Contact et assistance</h1>
+    <p>Une question, un problème, une suggestion ? Nous sommes là pour vous aider.</p>
+  </div>
+</header>
+
+<main class="container">
+  <div class="content">
+
+    <!-- Contact rapide -->
+    <div class="quick-contact">
+      <div class="contact-card">
+        <div class="contact-icon icon-whatsapp">💬</div>
+        <h3>WhatsApp</h3>
+        <div class="contact-value">+225 01 00 60 0218</div>
+        <div class="contact-note">Réponse en général sous 24h</div>
+        <a href="https://wa.me/2250100600218" class="btn btn-whatsapp" target="_blank" rel="noopener">
+          Ouvrir WhatsApp
+        </a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon icon-email">📧</div>
+        <h3>Email</h3>
+        <div class="contact-value">coupon24ci@gmail.com</div>
+        <div class="contact-note">Pour les demandes détaillées</div>
+        <a href="mailto:coupon24ci@gmail.com" class="btn btn-outline">
+          Envoyer un email
+        </a>
+      </div>
+    </div>
+
+    <!-- Formulaire WhatsApp -->
+    <div class="form-card">
+      <h2>💬 Envoyer un message via WhatsApp</h2>
+      <p>Remplissez ce formulaire. Votre message sera automatiquement ouvert dans WhatsApp, prêt à envoyer.</p>
+
+      <form id="contact-form">
+        <div class="form-field">
+          <label for="nom">Votre nom complet <span class="req">*</span></label>
+          <input type="text" id="nom" required placeholder="Ex: Koffi Yao" />
+        </div>
+
+        <div class="form-field">
+          <label for="email">Votre email <span class="req">*</span></label>
+          <input type="text" id="email" required placeholder="Ex: ton.email@exemple.com" />
+        </div>
+
+        <div class="form-field">
+          <label for="sujet">Sujet de votre demande <span class="req">*</span></label>
+          <select id="sujet" required>
+            <option value="">— Choisir un sujet —</option>
+            <option value="Question générale">Question générale</option>
+            <option value="Problème de connexion">Problème de connexion</option>
+            <option value="Abonnement / Paiement">Abonnement / Paiement</option>
+            <option value="Activation d'abonnement">Activation d'abonnement</option>
+            <option value="Demande de remboursement">Demande de remboursement</option>
+            <option value="Signaler un bug">Signaler un bug</option>
+            <option value="Suggestion d'amélioration">Suggestion d'amélioration</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="message">Votre message <span class="req">*</span></label>
+          <textarea id="message" required placeholder="Décrivez votre demande le plus précisément possible..." maxlength="1000"></textarea>
+          <div class="hint">Maximum 1000 caractères. Soyez précis pour un traitement rapide.</div>
+        </div>
+
+        <button type="submit" class="btn btn-whatsapp">
+          💬 Envoyer via WhatsApp
+        </button>
+      </form>
+    </div>
+
+    <!-- Informations pratiques -->
+    <div class="info-pratique">
+      <h3>📋 Informations pratiques</h3>
+      <ul>
+        <li><strong>Email :</strong> coupon24ci@gmail.com</li>
+        <li><strong>WhatsApp :</strong> +225 01 00 60 0218</li>
+        <li><strong>Horaires :</strong> Du lundi au samedi, de 8h à 20h (GMT)</li>
+        <li><strong>Langue :</strong> Français</li>
+        <li><strong>Délai de réponse :</strong> 24 à 48h en moyenne</li>
+      </ul>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-card">
+      <h2>❓ Questions fréquentes</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>🔑</span>
+          <span>J'ai oublié mon mot de passe, comment faire ?</span>
+        </div>
+        <div class="faq-answer">
+          Rendez-vous sur la page <a href="/connexion.html">Connexion</a> et cliquez sur « Mot de passe oublié ». Un lien de réinitialisation vous sera envoyé par email. Si vous ne le recevez pas, vérifiez votre dossier spam ou contactez-nous.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>💳</span>
+          <span>J'ai payé mais mon abonnement n'est pas activé, que faire ?</span>
+        </div>
+        <div class="faq-answer">
+          Contactez-nous immédiatement via WhatsApp au +225 01 00 60 0218 en joignant la preuve de votre paiement (capture d'écran du SMS de débit ou du reçu). Nous activerons votre abonnement dans les plus brefs délais.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>🔒</span>
+          <span>Puis-je partager mes coupons premium avec un ami ?</span>
+        </div>
+        <div class="faq-answer">
+          Non. Le partage du contenu premium est strictement interdit par nos <a href="/legal/cgu.html">Conditions Générales d'Utilisation</a> et entraîne la suspension immédiate du compte, sans remboursement.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>💰</span>
+          <span>Puis-je obtenir un remboursement ?</span>
+        </div>
+        <div class="faq-answer">
+          Consultez notre <a href="/legal/remboursement.html">Politique de remboursement</a> pour connaître les cas où un remboursement est possible.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>📱</span>
+          <span>Le site fonctionne-t-il sur téléphone ?</span>
+        </div>
+        <div class="faq-answer">
+          Oui, COUPON24 est entièrement optimisé pour mobile (Android et iOS), tablette et ordinateur. Vous pouvez y accéder depuis n'importe quel navigateur récent.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>⚽</span>
+          <span>Garantissez-vous les pronostics publiés ?</span>
+        </div>
+        <div class="faq-answer">
+          Non. Les coupons publiés sont des pronostics à titre informatif. Nous ne garantissons aucun gain. Les paris sportifs comportent des risques de perte financière. Jouez de manière responsable.
+        </div>
+      </div>
+    </div>
+
+    <!-- Encadré légal -->
+    <div style="background: rgba(245, 166, 35, 0.1); border-left: 4px solid var(--gold); border-radius: 12px; padding: 20px 24px; font-size: 0.88rem; color: var(--navy);">
+      <strong>⚠️ Avertissement :</strong> Les paris sportifs comportent des risques de perte financière. COUPON24 publie des pronostics à titre informatif et ne garantit aucun gain. Jouez de manière responsable.
+    </div>
+
+  </div>
+</main>
+
+<script>
+  document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const nom = document.getElementById('nom').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const sujet = document.getElementById('sujet').value;
+    const message = document.getElementById('message').value.trim();
+
+    if (!nom || !email || !sujet || !message) {
+      alert('Merci de remplir tous les champs.');
+      return;
+    }
+
+    const texte =
+      'Bonjour COUPON24,\n\n' +
+      'Nom : ' + nom + '\n' +
+      'Email : ' + email + '\n' +
+      'Sujet : ' + sujet + '\n\n' +
+      'Message :\n' + message;
+
+    const url = 'https://wa.me/2250100600218?text=' + encodeURIComponent(texte);
+    window.open(url, '_blank');
+  });
+</script>
+
+</body>
+</html>
