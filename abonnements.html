@@ -312,11 +312,7 @@
     if (!currentPlan) return;
     const link = PAYMENT_LINKS[currentPlan.plan];
     if (!link) return;
-
-    // Rediriger l'utilisateur vers le paiement
     window.location.href = link;
-
-    // Fermer la modale (au cas où l'utilisateur revient en arrière)
     setTimeout(() => {
       document.getElementById('payment-modal').classList.remove('active');
     }, 1000);
