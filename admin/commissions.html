@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commissions — COUPON24 Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <style>
+    .commission-amount { font-family: 'Poppins'; font-weight: 700; color: var(--green); }
+    .referrer-cell { font-size: 0.82rem; color: var(--gray-text); margin-top: 2px; }
+    .empty-msg { text-align: center; padding: 40px 20px; color: var(--gray-text); font-size: 0.9rem; }
+
+    @media (max-width: 768px) {
+      .filters-row { flex-direction: column; align-items: stretch; }
+      .filters-row input, .filters-row select { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="admin-navbar">
+  <div class="container">
+    <a href="/admin/dashboard.html" class="admin-logo">
+      <span class="ball">⚽</span>
+      <span>COUPON<span style="color: var(--blue);">24</span></span>
+      <span class="badge-admin">Admin</span>
+    </a>
+    <div class="admin-nav-links">
+      <a href="/admin/dashboard.html">Tableau de bord</a>
+      <a href="/admin/coupons.html">Coupons</a>
+      <a href="/admin/utilisateurs.html">Utilisateurs</a>
+      <a href="/admin/resultats.html">Résultats</a>
+      <a href="/admin/commissions.html" class="active">Commissions</a>
+    </div>
+    <div class="admin-nav-actions">
+      <a href="/tableau-de-bord.html" class="btn btn-outline btn-sm">Mon espace</a>
+      <button id="logout-btn" class="btn btn-danger btn-sm">Déconnexion</button>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="admin-header">
+    <h1>Commissions de parrainage</h1>
+    <p>Suis les commissions générées par les parrains et marque-les comme payées après versement.</p>
+  </div>
+
+  <div id="page-alert" class="alert"></div>
+
+  <div id="loading" class="loader"><div class="spinner"></div></div>
+
+  <div id="content" style="display:none;">
+
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <div class="filters-row" style="margin-top:24px;">
+      <input type="text" id="search-input" placeholder="🔍 Rechercher un parrain, un filleul, un email..." style="flex:1;min-width:250px;" />
+      <select id="filter-status">
+        <option value="">Tous les statuts</option>
+        <option value="pending">À payer</option>
+        <option value="paid">Payées</option>
+      </select>
+    </div>
+
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Parrain</th>
+          <th>Filleul</th>
+          <th>Formule</th>
+          <th>Montant payé</th>
+          <th>Commission</th>
+          <th>Statut</th>
+          <th>Date</th>
+          <th style="text-align:right;">Action</th>
+        </tr>
+      </thead>
+      <tbody id="commissions-body">
+        <tr><td colspan="8" style="text-align:center;padding:40px;">Chargement…</td></tr>
+      </tbody>
+    </table>
+
+    <div id="empty" class="empty-state" style="display:none;margin-top:20px;">
+      <div class="icon">💰</div>
+      <p>Aucune commission pour le moment.</p>
+    </div>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/admin-common.js"></script>
+<script src="/assets/js/admin-commissions.js"></script>
+</body>
+</html>
