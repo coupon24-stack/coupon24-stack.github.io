@@ -19,16 +19,15 @@
       throw new Error('supabaseClient non chargé.');
     }
 
-    // ÉTAPE 1 : Vérifier l'authentification AVANT tout chargement
+    // ÉTAPE 1 : Vérifier l'authentification
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (!session) {
-      // Non connecté → redirection vers inscription avec retour
       const returnUrl = `/coupon-detail.html?id=${couponId}`;
       window.location.replace(`/inscription.html?redirect=${encodeURIComponent(returnUrl)}`);
       return;
     }
 
-    // ÉTAPE 2 : Charger les métadonnées du coupon
+    // ÉTAPE 2 : Charger les métadonnées
     const { data: meta, error: metaError } = await supabaseClient
       .from('coupons_list')
       .select('*')
@@ -45,7 +44,7 @@
     const breadcrumb = document.getElementById('breadcrumb-title');
     if (breadcrumb) breadcrumb.textContent = meta.title;
 
-    // ÉTAPE 3 : Si verrouillé → panneau de verrouillage
+    // ÉTAPE 3 : Si verrouillé
     if (meta.is_locked) {
       if (loading) loading.style.display = 'none';
       if (container) {
@@ -55,7 +54,7 @@
       return;
     }
 
-    // ÉTAPE 4 : Charger les sélections (autorisé)
+    // ÉTAPE 4 : Charger les sélections
     const { data: selections, error: selError } = await supabaseClient
       .from('selections')
       .select('*')
@@ -67,7 +66,8 @@
     if (loading) loading.style.display = 'none';
     if (container) {
       container.style.display = 'block';
-      container.innerHTML = renderCouponHeader(meta) + renderSelections(selections || [], meta);
+      const bettingCard = meta.betting_code ? renderBettingCodeCard(meta.betting_code) : '';
+      container.innerHTML = renderCouponHeader(meta) + bettingCard + renderSelections(selections || [], meta);
     }
 
   } catch (err) {
@@ -130,6 +130,93 @@ function renderCouponHeader(c) {
     </div>
   `;
 }
+
+// ============================================================
+// CARTE CODE BOOKMAKER (1xbet)
+// ============================================================
+function renderBettingCodeCard(code) {
+  if (!code) return '';
+  return `
+    <div class="betting-code-card">
+      <div class="bc-header">
+        <span class="bc-logo">1xbet</span>
+        <span class="bc-title">Code du coupon</span>
+      </div>
+      <div class="bc-code-display">
+        <span class="bc-code-value" id="bc-code-text">${escapeHtml(code)}</span>
+      </div>
+      <div class="bc-instructions">
+        📋 Clique sur le bouton pour <strong>copier le code</strong> et être redirigé automatiquement vers <strong>1xbet</strong>. Colle ensuite le code pour retrouver ce coupon.
+      </div>
+      <button class="bc-button" id="bc-copy-btn" data-code="${escapeAttr(code)}">
+        📋 Copier le code et ouvrir 1xbet
+      </button>
+    </div>
+  `;
+}
+
+async function copyCouponCode(code, btn) {
+  let success = false;
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(code);
+      success = true;
+    }
+  } catch (e) { console.warn('[clipboard] API error:', e); }
+
+  if (!success) {
+    try {
+      const textarea = document.createElement('textarea');
+      textarea.value = code;
+      textarea.style.position = 'fixed';
+      textarea.style.top = '0';
+      textarea.style.left = '0';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      success = document.execCommand('copy');
+      document.body.removeChild(textarea);
+    } catch (e) { console.warn('[clipboard] fallback error:', e); }
+  }
+
+  if (btn) {
+    const original = btn.innerHTML;
+    if (success) {
+      btn.classList.add('copied');
+      btn.innerHTML = '✅ Code copié !';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = original;
+      }, 2500);
+    } else {
+      btn.innerHTML = '❌ Erreur de copie';
+      setTimeout(() => {
+        btn.innerHTML = original;
+      }, 2500);
+    }
+  }
+
+  return success;
+}
+
+// Attacher le listener sur le bouton code
+document.addEventListener('click', async (e) => {
+  const btn = e.target.closest('#bc-copy-btn');
+  if (!btn) return;
+
+  const code = btn.dataset.code;
+  if (!code) return;
+
+  const success = await copyCouponCode(code, btn);
+
+  if (success) {
+    setTimeout(() => {
+      window.open('https://1xbet.com/fr/', '_blank', 'noopener,noreferrer');
+    }, 1200);
+  }
+});
 
 function renderLockedPanel() {
   return `
