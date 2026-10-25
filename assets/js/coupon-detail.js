@@ -128,7 +128,7 @@ function renderCouponHeader(c) {
 }
 
 // ============================================================
-// CARTE CODE BOOKMAKER (1xbet)
+// CARTE CODE BOOKMAKER — Copie uniquement
 // ============================================================
 function renderBettingCodeCard(code) {
   if (!code) return '';
@@ -148,10 +148,7 @@ function renderBettingCodeCard(code) {
         📋 Copier le code
       </button>
       <div id="bc-success-message" style="display:none; margin-top:16px; padding:14px 18px; background:rgba(255,255,255,0.2); border-radius:10px; font-size:0.9rem; position:relative; z-index:1;">
-        ✅ <strong>Code copié !</strong> Ouvre ton app 1xbet et colle-le pour télécharger le ticket.
-        <button id="bc-open-app-btn" data-code="${escapeAttr(code)}" style="display:block; margin-top:12px; width:100%; padding:12px; background:white; color:#0B7A3E; border:none; border-radius:8px; font-weight:700; font-size:0.92rem; cursor:pointer; font-family:'Poppins';">
-          📱 Ouvrir l'application 1xbet
-        </button>
+        ✅ <strong>Code copié !</strong> Ouvre maintenant ton application 1xbet et colle le code dans le champ prévu pour télécharger le ticket.
       </div>
     </div>
   `;
@@ -168,7 +165,7 @@ async function copyCouponCode(code, btn) {
     }
   } catch (e) { console.warn('[clipboard] API error:', e); }
 
-  // Fallback
+  // Fallback (ancienne méthode)
   if (!success) {
     try {
       const textarea = document.createElement('textarea');
@@ -186,74 +183,28 @@ async function copyCouponCode(code, btn) {
   }
 
   if (btn) {
-    const original = btn.innerHTML;
     if (success) {
       btn.classList.add('copied');
       btn.innerHTML = '✅ Code copié !';
-      // Afficher le message d'instructions + bouton d'ouverture d'app
       const msg = document.getElementById('bc-success-message');
       if (msg) msg.style.display = 'block';
-      // Ne pas restaurer le texte pour que l'utilisateur voie le succès
     } else {
+      const original = btn.innerHTML;
       btn.innerHTML = '❌ Erreur de copie';
-      setTimeout(() => {
-        btn.innerHTML = original;
-      }, 2500);
+      setTimeout(() => { btn.innerHTML = original; }, 2500);
     }
   }
 
   return success;
 }
 
-// Ouvre l'app 1xbet si installée, sinon redirige vers le site
-function open1xbetApp() {
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  
-  if (isMobile) {
-    // Tenter d'ouvrir l'application via deep link
-    const appScheme = '1xbet://';
-    const websiteUrl = 'https://1xbet.com/fr/';
-    
-    // Éviter le blocage silencieux : utiliser un timeout
-    let appOpened = false;
-    
-    const onVisibilityChange = () => {
-      if (document.hidden) appOpened = true;
-    };
-    document.addEventListener('visibilitychange', onVisibilityChange);
-    
-    // Essayer d'ouvrir l'app
-    window.location.href = appScheme;
-    
-    // Après 1.5s, si l'app n'a pas été ouverte, proposer le site
-    setTimeout(() => {
-      document.removeEventListener('visibilitychange', onVisibilityChange);
-      if (!appOpened && !document.hidden) {
-        if (confirm('L\'application 1xbet ne semble pas installée sur ton téléphone.\n\nVoulez-vous ouvrir le site 1xbet dans votre navigateur ?')) {
-          window.open(websiteUrl, '_blank', 'noopener,noreferrer');
-        }
-      }
-    }, 1500);
-  } else {
-    // Sur desktop : ouvrir directement le site
-    window.open('https://1xbet.com/fr/', '_blank', 'noopener,noreferrer');
-  }
-}
-
-// Attacher le listener sur le bouton "Copier"
+// Listener du bouton "Copier le code"
 document.addEventListener('click', async (e) => {
   const btn = e.target.closest('#bc-copy-btn');
   if (!btn) return;
   const code = btn.dataset.code;
   if (!code) return;
   await copyCouponCode(code, btn);
-});
-
-// Attacher le listener sur le bouton "Ouvrir l'app"
-document.addEventListener('click', (e) => {
-  const btn = e.target.closest('#bc-open-app-btn');
-  if (!btn) return;
-  open1xbetApp();
 });
 
 function renderLockedPanel() {
