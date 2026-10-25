@@ -30,17 +30,18 @@
     h1, h2, h3 { font-family:'Poppins',sans-serif; line-height:1.2; }
 
     .navbar { background: white; border-bottom: 1px solid rgba(10,31,68,0.06); position: sticky; top: 0; z-index: 100; }
-    .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 12px; }
-    .logo { display:flex; align-items:center; gap:10px; font-family:'Poppins'; font-weight:800; font-size:1.5rem; flex-shrink: 0; }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .logo { display:flex; align-items:center; gap:10px; font-family:'Poppins'; font-weight:800; font-size:1.5rem; }
     .logo-ball { width:32px; height:32px; background:var(--blue-gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1rem; }
-    .nav-right { display:flex; align-items:center; gap:12px; flex-shrink: 0; }
-    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 22px; border-radius:var(--radius-pill); font-family:'Inter'; font-size:0.9rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; white-space: nowrap; }
+    .nav-right { display:flex; align-items:center; gap:12px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 22px; border-radius:var(--radius-pill); font-family:'Inter'; font-size:0.9rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; }
     .btn-outline { background:transparent; color:var(--navy); border:1.5px solid rgba(10,31,68,0.15); }
     .btn-outline:hover { border-color:var(--blue); color:var(--blue); }
     .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
     .btn-primary:hover { transform:translateY(-2px); }
     .btn-danger { background:#FED7D7; color:#9B2C2C; }
     .btn-danger:hover { background:#FEB2B2; }
+    .btn-sm { padding: 8px 16px; font-size: 0.82rem; }
 
     main { padding: 40px 0 80px; }
     .page-title { font-size: 1.9rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
@@ -49,7 +50,7 @@
     .card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding: 32px; margin-bottom: 24px; }
     .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid rgba(10,31,68,0.08); }
     .avatar { width: 72px; height: 72px; border-radius: 50%; background: var(--blue-gradient); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Poppins'; font-weight: 800; font-size: 1.5rem; flex-shrink: 0; }
-    .profile-header h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; word-break: break-word; }
+    .profile-header h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
     .role-badge { display: inline-block; padding: 3px 12px; border-radius: var(--radius-pill); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; background: var(--sky); color: var(--blue); }
 
     .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
@@ -60,6 +61,190 @@
     .subscription-card h3 { font-size: 1.15rem; margin-bottom: 8px; }
     .subscription-card p { color: var(--gray-text); font-size: 0.92rem; margin-bottom: 16px; }
     #subscription-status { font-weight: 600; color: var(--navy); }
+
+    /* ============ SECTION PARRAINAGE ============ */
+    .referral-card {
+      background: linear-gradient(135deg, #FFF9E6, #FFF4E5);
+      border: 2px solid #FFD98A;
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .referral-card::before {
+      content: '🎁';
+      position: absolute;
+      top: -30px;
+      right: -20px;
+      font-size: 10rem;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+    .referral-card h3 {
+      font-size: 1.3rem;
+      color: #B45309;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .referral-card .ref-subtitle {
+      color: #92400E;
+      font-size: 0.92rem;
+      margin-bottom: 24px;
+    }
+    .ref-code-box {
+      background: white;
+      border: 2px dashed #FFD98A;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .ref-code-box .ref-code-label {
+      font-size: 0.75rem;
+      color: #B45309;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .ref-code-box .ref-code-value {
+      font-family: 'Courier New', monospace;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 3px;
+    }
+    .ref-code-box .btn { flex-shrink: 0; }
+
+    .ref-link-box {
+      background: white;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .ref-link-box label {
+      font-size: 0.78rem;
+      color: var(--gray-text);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      width: 100%;
+      margin-bottom: 4px;
+    }
+    .ref-link-box input {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 12px;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.82rem;
+      color: var(--gray-text);
+      background: var(--gray-light);
+    }
+
+    .ref-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .ref-stat {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(10,31,68,0.04);
+    }
+    .ref-stat .stat-value {
+      font-family: 'Poppins';
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #B45309;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .ref-stat .stat-label {
+      font-size: 0.75rem;
+      color: var(--gray-text);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+    .ref-stat.paid .stat-value { color: var(--green); }
+    .ref-stat.total .stat-value { color: var(--blue); }
+
+    .ref-benefits {
+      background: white;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 8px;
+    }
+    .ref-benefits h4 {
+      font-size: 0.95rem;
+      color: var(--navy);
+      margin-bottom: 12px;
+      font-family: 'Poppins';
+    }
+    .ref-benefits ul {
+      list-style: none;
+    }
+    .ref-benefits li {
+      padding: 6px 0;
+      font-size: 0.88rem;
+      color: var(--gray-text);
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .ref-benefits li strong { color: var(--navy); }
+
+    /* Table filleuls */
+    .ref-filleuls { margin-top: 24px; }
+    .ref-filleuls h4 {
+      font-size: 1rem;
+      color: var(--navy);
+      margin-bottom: 12px;
+      font-family: 'Poppins';
+    }
+    .filleuls-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(10,31,68,0.04);
+    }
+    .filleuls-table thead th {
+      text-align: left;
+      padding: 12px 14px;
+      background: #FFF9E6;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      color: #B45309;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+    .filleuls-table tbody td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(10,31,68,0.06);
+      font-size: 0.88rem;
+    }
+    .filleuls-table tbody tr:last-child td { border-bottom: none; }
+    .filleuls-table .badge-active { background: #E6F9EF; color: #1E7E45; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 700; }
+    .filleuls-table .badge-inactive { background: #E2E8F0; color: #4A5568; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 700; }
+    .empty-filleuls { text-align: center; padding: 30px 20px; color: var(--gray-text); font-size: 0.9rem; }
 
     .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 8px; }
     .action-card { display: flex; align-items: center; gap: 14px; padding: 18px 20px; background: white; border-radius: 12px; box-shadow: var(--shadow); transition: all 0.2s; border: 1px solid rgba(10,31,68,0.04); }
@@ -73,30 +258,42 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .alert-error { background: #FED7D7; color: #9B2C2C; border: 1px solid #FEB2B2; padding: 16px; border-radius: 12px; display: none; }
 
+    .toast-copy {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--green);
+      color: white;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 6px 20px rgba(39,174,96,0.4);
+      transition: transform 0.3s ease;
+      z-index: 9999;
+    }
+    .toast-copy.show { transform: translateX(-50%) translateY(0); }
+
     @media (max-width: 640px) {
-      body { overflow-x: hidden; }
-      .navbar .container { height: auto; min-height: 60px; padding: 8px 16px; gap: 8px; flex-wrap: nowrap; }
-      .logo { font-size: 1.2rem; gap: 6px; }
-      .logo-ball { width: 28px; height: 28px; font-size: 0.9rem; }
-      .nav-right { gap: 6px; margin-left: auto; }
-      .nav-right .btn { padding: 10px 14px; font-size: 0.82rem; min-height: 40px; min-width: 44px; }
-      .nav-right .btn-outline { display: none; }
-      .nav-right .btn-danger { padding: 10px 14px; font-size: 0.82rem; }
       .profile-header { flex-direction: column; text-align: center; }
-      .card { padding: 24px 20px; }
-      .page-title { font-size: 1.5rem; }
-      .container { padding: 0 16px; }
-    }
-    @media (max-width: 360px) {
-      .navbar .container { padding: 6px 12px; }
-      .logo { font-size: 1.05rem; }
-      .logo-ball { width: 24px; height: 24px; font-size: 0.8rem; }
-      .nav-right .btn-danger { padding: 9px 12px; font-size: 0.78rem; }
-    }
-    @supports (padding: max(0px)) {
-      .navbar .container {
-        padding-left: max(16px, env(safe-area-inset-left));
-        padding-right: max(16px, env(safe-area-inset-right));
+      .navbar .container { height: 64px; }
+      .nav-right .btn { padding: 8px 14px; font-size: 0.82rem; }
+      .card, .referral-card { padding: 20px 16px; }
+      .ref-code-box { flex-direction: column; align-items: stretch; }
+      .ref-code-box .btn { width: 100%; }
+      .filleuls-table thead { display: none; }
+      .filleuls-table, .filleuls-table tbody, .filleuls-table tr, .filleuls-table td { display: block; width: 100%; }
+      .filleuls-table tr { background: var(--gray-light); border-radius: 10px; padding: 12px; margin-bottom: 8px; }
+      .filleuls-table td { padding: 6px 0; border: none; }
+      .filleuls-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--gray-text);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 2px;
       }
     }
   </style>
@@ -128,6 +325,8 @@
     <div id="dashboard-error" class="alert-error"></div>
 
     <div id="dashboard-content" style="display:none;">
+
+      <!-- PROFIL -->
       <div class="card">
         <div class="profile-header">
           <div class="avatar" id="user-initials">?</div>
@@ -137,10 +336,6 @@
           </div>
         </div>
         <div class="info-grid">
-          <div class="info-item">
-            <div class="info-label">Nom complet</div>
-            <div class="info-value" id="user-fullname-2">—</div>
-          </div>
           <div class="info-item">
             <div class="info-label">Adresse e-mail</div>
             <div class="info-value" id="user-email">—</div>
@@ -152,6 +347,7 @@
         </div>
       </div>
 
+      <!-- ABONNEMENT -->
       <div class="card subscription-card">
         <h3>💳 Mon abonnement</h3>
         <p>
@@ -161,6 +357,62 @@
         <a href="/abonnements.html" class="btn btn-primary">Voir les formules</a>
       </div>
 
+      <!-- PARRAINAGE -->
+      <div class="referral-card" id="referral-section">
+        <h3>🎁 Mon programme de parrainage</h3>
+        <p class="ref-subtitle">Invite tes amis avec ton code unique. Ils gagnent des jours gratuits, tu gagnes 20% de commission.</p>
+
+        <div class="ref-code-box">
+          <div>
+            <div class="ref-code-label">Ton code de parrainage</div>
+            <div class="ref-code-value" id="ref-code-display">—</div>
+          </div>
+          <button class="btn btn-primary" id="copy-code-btn">📋 Copier mon code</button>
+        </div>
+
+        <div class="ref-link-box">
+          <label>Lien de partage (envoie-le par WhatsApp)</label>
+          <input type="text" id="ref-link-display" readonly value="Chargement..." />
+          <button class="btn btn-outline btn-sm" id="copy-link-btn">📋 Copier le lien</button>
+        </div>
+
+        <div class="ref-stats-grid">
+          <div class="ref-stat">
+            <div class="stat-value" id="stat-referred-count">0</div>
+            <div class="stat-label">Filleuls</div>
+          </div>
+          <div class="ref-stat">
+            <div class="stat-value" id="stat-pending">0</div>
+            <div class="stat-label">À recevoir</div>
+          </div>
+          <div class="ref-stat paid">
+            <div class="stat-value" id="stat-paid">0</div>
+            <div class="stat-label">Déjà perçu</div>
+          </div>
+          <div class="ref-stat total">
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-label">Total gagné</div>
+          </div>
+        </div>
+
+        <div class="ref-benefits">
+          <h4>💡 Ce que ton filleul gagne à son 1er abonnement :</h4>
+          <ul>
+            <li><strong>+3 jours gratuits</strong> avec la formule 7 jours</li>
+            <li><strong>+7 jours gratuits</strong> avec la formule 30 jours</li>
+            <li><strong>+30 jours gratuits</strong> avec la formule annuelle</li>
+          </ul>
+        </div>
+
+        <div class="ref-filleuls">
+          <h4>👥 Mes filleuls (<span id="filleuls-count">0</span>)</h4>
+          <div id="filleuls-container">
+            <div class="empty-filleuls">Chargement…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIONS RAPIDES -->
       <div class="card">
         <h3 style="margin-bottom: 16px;">Actions rapides</h3>
         <div class="actions-grid">
@@ -187,9 +439,12 @@
           </a>
         </div>
       </div>
+
     </div>
   </div>
 </main>
+
+<div class="toast-copy" id="toast-copy">✅ Copié !</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/assets/js/supabase-client.js"></script>
