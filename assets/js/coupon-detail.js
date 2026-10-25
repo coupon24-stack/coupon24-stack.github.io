@@ -1,5 +1,5 @@
 // frontend/assets/js/coupon-detail.js
-// Charge et affiche un coupon. Si verrouillé, ne tente pas de charger les sélections.
+// Charge et affiche un coupon. Exige une authentification pour tout coupon.
 
 (async function init() {
   const loading = document.getElementById('loading');
@@ -19,7 +19,16 @@
       throw new Error('supabaseClient non chargé.');
     }
 
-    // 1. Charger les métadonnées (vue publique, jamais de pronostics dedans)
+    // ÉTAPE 1 : Vérifier l'authentification AVANT tout chargement
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) {
+      // Non connecté → redirection vers inscription avec retour
+      const returnUrl = `/coupon-detail.html?id=${couponId}`;
+      window.location.replace(`/inscription.html?redirect=${encodeURIComponent(returnUrl)}`);
+      return;
+    }
+
+    // ÉTAPE 2 : Charger les métadonnées du coupon
     const { data: meta, error: metaError } = await supabaseClient
       .from('coupons_list')
       .select('*')
@@ -36,7 +45,7 @@
     const breadcrumb = document.getElementById('breadcrumb-title');
     if (breadcrumb) breadcrumb.textContent = meta.title;
 
-    // 2. Si verrouillé → panneau de verrouillage, AUCUNE requête sur selections
+    // ÉTAPE 3 : Si verrouillé → panneau de verrouillage
     if (meta.is_locked) {
       if (loading) loading.style.display = 'none';
       if (container) {
@@ -46,7 +55,7 @@
       return;
     }
 
-    // 3. Sinon, charger les sélections (RLS autorise l'accès)
+    // ÉTAPE 4 : Charger les sélections (autorisé)
     const { data: selections, error: selError } = await supabaseClient
       .from('selections')
       .select('*')
@@ -130,7 +139,7 @@ function renderLockedPanel() {
       <p>Ce coupon est réservé aux abonnés COUPON24. Souscris à une formule pour accéder aux pronostics et aux analyses détaillées.</p>
       <div class="locked-cta">
         <a href="/abonnements.html" class="btn btn-primary">Voir les abonnements</a>
-        <a href="/connexion.html" class="btn btn-outline">Se connecter</a>
+        <a href="/tableau-de-bord.html" class="btn btn-outline">Mon espace</a>
       </div>
     </div>
   `;
@@ -189,7 +198,6 @@ function renderSelections(selections, coupon) {
   `;
 }
 
-// Helpers
 function formatDate(iso) {
   if (!iso) return '—';
   const d = new Date(iso.length === 10 ? iso + 'T00:00:00' : iso);
