@@ -21,7 +21,7 @@
       background: white;
       border-radius: var(--radius);
       padding: 28px;
-      max-width: 480px;
+      max-width: 520px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
@@ -32,7 +32,7 @@
       padding-bottom: 12px;
       border-bottom: 1px solid rgba(10,31,68,0.08);
     }
-    .modal p { color: var(--gray-text); font-size: 0.9rem; margin-bottom: 20px; }
+    .modal p { color: var(--gray-text); font-size: 0.9rem; margin-bottom: 16px; }
     .modal .form-field { margin-bottom: 16px; }
     .modal .form-field label {
       display: block;
@@ -41,7 +41,8 @@
       margin-bottom: 6px;
     }
     .modal .form-field select,
-    .modal .form-field input {
+    .modal .form-field input,
+    .modal .form-field textarea {
       width: 100%;
       padding: 10px 14px;
       border: 1.5px solid #E2E8F0;
@@ -49,8 +50,10 @@
       font-family: 'Inter';
       font-size: 0.92rem;
     }
+    .modal .form-field textarea { resize: vertical; min-height: 70px; }
     .modal .form-field select:focus,
-    .modal .form-field input:focus {
+    .modal .form-field input:focus,
+    .modal .form-field textarea:focus {
       outline: none;
       border-color: var(--blue);
     }
@@ -59,6 +62,23 @@
       gap: 10px;
       justify-content: flex-end;
       margin-top: 20px;
+    }
+    .modal-warning {
+      background: #FED7D7;
+      border-left: 4px solid #E53E3E;
+      color: #9B2C2C;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
+    .modal-info {
+      background: var(--sky);
+      border-left: 4px solid var(--blue);
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
     }
 
     @media (max-width: 640px) {
@@ -133,10 +153,10 @@
   </div>
 </main>
 
-<!-- Modale d'activation d'abonnement -->
+<!-- Modale : activer un abonnement -->
 <div class="modal-overlay" id="sub-modal">
   <div class="modal">
-    <h2>Activer / prolonger un abonnement</h2>
+    <h2>✅ Activer / prolonger un abonnement</h2>
     <p>Utilisateur : <strong id="modal-user-name">—</strong><br /><span id="modal-user-email" style="font-size:0.85rem;"></span></p>
 
     <div class="form-field">
@@ -161,6 +181,51 @@
     <div class="modal-actions">
       <button class="btn btn-outline" id="modal-cancel">Annuler</button>
       <button class="btn btn-primary" id="modal-confirm">Confirmer l'activation</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modale : annuler un abonnement -->
+<div class="modal-overlay" id="cancel-modal">
+  <div class="modal">
+    <h2>🛑 Annuler l'abonnement</h2>
+
+    <div class="modal-warning">
+      ⚠️ <strong>Attention :</strong> l'utilisateur perdra <strong>immédiatement</strong> l'accès aux coupons premium. Cette action est irréversible (il devra souscrire un nouvel abonnement).
+    </div>
+
+    <p>Utilisateur : <strong id="cancel-user-name">—</strong><br /><span id="cancel-user-email" style="font-size:0.85rem;"></span></p>
+
+    <div class="modal-info" id="cancel-info">
+      <!-- Rempli dynamiquement -->
+    </div>
+
+    <div class="form-field">
+      <label>Motif de l'annulation <span style="color:#E53E3E;">*</span></label>
+      <select id="cancel-reason">
+        <option value="Erreur de paiement">Erreur de paiement (double débit, montant incorrect)</option>
+        <option value="Demande de l'utilisateur">Demande de l'utilisateur (remboursement)</option>
+        <option value="Fraude suspectée">Fraude suspectée</option>
+        <option value="Violation des CGU">Violation des CGU (partage de contenu)</option>
+        <option value="Problème technique">Problème technique (abonnement non utilisé)</option>
+        <option value="Autre">Autre</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label>Détails / note</label>
+      <textarea id="cancel-note" placeholder="Ex: L'utilisateur a payé deux fois par Wave le 25/10. Rembourser 5000 FCFA."></textarea>
+    </div>
+
+    <div class="form-field">
+      <label>Montant à rembourser (FCFA)</label>
+      <input type="number" id="cancel-refund" min="0" placeholder="Laisser vide si pas de remboursement" />
+      <div style="font-size:0.75rem;color:var(--gray-text);margin-top:4px;">Le remboursement est à effectuer manuellement via Wave/Orange Money.</div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="cancel-dismiss">Retour</button>
+      <button class="btn btn-danger" id="cancel-confirm">Confirmer l'annulation</button>
     </div>
   </div>
 </div>
