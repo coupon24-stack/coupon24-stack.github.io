@@ -64,7 +64,6 @@
     .subscription-card p { color: var(--gray-text); font-size: 0.92rem; margin-bottom: 16px; }
     #subscription-status { font-weight: 600; color: var(--navy); }
 
-    /* ============ SECTION PARRAINAGE ============ */
     .referral-card {
       background: linear-gradient(135deg, #FFF9E6, #FFF4E5);
       border: 2px solid #FFD98A;
@@ -92,11 +91,7 @@
       gap: 8px;
       flex-wrap: wrap;
     }
-    .referral-card .ref-subtitle {
-      color: #92400E;
-      font-size: 0.92rem;
-      margin-bottom: 24px;
-    }
+    .referral-card .ref-subtitle { color: #92400E; font-size: 0.92rem; margin-bottom: 24px; }
     .ref-code-box {
       background: white;
       border: 2px dashed #FFD98A;
@@ -109,154 +104,60 @@
       gap: 16px;
       flex-wrap: wrap;
     }
-    .ref-code-box > div:first-child {
-      min-width: 0;
-      flex: 1;
-    }
-    .ref-code-box .ref-code-label {
-      font-size: 0.75rem;
-      color: #B45309;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .ref-code-box .ref-code-value {
-      font-family: 'Courier New', monospace;
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--navy);
-      letter-spacing: 3px;
-      word-break: break-all;
-    }
+    .ref-code-box > div:first-child { min-width: 0; flex: 1; }
+    .ref-code-box .ref-code-label { font-size: 0.75rem; color: #B45309; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 4px; }
+    .ref-code-box .ref-code-value { font-family: 'Courier New', monospace; font-size: 1.6rem; font-weight: 800; color: var(--navy); letter-spacing: 3px; word-break: break-all; }
     .ref-code-box .btn { flex-shrink: 0; }
 
-    .ref-link-box {
-      background: white;
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .ref-link-box label {
-      font-size: 0.78rem;
-      color: var(--gray-text);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 700;
-      width: 100%;
-      margin-bottom: 4px;
-    }
-    .ref-link-box input {
-      flex: 1 1 200px;
-      min-width: 0;
-      padding: 10px 12px;
-      border: 1.5px solid #E2E8F0;
-      border-radius: 8px;
-      font-family: monospace;
-      font-size: 0.82rem;
-      color: var(--gray-text);
-      background: var(--gray-light);
-      width: 100%;
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .ref-link-box { background: white; border-radius: 10px; padding: 14px 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .ref-link-box label { font-size: 0.78rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; width: 100%; margin-bottom: 4px; }
+    .ref-link-box input { flex: 1 1 200px; min-width: 0; padding: 10px 12px; border: 1.5px solid #E2E8F0; border-radius: 8px; font-family: monospace; font-size: 0.82rem; color: var(--gray-text); background: var(--gray-light); width: 100%; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
 
-    .ref-stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .ref-stat {
-      background: white;
-      border-radius: 12px;
-      padding: 20px 12px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(10,31,68,0.04);
-      min-width: 0;
-    }
-    .ref-stat .stat-value {
-      font-family: 'Poppins';
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #B45309;
-      line-height: 1;
-      margin-bottom: 4px;
-      word-break: break-word;
-    }
-    .ref-stat .stat-label {
-      font-size: 0.7rem;
-      color: var(--gray-text);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 600;
-    }
+    .ref-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .ref-stat { background: white; border-radius: 12px; padding: 20px 12px; text-align: center; box-shadow: 0 2px 8px rgba(10,31,68,0.04); min-width: 0; }
+    .ref-stat .stat-value { font-family: 'Poppins'; font-size: 1.5rem; font-weight: 800; color: #B45309; line-height: 1; margin-bottom: 4px; word-break: break-word; }
+    .ref-stat .stat-label { font-size: 0.7rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
     .ref-stat.paid .stat-value { color: var(--green); }
     .ref-stat.total .stat-value { color: var(--blue); }
 
-    .ref-benefits {
+    /* WITHDRAWAL BOX */
+    .withdraw-box {
       background: white;
       border-radius: 12px;
       padding: 20px 24px;
-      margin-bottom: 8px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(10,31,68,0.04);
     }
-    .ref-benefits h4 {
-      font-size: 0.95rem;
-      color: var(--navy);
-      margin-bottom: 12px;
-      font-family: 'Poppins';
-    }
-    .ref-benefits ul { list-style: none; }
-    .ref-benefits li {
-      padding: 6px 0;
-      font-size: 0.88rem;
-      color: var(--gray-text);
+    .withdraw-header {
       display: flex;
-      gap: 8px;
-      align-items: flex-start;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
     }
+    .withdraw-label { font-size: 0.75rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 4px; }
+    .withdraw-balance { font-family: 'Poppins'; font-size: 1.8rem; font-weight: 800; color: var(--green); line-height: 1; }
+    .withdraw-note { font-size: 0.78rem; color: var(--gray-text); }
+    .withdraw-pending { margin-top: 12px; padding: 10px 14px; background: #FFF4E5; border-radius: 8px; font-size: 0.85rem; color: #B45309; font-weight: 500; }
+
+    .ref-benefits { background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 8px; }
+    .ref-benefits h4 { font-size: 0.95rem; color: var(--navy); margin-bottom: 12px; font-family: 'Poppins'; }
+    .ref-benefits ul { list-style: none; }
+    .ref-benefits li { padding: 6px 0; font-size: 0.88rem; color: var(--gray-text); display: flex; gap: 8px; align-items: flex-start; }
     .ref-benefits li strong { color: var(--navy); }
 
     .ref-filleuls { margin-top: 24px; }
-    .ref-filleuls h4 {
-      font-size: 1rem;
-      color: var(--navy);
-      margin-bottom: 12px;
-      font-family: 'Poppins';
-    }
-    .filleuls-table-wrapper {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(10,31,68,0.04);
-    }
+    .ref-filleuls h4 { font-size: 1rem; color: var(--navy); margin-bottom: 12px; font-family: 'Poppins'; }
+    .filleuls-table-wrapper { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(10,31,68,0.04); }
     .filleuls-table { width: 100%; border-collapse: collapse; }
-    .filleuls-table thead th {
-      text-align: left;
-      padding: 12px 14px;
-      background: #FFF9E6;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      color: #B45309;
-      letter-spacing: 0.5px;
-      font-weight: 700;
-    }
-    .filleuls-table tbody td {
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(10,31,68,0.06);
-      font-size: 0.88rem;
-    }
+    .filleuls-table thead th { text-align: left; padding: 12px 14px; background: #FFF9E6; font-size: 0.72rem; text-transform: uppercase; color: #B45309; letter-spacing: 0.5px; font-weight: 700; }
+    .filleuls-table tbody td { padding: 12px 14px; border-bottom: 1px solid rgba(10,31,68,0.06); font-size: 0.88rem; }
     .filleuls-table tbody tr:last-child td { border-bottom: none; }
     .filleuls-table .badge-active { background: #E6F9EF; color: #1E7E45; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 700; }
     .filleuls-table .badge-inactive { background: #E2E8F0; color: #4A5568; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 700; }
     .empty-filleuls { text-align: center; padding: 30px 20px; color: var(--gray-text); font-size: 0.9rem; }
 
-    /* ============ ACTIONS RAPIDES ============ */
     .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 8px; }
     .action-card { display: flex; align-items: center; gap: 14px; padding: 18px 20px; background: white; border-radius: 12px; box-shadow: var(--shadow); transition: all 0.2s; border: 1px solid rgba(10,31,68,0.04); }
     .action-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
@@ -287,6 +188,36 @@
       text-align: center;
     }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
+
+    /* MODALE RETRAIT */
+    .wd-modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(10,31,68,0.7);
+      z-index: 1000;
+      align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .wd-modal-overlay.active { display: flex; }
+    .wd-modal {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .wd-modal h2 { font-size: 1.25rem; margin-bottom: 8px; }
+    .wd-modal .wd-sub { color: var(--gray-text); font-size: 0.88rem; margin-bottom: 20px; }
+    .wd-modal .wd-field { margin-bottom: 16px; }
+    .wd-modal .wd-field label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; }
+    .wd-modal .wd-field input,
+    .wd-modal .wd-field select { width: 100%; padding: 10px 14px; border: 1.5px solid #E2E8F0; border-radius: 10px; font-family: 'Inter'; font-size: 0.92rem; }
+    .wd-modal .wd-field input:focus,
+    .wd-modal .wd-field select:focus { outline: none; border-color: var(--blue); }
+    .wd-modal .wd-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+    .wd-modal .wd-actions .btn { padding: 12px 24px; }
 
     @media (max-width: 768px) {
       .ref-stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -332,6 +263,10 @@
       .ref-stat .stat-value { font-size: 1.15rem; }
       .ref-stat .stat-label { font-size: 0.65rem; }
 
+      .withdraw-header { flex-direction: column; align-items: stretch; }
+      .withdraw-header .btn { width: 100%; }
+      .withdraw-balance { font-size: 1.4rem; }
+
       .ref-benefits { padding: 16px; }
       .ref-benefits li { font-size: 0.82rem; }
 
@@ -339,31 +274,9 @@
       .filleuls-table { display: block; background: transparent; }
       .filleuls-table thead { display: none; }
       .filleuls-table tbody { display: block; }
-      .filleuls-table tbody tr {
-        display: block;
-        background: white;
-        border-radius: 10px;
-        padding: 12px 14px;
-        margin-bottom: 10px;
-        box-shadow: 0 2px 8px rgba(10,31,68,0.04);
-      }
-      .filleuls-table tbody td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 6px 0;
-        border: none;
-        text-align: left !important;
-      }
-      .filleuls-table tbody td::before {
-        content: attr(data-label);
-        font-weight: 700;
-        color: var(--gray-text);
-        font-size: 0.68rem;
-        text-transform: uppercase;
-        margin-right: 12px;
-        flex-shrink: 0;
-      }
+      .filleuls-table tbody tr { display: block; background: white; border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(10,31,68,0.04); }
+      .filleuls-table tbody td { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border: none; text-align: left !important; }
+      .filleuls-table tbody td::before { content: attr(data-label); font-weight: 700; color: var(--gray-text); font-size: 0.68rem; text-transform: uppercase; margin-right: 12px; flex-shrink: 0; }
       .filleuls-table tbody td strong { font-size: 0.88rem; }
 
       .actions-grid { grid-template-columns: 1fr; gap: 12px; }
@@ -372,6 +285,9 @@
       .subscription-card .btn { width: 100%; }
 
       .toast-copy { bottom: 16px; font-size: 0.85rem; padding: 10px 20px; }
+
+      .wd-actions { flex-direction: column-reverse; }
+      .wd-actions .btn { width: 100%; }
     }
 
     @media (max-width: 360px) {
@@ -410,10 +326,7 @@
     <h1 class="page-title">Mon espace</h1>
     <p class="page-subtitle">Bienvenue sur ton tableau de bord COUPON24.</p>
 
-    <div id="dashboard-loading" class="loader">
-      <div class="spinner"></div>
-    </div>
-
+    <div id="dashboard-loading" class="loader"><div class="spinner"></div></div>
     <div id="dashboard-error" class="alert-error"></div>
 
     <div id="dashboard-content" style="display:none;">
@@ -484,6 +397,21 @@
           </div>
         </div>
 
+        <!-- SOLDE ET RETRAIT -->
+        <div class="withdraw-box" id="withdraw-box">
+          <div class="withdraw-header">
+            <div>
+              <div class="withdraw-label">💰 Solde disponible</div>
+              <div class="withdraw-balance" id="available-balance">0 F</div>
+            </div>
+            <button class="btn btn-primary" id="request-withdraw-btn">💸 Demander un retrait</button>
+          </div>
+          <div class="withdraw-note">Minimum 500 FCFA · Versement via Wave, Orange Money, MTN ou Moov</div>
+          <div id="pending-withdraw-info" class="withdraw-pending" style="display:none;">
+            ⏳ <span id="pending-withdraw-text"></span>
+          </div>
+        </div>
+
         <div class="ref-benefits">
           <h4>💡 Ce que ton filleul gagne à son 1er abonnement :</h4>
           <ul>
@@ -545,6 +473,36 @@
     </div>
   </div>
 </main>
+
+<!-- MODALE RETRAIT -->
+<div class="wd-modal-overlay" id="withdraw-modal">
+  <div class="wd-modal">
+    <h2>💸 Demander un retrait</h2>
+    <p class="wd-sub">Remplis le formulaire, notre équipe te versera sous 48h ouvrées.</p>
+    <div class="wd-field">
+      <label>Montant à retirer (FCFA)</label>
+      <input type="number" id="wd-amount" min="500" step="50" placeholder="Ex: 1000" />
+      <div style="font-size:0.75rem;color:var(--gray-text);margin-top:4px;">Disponible : <strong id="wd-available">0 F</strong> · Minimum 500 FCFA</div>
+    </div>
+    <div class="wd-field">
+      <label>Moyen de paiement</label>
+      <select id="wd-method">
+        <option value="wave">Wave</option>
+        <option value="orange_money">Orange Money</option>
+        <option value="mtn_momo">MTN MoMo</option>
+        <option value="moov_money">Moov Money</option>
+      </select>
+    </div>
+    <div class="wd-field">
+      <label>Numéro de téléphone pour le versement</label>
+      <input type="tel" id="wd-phone" placeholder="Ex: +2250700000000" />
+    </div>
+    <div class="wd-actions">
+      <button class="btn btn-outline" id="wd-cancel">Annuler</button>
+      <button class="btn btn-primary" id="wd-confirm">Confirmer la demande</button>
+    </div>
+  </div>
+</div>
 
 <div class="toast-copy" id="toast-copy">✅ Copié !</div>
 
