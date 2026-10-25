@@ -7,7 +7,7 @@
   <meta name="description" content="Découvre tes coupons football du jour. Pronostics gratuits et premium, analyses de matchs et abonnements adaptés." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
       --navy: #0A1F44;
@@ -19,7 +19,6 @@
       --gray-light: #F7F9FC;
       --green: #27AE60;
       --gold: #F5A623;
-      --red: #E53E3E;
       --radius: 16px;
       --radius-pill: 999px;
       --shadow: 0 4px 20px rgba(10, 31, 68, 0.06);
@@ -36,6 +35,7 @@
     .logo { display: flex; align-items: center; gap: 10px; font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--navy); letter-spacing: -0.5px; }
     .logo-ball { width: 34px; height: 34px; background: var(--blue-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(30, 79, 216, 0.3); }
 
+    /* ============ NAVBAR ============ */
     .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(10, 31, 68, 0.06); transition: 0.25s ease; }
     .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 12px; }
     .nav-links { display: flex; align-items: center; gap: 32px; }
@@ -51,13 +51,38 @@
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(30, 79, 216, 0.45); }
     .btn-white { background: white; color: var(--navy); }
     .btn-white:hover { background: var(--sky); }
-    .btn-danger { background: #FED7D7; color: #9B2C2C; }
-    .btn-danger:hover { background: #FEB2B2; }
     .btn-large { padding: 16px 36px; font-size: 1.05rem; }
 
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 8px; }
-    .hamburger span { width: 26px; height: 2.5px; background: var(--navy); border-radius: 2px; transition: 0.25s ease; }
+    /* ============ HAMBURGER ============ */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 8px; z-index: 1010; position: relative; }
+    .hamburger span { width: 26px; height: 2.5px; background: var(--navy); border-radius: 2px; transition: 0.3s ease; }
+    .hamburger.active span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
 
+    /* ============ MENU MOBILE ============ */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 8px 30px rgba(10,31,68,0.12);
+      padding: 20px 16px 24px;
+      z-index: 999;
+      flex-direction: column;
+      gap: 12px;
+      max-height: calc(100vh - 64px);
+      overflow-y: auto;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { padding: 14px 16px; font-size: 0.95rem; font-weight: 500; color: var(--gray-text); border-radius: 10px; transition: all 0.2s; }
+    .mobile-menu a:hover, .mobile-menu a.active { background: var(--sky); color: var(--blue); }
+    .mobile-menu .mobile-divider { height: 1px; background: rgba(10,31,68,0.08); margin: 6px 0; }
+    .mobile-menu .btn { width: 100%; padding: 14px; font-size: 0.95rem; }
+
+    /* ============ HERO ============ */
     .hero { position: relative; min-height: 92vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 80px; overflow: hidden; background: var(--navy); }
     .hero-bg { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; opacity: 0.45; }
     .hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10, 31, 68, 0.85) 0%, rgba(10, 31, 68, 0.6) 50%, rgba(10, 31, 68, 0.9) 100%); }
@@ -132,10 +157,11 @@
 
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
+    /* ============ RESPONSIVE ============ */
     @media (max-width: 968px) {
       .nav-links { display: none; }
-      .nav-actions .nav-guest .btn-outline { display: none; }
-      .nav-actions .nav-auth .btn-outline { display: none; }
+      .nav-actions .nav-guest,
+      .nav-actions .nav-auth { display: none; }
       .hamburger { display: flex; }
       .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
     }
@@ -150,7 +176,6 @@
       .navbar .container { height: 64px; padding: 8px 16px; gap: 8px; }
       .logo { font-size: 1.35rem; }
       .logo-ball { width: 30px; height: 30px; font-size: 1rem; }
-      .nav-actions .btn { padding: 10px 16px; font-size: 0.85rem; }
     }
     @supports (padding: max(0px)) {
       .navbar .container { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
@@ -165,29 +190,54 @@
       <span class="logo-ball">⚽</span>
       <span>COUPON<span style="color: var(--blue);">24</span></span>
     </a>
+
+    <!-- Liens desktop -->
     <div class="nav-links">
       <a href="/index.html" class="active">Accueil</a>
       <a href="/coupons.html">Coupons du jour</a>
       <a href="/abonnements.html">Abonnements</a>
       <a href="#comment-ca-marche">Comment ça marche ?</a>
     </div>
+
+    <!-- Actions desktop -->
     <div class="nav-actions">
       <!-- État NON connecté -->
       <div class="nav-guest" id="nav-guest">
         <a href="/connexion.html" class="btn btn-outline">Connexion</a>
         <a href="/inscription.html" class="btn btn-primary">Créer un compte</a>
       </div>
-      <!-- État CONNECTÉ (masqué par défaut) -->
+      <!-- État CONNECTÉ (sans bouton déconnexion) -->
       <div class="nav-auth" id="nav-auth" style="display:none;">
         <a href="/tableau-de-bord.html" class="btn btn-primary">Mon espace</a>
-        <button id="logout-btn" class="btn btn-danger">Déconnexion</button>
       </div>
+
+      <!-- Hamburger -->
       <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
 </nav>
+
+<!-- Menu mobile (s'ouvre sous la navbar) -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/index.html" class="active">🏠 Accueil</a>
+  <a href="/coupons.html">⚽ Coupons du jour</a>
+  <a href="/abonnements.html">💳 Abonnements</a>
+  <a href="#comment-ca-marche" data-close-menu>❓ Comment ça marche ?</a>
+  <div class="mobile-divider"></div>
+
+  <!-- État NON connecté (mobile) -->
+  <div id="mobile-guest">
+    <a href="/connexion.html" class="btn btn-outline">Connexion</a>
+    <a href="/inscription.html" class="btn btn-primary" style="margin-top:10px;">Créer un compte</a>
+  </div>
+
+  <!-- État CONNECTÉ (mobile) -->
+  <div id="mobile-auth" style="display:none;">
+    <a href="/tableau-de-bord.html" class="btn btn-primary">Mon espace</a>
+  </div>
+</div>
 
 <header class="hero">
   <div class="hero-bg" role="img" aria-label="Stade de football illuminé"></div>
@@ -222,14 +272,8 @@
             <span>⚽ 3 matchs</span>
           </div>
           <div class="coupon-stats">
-            <div class="coupon-stat">
-              <div class="value">3</div>
-              <div class="label">Matchs</div>
-            </div>
-            <div class="coupon-stat">
-              <div class="value">2.45</div>
-              <div class="label">Cote totale</div>
-            </div>
+            <div class="coupon-stat"><div class="value">3</div><div class="label">Matchs</div></div>
+            <div class="coupon-stat"><div class="value">2.45</div><div class="label">Cote totale</div></div>
           </div>
           <span class="coupon-status status-disponible">● Disponible</span>
           <a href="/coupons.html" class="btn btn-primary">Voir le coupon</a>
@@ -247,14 +291,8 @@
             <span>⚽ 2 matchs</span>
           </div>
           <div class="coupon-stats">
-            <div class="coupon-stat">
-              <div class="value">2</div>
-              <div class="label">Matchs</div>
-            </div>
-            <div class="coupon-stat">
-              <div class="value">1.85</div>
-              <div class="label">Cote totale</div>
-            </div>
+            <div class="coupon-stat"><div class="value">2</div><div class="label">Matchs</div></div>
+            <div class="coupon-stat"><div class="value">1.85</div><div class="label">Cote totale</div></div>
           </div>
           <span class="coupon-status status-disponible">● Disponible</span>
           <a href="/coupons.html" class="btn btn-primary">Voir le coupon</a>
@@ -273,14 +311,8 @@
             <span>⚽ 5 matchs</span>
           </div>
           <div class="coupon-stats">
-            <div class="coupon-stat">
-              <div class="value">5</div>
-              <div class="label">Matchs</div>
-            </div>
-            <div class="coupon-stat">
-              <div class="value">🔒</div>
-              <div class="label">Cote totale</div>
-            </div>
+            <div class="coupon-stat"><div class="value">5</div><div class="label">Matchs</div></div>
+            <div class="coupon-stat"><div class="value">🔒</div><div class="label">Cote totale</div></div>
           </div>
           <span class="coupon-status status-bientot">🔒 Réservé aux abonnés</span>
           <a href="/abonnements.html" class="btn btn-primary">S'abonner pour voir</a>
@@ -454,53 +486,63 @@
   (async function initNavbar() {
     const guestNav = document.getElementById('nav-guest');
     const authNav = document.getElementById('nav-auth');
-
-    if (!guestNav || !authNav) return;
+    const mobileGuest = document.getElementById('mobile-guest');
+    const mobileAuth = document.getElementById('mobile-auth');
 
     try {
       if (typeof supabaseClient !== 'undefined') {
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (session) {
-          guestNav.style.display = 'none';
-          authNav.style.display = 'flex';
+          if (guestNav) guestNav.style.display = 'none';
+          if (authNav) authNav.style.display = 'flex';
+          if (mobileGuest) mobileGuest.style.display = 'none';
+          if (mobileAuth) mobileAuth.style.display = 'block';
         } else {
-          guestNav.style.display = 'flex';
-          authNav.style.display = 'none';
+          if (guestNav) guestNav.style.display = 'flex';
+          if (authNav) authNav.style.display = 'none';
+          if (mobileGuest) mobileGuest.style.display = 'block';
+          if (mobileAuth) mobileAuth.style.display = 'none';
         }
       }
     } catch (e) {
       console.warn('[navbar] auth check failed:', e);
     }
-
-    // Déconnexion
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        if (!confirm('Se déconnecter ?')) return;
-        await supabaseClient.auth.signOut();
-        window.location.reload();
-      });
-    }
   })();
 
   // ============ MENU HAMBURGER MOBILE ============
   const hamburger = document.getElementById('hamburger');
-  const navLinks = document.querySelector('.nav-links');
-  if (hamburger && navLinks) {
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  if (hamburger && mobileMenu) {
     hamburger.addEventListener('click', () => {
-      const isOpen = navLinks.style.display === 'flex';
-      navLinks.style.display = isOpen ? 'none' : 'flex';
-      navLinks.style.position = 'absolute';
-      navLinks.style.top = '72px';
-      navLinks.style.left = '0';
-      navLinks.style.right = '0';
-      navLinks.style.background = 'white';
-      navLinks.style.flexDirection = 'column';
-      navLinks.style.padding = '24px';
-      navLinks.style.gap = '16px';
-      navLinks.style.boxShadow = '0 8px 30px rgba(10,31,68,0.12)';
-      hamburger.setAttribute('aria-expanded', String(!isOpen));
+      const isOpen = mobileMenu.classList.contains('open');
+      if (isOpen) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+      } else {
+        mobileMenu.classList.add('open');
+        hamburger.classList.add('active');
+        hamburger.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    // Fermer le menu au clic sur un lien
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Fermer le menu au clic en dehors
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
     });
   }
 
