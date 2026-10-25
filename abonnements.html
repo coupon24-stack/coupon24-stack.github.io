@@ -6,15 +6,7 @@
   <title>Abonnements — COUPON24</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --navy:#0A1F44; --blue:#1E4FD8;
-      --blue-gradient:linear-gradient(135deg,#0A1F44 0%,#1E4FD8 100%);
-      --sky:#E8F0FE; --gray-text:#4A5568; --gray-light:#F7F9FC;
-      --green:#27AE60; --gold:#F5A623; --red:#E53E3E;
-      --radius:16px; --radius-pill:999px;
-      --shadow:0 4px 20px rgba(10,31,68,0.06);
-      --shadow-hover:0 8px 30px rgba(10,31,68,0.12);
-    }
+    :root { --navy:#0A1F44; --blue:#1E4FD8; --blue-gradient:linear-gradient(135deg,#0A1F44 0%,#1E4FD8 100%); --sky:#E8F0FE; --gray-text:#4A5568; --gray-light:#F7F9FC; --green:#27AE60; --gold:#F5A623; --red:#E53E3E; --whatsapp:#25D366; --radius:16px; --radius-pill:999px; --shadow:0 4px 20px rgba(10,31,68,0.06); --shadow-hover:0 8px 30px rgba(10,31,68,0.12); }
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Inter',sans-serif; background:var(--gray-light); color:var(--navy); line-height:1.6; -webkit-font-smoothing:antialiased; }
     a { text-decoration:none; color:inherit; }
@@ -31,6 +23,8 @@
     .btn-outline:hover { border-color:var(--blue); color:var(--blue); }
     .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
     .btn-primary:hover { transform:translateY(-2px); }
+    .btn-whatsapp { background:var(--whatsapp); color:white; }
+    .btn-whatsapp:hover { transform:translateY(-2px); }
 
     .page-header { background:var(--navy); color:white; padding:60px 0 90px; text-align:center; }
     .page-header h1 { font-size:clamp(1.8rem,4vw,2.6rem); margin-bottom:10px; letter-spacing:-0.5px; }
@@ -41,13 +35,14 @@
     .status-banner.expired { background:#FED7D7; color:#9B2C2C; border-left:4px solid var(--red); display:block; }
     .status-banner.info { background:var(--sky); color:var(--blue); border-left:4px solid var(--blue); display:block; }
 
+    .info-box { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 24px; margin-bottom:24px; font-size:0.9rem; color:var(--gray-text); border-left:4px solid var(--gold); }
+    .info-box strong { color:var(--navy); }
+
     .pricing-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; padding-bottom:60px; }
     .pricing-card { background:white; border-radius:var(--radius); padding:40px 32px; text-align:center; box-shadow:var(--shadow); transition:all 0.25s; border:1.5px solid rgba(10,31,68,0.08); display:flex; flex-direction:column; position:relative; }
     .pricing-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-hover); }
     .pricing-card.featured { border-color:var(--blue); background:var(--navy); color:white; }
-    .pricing-card.featured .pricing-price,
-    .pricing-card.featured .pricing-duration,
-    .pricing-card.featured .pricing-features li { color:white; }
+    .pricing-card.featured .pricing-price, .pricing-card.featured .pricing-duration, .pricing-card.featured .pricing-features li { color:white; }
     .pricing-card.featured .pricing-features li::before { color:#8AB4FF; }
     .popular-badge { position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:var(--gold); color:var(--navy); padding:6px 20px; border-radius:var(--radius-pill); font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; white-space:nowrap; }
     .pricing-duration { font-size:0.95rem; font-weight:600; color:var(--gray-text); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
@@ -59,31 +54,47 @@
     .pricing-features li::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; }
     .pricing-card .btn { width:100%; }
 
-    .info-box { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:24px 28px; margin-bottom:24px; font-size:0.9rem; color:var(--gray-text); border-left:4px solid var(--gold); }
-    .info-box strong { color:var(--navy); }
+    /* MODALE */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(10,31,68,0.7); z-index:1000; align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
+    .modal-overlay.active { display:flex; }
+    .modal { background:white; border-radius:16px; padding:32px 28px; max-width:540px; width:100%; max-height:90vh; overflow-y:auto; }
+    .modal h2 { font-size:1.3rem; margin-bottom:8px; }
+    .modal .modal-sub { color:var(--gray-text); font-size:0.9rem; margin-bottom:20px; }
+    .modal-recap { background:linear-gradient(135deg,#F7F9FC,#E8F0FE); border-radius:12px; padding:20px 24px; margin-bottom:20px; }
+    .modal-recap .row { display:flex; justify-content:space-between; padding:8px 0; font-size:0.95rem; }
+    .modal-recap .row:not(:last-child) { border-bottom:1px solid rgba(10,31,68,0.08); }
+    .modal-recap .row .label { color:var(--gray-text); }
+    .modal-recap .row .value { font-weight:700; color:var(--navy); }
+    .modal-recap .row .value.price { color:var(--blue); font-family:'Poppins'; font-size:1.3rem; }
+
+    .email-highlight { background:#FFF4E5; border:2px solid var(--gold); border-radius:12px; padding:16px 20px; margin-bottom:20px; }
+    .email-highlight .label { font-size:0.78rem; color:#B45309; text-transform:uppercase; letter-spacing:0.5px; font-weight:700; margin-bottom:6px; }
+    .email-highlight .value { font-family:'Poppins'; font-weight:700; font-size:1.05rem; color:var(--navy); word-break:break-all; }
+    .email-highlight .note { font-size:0.82rem; color:var(--gray-text); margin-top:8px; }
+
+    .modal-steps { list-style:none; margin-bottom:24px; }
+    .modal-steps li { display:flex; gap:12px; padding:10px 0; font-size:0.88rem; color:var(--gray-text); }
+    .modal-steps .step-num { flex-shrink:0; width:26px; height:26px; border-radius:50%; background:var(--sky); color:var(--blue); display:flex; align-items:center; justify-content:center; font-family:'Poppins'; font-weight:700; font-size:0.8rem; }
+
+    .modal-actions { display:flex; gap:10px; flex-direction:column; }
+    .modal-actions .btn { width:100%; padding:14px; font-size:0.95rem; }
 
     @media (max-width:640px) {
       body { overflow-x:hidden; }
-      .navbar .container { height:auto; min-height:60px; padding:8px 16px; gap:8px; flex-wrap:nowrap; }
+      .navbar .container { height:auto; min-height:60px; padding:8px 16px; gap:8px; }
       .logo { font-size:1.2rem; gap:6px; }
       .logo-ball { width:28px; height:28px; font-size:0.9rem; }
       .nav-right { gap:6px; margin-left:auto; }
-      .nav-right .btn { padding:10px 14px; font-size:0.82rem; min-height:40px; min-width:44px; }
+      .nav-right .btn { padding:10px 14px; font-size:0.82rem; }
       .nav-right .btn-outline { display:none; }
       .container { padding:0 16px; }
       .pricing-card { padding:32px 24px; }
       .pricing-price { font-size:2.2rem; }
       .status-banner { margin:-40px 16px 24px; }
-    }
-    @media (max-width:360px) {
-      .logo { font-size:1.05rem; }
-      .logo-ball { width:24px; height:24px; font-size:0.8rem; }
+      .modal { padding:24px 20px; }
     }
     @supports (padding: max(0px)) {
-      .navbar .container {
-        padding-left: max(16px, env(safe-area-inset-left));
-        padding-right: max(16px, env(safe-area-inset-right));
-      }
+      .navbar .container { padding-left:max(16px, env(safe-area-inset-left)); padding-right:max(16px, env(safe-area-inset-right)); }
     }
   </style>
 </head>
@@ -113,7 +124,7 @@
   <div id="status-banner" class="status-banner"></div>
 
   <div class="info-box">
-    ⚠️ <strong>Information :</strong> L'intégration des paiements mobiles (Orange Money, MTN MoMo, Wave) est en cours de finalisation. En attendant, les abonnements peuvent être activés manuellement par l'administrateur. Contacte-nous pour plus d'informations.
+    💡 <strong>Comment ça marche :</strong> Le paiement s'effectue via <strong>Money Fusion</strong> (Orange Money, MTN, Moov, Wave). <strong>Utilise le même email que ton compte COUPON24</strong> pour que ton abonnement soit activé automatiquement par notre équipe.
   </div>
 
   <div class="pricing-grid">
@@ -126,7 +137,7 @@
         <li>Coupons gratuits inclus</li>
         <li>Support par email</li>
       </ul>
-      <button class="btn btn-outline" data-plan="7j" data-days="7" data-price="1500">Choisir cette formule</button>
+      <button class="btn btn-outline" data-plan="7j" data-days="7" data-price="1500" data-label="7 jours">Choisir cette formule</button>
     </div>
 
     <div class="pricing-card featured">
@@ -139,7 +150,7 @@
         <li>Économie de 1 000 FCFA vs 4 semaines</li>
         <li>Support prioritaire</li>
       </ul>
-      <button class="btn btn-primary" data-plan="30j" data-days="30" data-price="5000">Choisir cette formule</button>
+      <button class="btn btn-primary" data-plan="30j" data-days="30" data-price="5000" data-label="30 jours">Choisir cette formule</button>
     </div>
 
     <div class="pricing-card">
@@ -151,80 +162,177 @@
         <li>Économie de 15 000 FCFA vs 12 mensuels</li>
         <li>Accès prioritaire aux nouveaux coupons</li>
       </ul>
-      <button class="btn btn-outline" data-plan="annuel" data-days="365" data-price="45000">Choisir cette formule</button>
+      <button class="btn btn-outline" data-plan="annuel" data-days="365" data-price="45000" data-label="Annuel">Choisir cette formule</button>
     </div>
   </div>
 </div>
 
-<!-- Modale d'information -->
-<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(10,31,68,0.7);z-index:1000;align-items:center;justify-content:center;padding:20px;">
-  <div style="background:white;border-radius:16px;padding:32px 28px;max-width:480px;width:100%;text-align:center;">
-    <div style="font-size:2.5rem;margin-bottom:12px;">💳</div>
-    <h2 style="font-size:1.3rem;margin-bottom:12px;">Paiement bientôt disponible</h2>
-    <p id="modal-text" style="color:#4A5568;font-size:0.92rem;margin-bottom:24px;"></p>
-    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-      <a href="/tableau-de-bord.html" class="btn btn-outline">Mon espace</a>
-      <button class="btn btn-primary" onclick="document.getElementById('modal').style.display='none'">Fermer</button>
+<!-- MODALE DE PAIEMENT -->
+<div class="modal-overlay" id="payment-modal">
+  <div class="modal">
+    <h2>Confirmer ton abonnement</h2>
+    <p class="modal-sub">Vérifie les informations avant de continuer</p>
+
+    <div class="modal-recap">
+      <div class="row">
+        <span class="label">Formule</span>
+        <span class="value" id="modal-plan-label">—</span>
+      </div>
+      <div class="row">
+        <span class="label">Durée</span>
+        <span class="value" id="modal-days-label">—</span>
+      </div>
+      <div class="row">
+        <span class="label">Montant</span>
+        <span class="value price" id="modal-price-label">—</span>
+      </div>
+    </div>
+
+    <div class="email-highlight">
+      <div class="label">⚠️ Email à utiliser lors du paiement</div>
+      <div class="value" id="modal-email">—</div>
+      <div class="note">Utilise <strong>obligatoirement cet email</strong> dans le formulaire Money Fusion pour permettre à notre équipe de retrouver ton compte et d'activer ton abonnement.</div>
+    </div>
+
+    <p style="font-weight:600; color:var(--navy); margin-bottom:8px;">Comment procéder :</p>
+    <ul class="modal-steps">
+      <li>
+        <span class="step-num">1</span>
+        <span>Clique sur <strong>"Continuer vers le paiement"</strong>. Une page Money Fusion s'ouvrira.</span>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <span>Remplis le formulaire avec <strong>ton nom, ton email COUPON24</strong> et <strong>ton numéro</strong>, puis paie.</span>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <span>Une fois le paiement confirmé par Money Fusion, <strong>reviens sur ce site</strong>. Ton abonnement sera activé par notre équipe.</span>
+      </li>
+      <li>
+        <span class="step-num">4</span>
+        <span>Tu recevras une confirmation. En cas de souci, contacte-nous sur WhatsApp au <strong>+225 01 00 60 0218</strong>.</span>
+      </li>
+    </ul>
+
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="modal-continue">💳 Continuer vers le paiement</button>
+      <button class="btn btn-outline" id="modal-cancel">Annuler</button>
     </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/assets/js/supabase-client.js"></script>
+
 <script>
-(async function() {
-  const banner = document.getElementById('status-banner');
+  // ============================================================
+  // ⚠️ REMPLACE CES 3 LIENS PAR TES LIENS MONEY FUSION ⚠️
+  // ============================================================
+  const PAYMENT_LINKS = {
+    '7j':     'https://REMPLACE_MOI_LIEN_7J',
+    '30j':    'https://REMPLACE_MOI_LIEN_30J',
+    'annuel': 'https://REMPLACE_MOI_LIEN_ANNUEL'
+  };
 
-  // Vérifier si connecté
-  let session = null;
-  try {
-    const res = await supabaseClient.auth.getSession();
-    session = res.data.session;
-  } catch (e) { console.warn(e); }
+  let currentPlan = null;
+  let currentSession = null;
 
-  if (!session) {
-    banner.className = 'status-banner info';
-    banner.textContent = 'ℹ️ Connecte-toi ou crée un compte pour souscrire un abonnement.';
-    return;
-  }
+  (async function init() {
+    const banner = document.getElementById('status-banner');
 
-  // Vérifier l'abonnement actuel
-  try {
-    const { data: subs } = await supabaseClient
-      .from('subscriptions')
-      .select('expires_at, status')
-      .eq('user_id', session.user.id)
-      .order('expires_at', { ascending: false })
-      .limit(1);
-
-    if (subs && subs.length > 0) {
-      const sub = subs[0];
-      const exp = new Date(sub.expires_at);
-      const now = new Date();
-      if (sub.status === 'active' && exp > now) {
-        const daysLeft = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
-        banner.className = 'status-banner active';
-        banner.textContent = `✅ Tu as un abonnement actif jusqu'au ${exp.toLocaleDateString('fr-FR')} (${daysLeft} jour${daysLeft > 1 ? 's' : ''} restant${daysLeft > 1 ? 's' : ''}).`;
-      } else {
-        banner.className = 'status-banner expired';
-        banner.textContent = `⏱️ Ton abonnement a expiré le ${exp.toLocaleDateString('fr-FR')}. Choisis une nouvelle formule ci-dessous.`;
+    try {
+      if (typeof supabaseClient !== 'undefined') {
+        const res = await supabaseClient.auth.getSession();
+        currentSession = res.data.session;
       }
-    }
-  } catch (e) { console.warn('[abonnements]', e); }
+    } catch (e) { console.warn(e); }
 
-  // Boutons de souscription
+    if (!currentSession) {
+      banner.className = 'status-banner info';
+      banner.textContent = 'ℹ️ Connecte-toi ou crée un compte pour souscrire un abonnement.';
+      return;
+    }
+
+    try {
+      const { data: subs } = await supabaseClient
+        .from('subscriptions')
+        .select('expires_at, status')
+        .eq('user_id', currentSession.user.id)
+        .order('expires_at', { ascending: false })
+        .limit(1);
+
+      if (subs && subs.length > 0) {
+        const sub = subs[0];
+        const exp = new Date(sub.expires_at);
+        const now = new Date();
+        if (sub.status === 'active' && exp > now) {
+          const daysLeft = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+          banner.className = 'status-banner active';
+          banner.textContent = `✅ Tu as un abonnement actif jusqu'au ${exp.toLocaleDateString('fr-FR')} (${daysLeft} jour${daysLeft > 1 ? 's' : ''} restant${daysLeft > 1 ? 's' : ''}).`;
+        } else {
+          banner.className = 'status-banner expired';
+          banner.textContent = `⏱️ Ton abonnement a expiré le ${exp.toLocaleDateString('fr-FR')}. Choisis une nouvelle formule ci-dessous.`;
+        }
+      }
+    } catch (e) { console.warn('[abonnements]', e); }
+  })();
+
   document.querySelectorAll('button[data-plan]').forEach(btn => {
     btn.addEventListener('click', () => {
       const plan = btn.dataset.plan;
       const days = btn.dataset.days;
       const price = btn.dataset.price;
-      const modal = document.getElementById('modal');
-      document.getElementById('modal-text').textContent =
-        `Formule ${plan} — ${price} FCFA (${days} jours). L'intégration CinetPay est en cours. En attendant, contacte l'administrateur pour activer ton abonnement manuellement.`;
-      modal.style.display = 'flex';
+      const label = btn.dataset.label;
+
+      if (!currentSession) {
+        if (confirm('Tu dois être connecté pour souscrire. Aller à la page de connexion ?')) {
+          window.location.href = '/connexion.html?redirect=%2Fabonnements.html';
+        }
+        return;
+      }
+
+      const link = PAYMENT_LINKS[plan];
+      if (!link || link.includes('REMPLACE_MOI')) {
+        alert('⚠️ Les liens de paiement ne sont pas encore configurés.\n\n(Message admin : remplace les liens "REMPLACE_MOI_..." dans le fichier abonnements.html)');
+        return;
+      }
+
+      currentPlan = { plan, days, price, label };
+
+      document.getElementById('modal-plan-label').textContent = label;
+      document.getElementById('modal-days-label').textContent = `${days} jour${parseInt(days) > 1 ? 's' : ''}`;
+      document.getElementById('modal-price-label').textContent = `${parseInt(price).toLocaleString('fr-FR')} FCFA`;
+      document.getElementById('modal-email').textContent = currentSession.user.email;
+
+      document.getElementById('payment-modal').classList.add('active');
     });
   });
-})();
+
+  document.getElementById('modal-continue')?.addEventListener('click', () => {
+    if (!currentPlan) return;
+    const link = PAYMENT_LINKS[currentPlan.plan];
+    if (!link) return;
+
+    // Rediriger l'utilisateur vers le paiement
+    window.location.href = link;
+
+    // Fermer la modale (au cas où l'utilisateur revient en arrière)
+    setTimeout(() => {
+      document.getElementById('payment-modal').classList.remove('active');
+    }, 1000);
+  });
+
+  document.getElementById('modal-cancel')?.addEventListener('click', () => {
+    document.getElementById('payment-modal').classList.remove('active');
+    currentPlan = null;
+  });
+  document.getElementById('payment-modal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'payment-modal') {
+      document.getElementById('payment-modal').classList.remove('active');
+      currentPlan = null;
+    }
+  });
 </script>
+
 </body>
 </html>
