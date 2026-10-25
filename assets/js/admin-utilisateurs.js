@@ -1,13 +1,14 @@
 // frontend/assets/js/admin-utilisateurs.js
-// Gestion des utilisateurs : liste, recherche, activation manuelle d'abonnement.
+// Gestion des utilisateurs : liste, activation et annulation d'abonnement.
 
 let allUsers = [];
 let currentUserId = null;
 let currentUserName = null;
 let currentUserEmail = null;
+let currentSubscription = null; // Pour l'annulation
 
 // ============================================================
-// CHARGEMENT DES UTILISATEURS
+// CHARGEMENT
 // ============================================================
 async function loadUsers() {
   const loading = document.getElementById('loading');
@@ -35,7 +36,7 @@ async function loadUsers() {
 }
 
 // ============================================================
-// RENDU FILTRÉ
+// RENDU
 // ============================================================
 function renderUsers() {
   const tbody = document.getElementById('users-body');
@@ -52,7 +53,6 @@ function renderUsers() {
       (u.phone || '').toLowerCase().includes(search)
     );
   }
-
   if (filterSub) {
     filtered = filtered.filter(u => u.subscription_status === filterSub);
   }
@@ -74,6 +74,10 @@ function renderUsers() {
     const roleLabel = u.role === 'admin' ? 'Admin' : 'Membre';
     const roleBadge = u.role === 'admin' ? 'badge-admin' : 'badge-none';
 
+    const cancelBtn = u.subscription_status === 'active'
+      ? `<button class="btn btn-danger btn-sm" data-action="cancel" data-id="${u.id}">Annuler abo.</button>`
+      : '';
+
     return `
       <tr>
         <td data-label="Nom"><strong>${escapeHtml(u.full_name) || '—'}</strong></td>
@@ -88,22 +92,27 @@ function renderUsers() {
         <td data-label="Actions">
           <div class="user-actions">
             <button class="btn btn-primary btn-sm" data-action="activate" data-id="${u.id}">Activer abo.</button>
+            ${cancelBtn}
           </div>
         </td>
       </tr>
     `;
   }).join('');
 
-  // Attacher les listeners
-  tbody.querySelectorAll('button[data-action="activate"]').forEach(btn => {
-    btn.addEventListener('click', () => openSubscriptionModal(btn.dataset.id));
+  tbody.querySelectorAll('button[data-action]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const action = btn.dataset.action;
+      const id = btn.dataset.id;
+      if (action === 'activate') openActivationModal(id);
+      if (action === 'cancel') openCancelModal(id);
+    });
   });
 }
 
 // ============================================================
-// MODALE D'ACTIVATION
+// MODALE ACTIVATION
 // ============================================================
-function openSubscriptionModal(userId) {
+function openActivationModal(userId) {
   const user = allUsers.find(u => u.id === userId);
   if (!user) return;
 
@@ -119,13 +128,12 @@ function openSubscriptionModal(userId) {
 
   document.getElementById('sub-modal').classList.add('active');
 }
-
-function closeSubscriptionModal() {
+function closeActivationModal() {
   document.getElementById('sub-modal').classList.remove('active');
   currentUserId = null;
 }
 
-async function confirmSubscription() {
+async function confirmActivation() {
   if (!currentUserId) return;
 
   const planSelect = document.getElementById('modal-plan');
@@ -151,10 +159,8 @@ async function confirmSubscription() {
       p_plan_code: planCode,
       p_days: days,
     });
-
     if (error) throw error;
 
-    // Log la note dans admin_actions si fournie
     if (note) {
       try {
         const { data: { user } } = await supabaseClient.auth.getUser();
@@ -169,14 +175,128 @@ async function confirmSubscription() {
     }
 
     showToast(`Abonnement de ${days} jours activé pour ${currentUserName}`, 'success');
-    closeSubscriptionModal();
+    closeActivationModal();
     loadUsers();
   } catch (err) {
-    console.error('[confirmSubscription]', err);
+    console.error('[confirmActivation]', err);
     showToast('Erreur : ' + (err.message || 'inconnue'), 'error');
   } finally {
     btn.disabled = false;
     btn.textContent = "Confirmer l'activation";
+  }
+}
+
+// ============================================================
+// MODALE ANNULATION
+// ============================================================
+async function openCancelModal(userId) {
+  const user = allUsers.find(u => u.id === userId);
+  if (!user) return;
+
+  currentUserId = userId;
+  currentUserName = user.full_name || 'Utilisateur';
+  currentUserEmail = user.email;
+
+  document.getElementById('cancel-user-name').textContent = currentUserName;
+  document.getElementById('cancel-user-email').textContent = user.email;
+  document.getElementById('cancel-reason').value = 'Erreur de paiement';
+  document.getElementById('cancel-note').value = '';
+  document.getElementById('cancel-refund').value = '';
+
+  // Charger les détails de l'abonnement actif pour afficher le récap
+  const infoBox = document.getElementById('cancel-info');
+  infoBox.textContent = 'Chargement des détails…';
+
+  try {
+    const { data: subs, error } = await supabaseClient
+      .from('subscriptions')
+      .select('id, plan_code, starts_at, expires_at, status')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .order('expires_at', { ascending: false })
+      .limit(1);
+
+    if (error) throw error;
+
+    if (!subs || subs.length === 0) {
+      infoBox.textContent = 'Aucun abonnement actif trouvé.';
+      currentSubscription = null;
+    } else {
+      currentSubscription = subs[0];
+      const exp = new Date(currentSubscription.expires_at);
+      const now = new Date();
+      const daysLeft = Math.max(0, Math.ceil((exp - now) / (1000 * 60 * 60 * 24)));
+      const priceMap = { '7j': 1500, '30j': 5000, 'annuel': 45000 };
+
+      infoBox.innerHTML = `
+        <strong>Abonnement actif :</strong><br />
+        Formule : <strong>${currentSubscription.plan_code}</strong><br />
+        Expire le : <strong>${exp.toLocaleDateString('fr-FR')}</strong><br />
+        Jours restants : <strong>${daysLeft} jour${daysLeft > 1 ? 's' : ''}</strong>
+      `;
+
+      // Pré-remplir le montant à rembourser avec le prix de la formule
+      const suggestedPrice = priceMap[currentSubscription.plan_code] || '';
+      if (suggestedPrice) {
+        document.getElementById('cancel-refund').value = suggestedPrice;
+      }
+    }
+
+    document.getElementById('cancel-modal').classList.add('active');
+  } catch (err) {
+    console.error('[openCancelModal]', err);
+    showToast('Erreur chargement abonnement : ' + err.message, 'error');
+  }
+}
+
+function closeCancelModal() {
+  document.getElementById('cancel-modal').classList.remove('active');
+  currentUserId = null;
+  currentSubscription = null;
+}
+
+async function confirmCancel() {
+  if (!currentUserId) return;
+
+  const reason = document.getElementById('cancel-reason').value;
+  const note = document.getElementById('cancel-note').value.trim();
+  const refundStr = document.getElementById('cancel-refund').value.trim();
+  const refundAmount = refundStr ? parseFloat(refundStr) : null;
+
+  if (!reason) {
+    showToast('Le motif est obligatoire', 'error');
+    return;
+  }
+
+  const reasonText = note ? `${reason} — ${note}` : reason;
+
+  const btn = document.getElementById('cancel-confirm');
+  btn.disabled = true;
+  btn.textContent = 'Annulation...';
+
+  try {
+    const { data, error } = await supabaseClient.rpc('admin_cancel_subscription', {
+      p_user_id: currentUserId,
+      p_reason: reasonText,
+      p_refund_amount: refundAmount,
+    });
+    if (error) throw error;
+
+    // Message de succès détaillé
+    let msg = `Abonnement annulé pour ${currentUserName}.`;
+    if (refundAmount && refundAmount > 0) {
+      msg += ` ⚠️ N'oublie pas de rembourser ${refundAmount} FCFA via Wave/Orange Money.`;
+    }
+
+    showToast(msg, 'success', 6000);
+    closeCancelModal();
+    loadUsers();
+  } catch (err) {
+    console.error('[confirmCancel]', err);
+    showToast('Erreur : ' + (err.message || 'inconnue'), 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Confirmer l'annulation";
   }
 }
 
@@ -187,7 +307,6 @@ async function confirmSubscription() {
   const ctx = await requireAdmin();
   if (!ctx) return;
 
-  // Filtres
   let searchTimeout;
   document.getElementById('search-input')?.addEventListener('input', () => {
     clearTimeout(searchTimeout);
@@ -195,11 +314,18 @@ async function confirmSubscription() {
   });
   document.getElementById('filter-subscription')?.addEventListener('change', renderUsers);
 
-  // Modale
-  document.getElementById('modal-cancel')?.addEventListener('click', closeSubscriptionModal);
-  document.getElementById('modal-confirm')?.addEventListener('click', confirmSubscription);
+  // Modale activation
+  document.getElementById('modal-cancel')?.addEventListener('click', closeActivationModal);
+  document.getElementById('modal-confirm')?.addEventListener('click', confirmActivation);
   document.getElementById('sub-modal')?.addEventListener('click', (e) => {
-    if (e.target.id === 'sub-modal') closeSubscriptionModal();
+    if (e.target.id === 'sub-modal') closeActivationModal();
+  });
+
+  // Modale annulation
+  document.getElementById('cancel-dismiss')?.addEventListener('click', closeCancelModal);
+  document.getElementById('cancel-confirm')?.addEventListener('click', confirmCancel);
+  document.getElementById('cancel-modal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'cancel-modal') closeCancelModal();
   });
 
   loadUsers();
