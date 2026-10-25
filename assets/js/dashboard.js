@@ -1,25 +1,21 @@
 // frontend/assets/js/dashboard.js
-// Charge et affiche les données du profil + le programme de parrainage.
+// Charge et affiche les données du profil + le programme de parrainage + les retraits.
 
-(async function loadDashboard() {
+let currentWithdrawalStats = null;
+
+async function loadDashboardRoutine() {
   const loadingEl = document.getElementById('dashboard-loading');
   const contentEl = document.getElementById('dashboard-content');
   const errorEl = document.getElementById('dashboard-error');
 
   try {
-    if (typeof supabaseClient === 'undefined') {
-      throw new Error("supabaseClient non chargé.");
-    }
+    if (typeof supabaseClient === 'undefined') throw new Error("supabaseClient non chargé.");
 
     const { data: { session }, error: sessionErr } = await supabaseClient.auth.getSession();
-    if (sessionErr || !session) {
-      window.location.replace('/connexion.html');
-      return;
-    }
+    if (sessionErr || !session) { window.location.replace('/connexion.html'); return; }
 
     const user = session.user;
 
-    // Profil
     const { data: profile, error: profileError } = await supabaseClient
       .from('profiles')
       .select('id, full_name, phone, role, created_at, referral_code')
@@ -28,10 +24,8 @@
 
     if (profileError) console.error('[dashboard] profil:', profileError);
 
-    // Abonnement
     let subStatus = 'Aucun abonnement actif';
     let subDetails = 'Souscris à un abonnement pour accéder aux coupons premium.';
-
     try {
       const { data: subs } = await supabaseClient
         .from('subscriptions')
@@ -39,7 +33,6 @@
         .eq('user_id', user.id)
         .order('expires_at', { ascending: false })
         .limit(1);
-
       if (subs && subs.length > 0) {
         const sub = subs[0];
         const expiresAt = new Date(sub.expires_at);
@@ -53,15 +46,9 @@
           subDetails = `Expiré le ${expiresAt.toLocaleDateString('fr-FR')}. Renouvelle pour retrouver l'accès.`;
         }
       }
-    } catch (e) {
-      console.warn('[dashboard] subscriptions:', e);
-    }
+    } catch (e) { console.warn('[dashboard] subscriptions:', e); }
 
-    // Remplir la section profil
-    const setText = (id, val) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = val;
-    };
+    const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
     const fullName = (profile && profile.full_name) || 'Utilisateur';
     setText('user-fullname', fullName);
     setText('user-email', user.email || '—');
@@ -76,41 +63,29 @@
       if (adminLink) adminLink.style.display = 'flex';
     }
 
-    // ============================================================
-    // SECTION PARRAINAGE
-    // ============================================================
+    // PARRAINAGE
     const referralCode = (profile && profile.referral_code) || '';
     const refDisplay = document.getElementById('ref-code-display');
     const refLinkInput = document.getElementById('ref-link-display');
-
-    if (refDisplay && referralCode) {
-      refDisplay.textContent = referralCode;
-    }
+    if (refDisplay && referralCode) refDisplay.textContent = referralCode;
     if (refLinkInput && referralCode) {
-      const shareUrl = `${window.location.origin}/inscription.html?ref=${encodeURIComponent(referralCode)}`;
-      refLinkInput.value = shareUrl;
+      refLinkInput.value = `${window.location.origin}/inscription.html?ref=${encodeURIComponent(referralCode)}`;
     }
 
-    // Bouton copier code
     const copyCodeBtn = document.getElementById('copy-code-btn');
     if (copyCodeBtn) {
       copyCodeBtn.addEventListener('click', async () => {
         if (!referralCode) return;
-        const ok = await copyText(referralCode);
-        if (ok) showToast('✅ Code copié !');
+        if (await copyText(referralCode)) showToast('✅ Code copié !');
       });
     }
-
-    // Bouton copier lien
     const copyLinkBtn = document.getElementById('copy-link-btn');
     if (copyLinkBtn && refLinkInput) {
       copyLinkBtn.addEventListener('click', async () => {
-        const ok = await copyText(refLinkInput.value);
-        if (ok) showToast('✅ Lien copié !');
+        if (await copyText(refLinkInput.value)) showToast('✅ Lien copié !');
       });
     }
 
-    // Stats
     try {
       const { data: stats, error: statsErr } = await supabaseClient.rpc('get_my_referral_stats');
       if (!statsErr && stats) {
@@ -121,54 +96,39 @@
       }
     } catch (e) { console.warn('[dashboard] stats:', e); }
 
-    // Filleuls
     try {
-      const { data: filleuls, error: filleulsErr } = await supabaseClient.rpc('get_my_referrals');
+      const { data: filleuls } = await supabaseClient.rpc('get_my_referrals');
       const container = document.getElementById('filleuls-container');
       const countEl = document.getElementById('filleuls-count');
-
-      if (!filleulsErr && filleuls) {
-        if (countEl) countEl.textContent = filleuls.length;
-        if (container) {
-          if (filleuls.length === 0) {
-            container.innerHTML = `
-              <div class="empty-filleuls">
-                Tu n'as encore parrainé personne.<br />
-                Partage ton code ou ton lien pour commencer à gagner !
-              </div>`;
-          } else {
-            container.innerHTML = `
+      if (countEl) countEl.textContent = (filleuls || []).length;
+      if (container) {
+        if (!filleuls || filleuls.length === 0) {
+          container.innerHTML = `<div class="empty-filleuls">Tu n'as encore parrainé personne.<br />Partage ton code ou ton lien pour commencer à gagner !</div>`;
+        } else {
+          container.innerHTML = `
+            <div class="filleuls-table-wrapper">
               <table class="filleuls-table">
                 <thead>
-                  <tr>
-                    <th>Nom</th>
-                    <th>Inscription</th>
-                    <th>Statut abonnement</th>
-                    <th style="text-align:right;">Commission</th>
-                  </tr>
+                  <tr><th>Nom</th><th>Inscription</th><th>Statut</th><th style="text-align:right;">Commission</th></tr>
                 </thead>
                 <tbody>
                   ${filleuls.map(f => `
                     <tr>
                       <td data-label="Nom"><strong>${escapeHtml(f.full_name)}</strong></td>
                       <td data-label="Inscription">${formatDateFR(f.created_at)}</td>
-                      <td data-label="Statut">
-                        <span class="${f.has_active_sub ? 'badge-active' : 'badge-inactive'}">
-                          ${f.has_active_sub ? 'Actif' : 'Sans abo'}
-                        </span>
-                      </td>
-                      <td data-label="Commission" style="text-align:right;font-weight:700;color:var(--green);">
-                        ${formatFCFA(f.total_commission)}
-                      </td>
+                      <td data-label="Statut"><span class="${f.has_active_sub ? 'badge-active' : 'badge-inactive'}">${f.has_active_sub ? 'Actif' : 'Sans abo'}</span></td>
+                      <td data-label="Commission" style="text-align:right;font-weight:700;color:var(--green);">${formatFCFA(f.total_commission)}</td>
                     </tr>
                   `).join('')}
                 </tbody>
               </table>
-            `;
-          }
+            </div>`;
         }
       }
     } catch (e) { console.warn('[dashboard] filleuls:', e); }
+
+    // RETRAITS
+    await loadWithdrawalStats();
 
     if (loadingEl) loadingEl.style.display = 'none';
     if (contentEl) contentEl.style.display = 'block';
@@ -181,7 +141,95 @@
       errorEl.style.display = 'block';
     }
   }
-})();
+}
+
+// ============================================================
+// RETRAIT
+// ============================================================
+async function loadWithdrawalStats() {
+  try {
+    const { data: stats, error } = await supabaseClient.rpc('get_my_withdrawal_stats');
+    if (error) throw error;
+    currentWithdrawalStats = stats;
+
+    const available = stats?.available_balance || 0;
+    const pending = stats?.pending_withdrawals || 0;
+
+    const balEl = document.getElementById('available-balance');
+    if (balEl) balEl.textContent = formatFCFA(available);
+
+    const pendEl = document.getElementById('pending-withdraw-info');
+    const pendText = document.getElementById('pending-withdraw-text');
+    if (pending > 0 && pendEl && pendText) {
+      pendEl.style.display = 'block';
+      pendText.textContent = `Retrait en attente : ${formatFCFA(pending)}`;
+    } else if (pendEl) {
+      pendEl.style.display = 'none';
+    }
+
+    // Pré-remplir téléphone
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) {
+      const { data: profile } = await supabaseClient
+        .from('profiles')
+        .select('phone')
+        .eq('id', session.user.id)
+        .maybeSingle();
+      const wdPhone = document.getElementById('wd-phone');
+      if (wdPhone && profile?.phone && !wdPhone.value) wdPhone.value = profile.phone;
+    }
+  } catch (e) { console.warn('[withdrawal stats]', e); }
+}
+
+function openWithdrawModal() {
+  const modal = document.getElementById('withdraw-modal');
+  if (!modal) return;
+  const available = currentWithdrawalStats?.available_balance || 0;
+  const wdAvailable = document.getElementById('wd-available');
+  if (wdAvailable) wdAvailable.textContent = formatFCFA(available);
+  if (available < 500) {
+    showToast('Solde insuffisant. Minimum de retrait : 500 FCFA');
+    return;
+  }
+  document.getElementById('wd-amount').value = '';
+  modal.classList.add('active');
+}
+
+function closeWithdrawModal() {
+  document.getElementById('withdraw-modal')?.classList.remove('active');
+}
+
+async function confirmWithdrawal() {
+  const amount = parseFloat(document.getElementById('wd-amount').value);
+  const method = document.getElementById('wd-method').value;
+  const phone = document.getElementById('wd-phone').value.trim();
+
+  if (!amount || amount < 500) return showToast('Montant minimum : 500 FCFA');
+  if (!phone || phone.length < 8) return showToast('Numéro de téléphone invalide');
+  if (amount > (currentWithdrawalStats?.available_balance || 0)) return showToast('Solde insuffisant');
+
+  const btn = document.getElementById('wd-confirm');
+  btn.disabled = true;
+  btn.textContent = 'Envoi...';
+
+  try {
+    const { error } = await supabaseClient.rpc('request_withdrawal', {
+      p_amount: amount,
+      p_payment_method: method,
+      p_payment_phone: phone
+    });
+    if (error) throw error;
+    showToast('✅ Demande envoyée ! Versement sous 48h.');
+    closeWithdrawModal();
+    await loadWithdrawalStats();
+  } catch (err) {
+    console.error('[withdrawal]', err);
+    showToast('Erreur : ' + (err.message || 'impossible'));
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Confirmer la demande';
+  }
+}
 
 // ============================================================
 // HELPERS
@@ -206,9 +254,7 @@ function formatDateFR(iso) {
 
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
-  return String(str).replace(/[&<>"']/g, m => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-  })[m]);
+  return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]);
 }
 
 async function copyText(text) {
@@ -218,7 +264,6 @@ async function copyText(text) {
       return true;
     }
   } catch (e) { console.warn('[clipboard]', e); }
-
   try {
     const ta = document.createElement('textarea');
     ta.value = text;
@@ -242,8 +287,24 @@ function showToast(message) {
   toastTimeout = setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
-// Déconnexion
-document.addEventListener('DOMContentLoaded', () => {
+// ============================================================
+// INIT
+// ============================================================
+(async function init() {
+  await loadDashboardRoutine();
+
+  const _wdReqBtn = document.getElementById('request-withdraw-btn');
+  if (_wdReqBtn) _wdReqBtn.addEventListener('click', openWithdrawModal);
+  const _wdCancelBtn = document.getElementById('wd-cancel');
+  if (_wdCancelBtn) _wdCancelBtn.addEventListener('click', closeWithdrawModal);
+  const _wdConfirmBtn = document.getElementById('wd-confirm');
+  if (_wdConfirmBtn) _wdConfirmBtn.addEventListener('click', confirmWithdrawal);
+  const _wdModal = document.getElementById('withdraw-modal');
+  if (_wdModal) _wdModal.addEventListener('click', (e) => {
+    if (e.target.id === 'withdraw-modal') closeWithdrawModal();
+  });
+
+  // Déconnexion
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async (e) => {
@@ -252,4 +313,4 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = '/index.html';
     });
   }
-});
+})();
