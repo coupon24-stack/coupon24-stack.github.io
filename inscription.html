@@ -6,7 +6,7 @@
   <title>Inscription — COUPON24</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
-    :root { --navy:#0A1F44; --blue:#1E4FD8; --blue-gradient:linear-gradient(135deg,#0A1F44 0%,#1E4FD8 100%); --sky:#E8F0FE; --gray-text:#4A5568; --red:#E53E3E; --green:#27AE60; --radius:16px; --radius-pill:999px; --shadow:0 4px 20px rgba(10,31,68,0.06); }
+    :root { --navy:#0A1F44; --blue:#1E4FD8; --blue-gradient:linear-gradient(135deg,#0A1F44 0%,#1E4FD8 100%); --sky:#E8F0FE; --gray-text:#4A5568; --red:#E53E3E; --green:#27AE60; --gold:#F5A623; --radius:16px; --radius-pill:999px; --shadow:0 4px 20px rgba(10,31,68,0.06); }
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Inter',sans-serif; background:#F7F9FC; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:24px; color:var(--navy); }
     .auth-card { background:white; width:100%; max-width:440px; border-radius:var(--radius); box-shadow:var(--shadow); padding:40px 32px; }
@@ -16,9 +16,53 @@
     .subtitle { text-align:center; color:var(--gray-text); font-size:0.9rem; margin-bottom:28px; }
     .form-group { margin-bottom:18px; }
     label { display:block; font-size:0.85rem; font-weight:600; margin-bottom:6px; }
-    input[type="text"], input[type="email"], input[type="tel"], input[type="password"] { width:100%; padding:12px 16px; border:1.5px solid #E2E8F0; border-radius:10px; font-family:'Inter'; font-size:0.95rem; transition:border-color 0.2s; }
+    label .optional { color:var(--gray-text); font-weight:400; font-size:0.8rem; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="password"] {
+      width:100%; padding:12px 16px; border:1.5px solid #E2E8F0; border-radius:10px;
+      font-family:'Inter'; font-size:0.95rem; transition:border-color 0.2s;
+    }
     input:focus { outline:none; border-color:var(--blue); }
+    input#referral_code {
+      text-transform:uppercase; font-family:'Courier New', monospace;
+      font-weight:700; letter-spacing:2px; font-size:1rem;
+    }
     .hint { font-size:0.75rem; color:var(--gray-text); margin-top:4px; }
+
+    /* Champ parrainage — encadré spécial */
+    .referral-box {
+      background: linear-gradient(135deg, #FFF9E6, #FFF4E5);
+      border: 1.5px solid #FFD98A;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .referral-box label {
+      color: #B45309;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .referral-box input {
+      border-color: #FFD98A;
+      background: white;
+    }
+    .referral-box input:focus { border-color: var(--gold); }
+    .referral-box .referral-feedback {
+      font-size: 0.78rem;
+      margin-top: 6px;
+      font-weight: 600;
+      display: none;
+    }
+    .referral-box .referral-feedback.valid { color: var(--green); display: block; }
+    .referral-box .referral-feedback.invalid { color: var(--red); display: block; }
+    .referral-box .referral-hint {
+      font-size: 0.75rem;
+      color: #92400E;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
     .checkbox-group { display:flex; align-items:flex-start; gap:10px; font-size:0.85rem; margin-bottom:24px; }
     .checkbox-group input { margin-top:3px; }
     .btn { display:inline-flex; align-items:center; justify-content:center; width:100%; padding:14px; border-radius:var(--radius-pill); font-family:'Inter'; font-size:1rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; }
@@ -69,6 +113,15 @@
     <div class="form-group">
       <label for="confirm_password">Confirmer le mot de passe</label>
       <input type="password" id="confirm_password" placeholder="Répète ton mot de passe" required />
+    </div>
+
+    <div class="referral-box" id="referral-box">
+      <label for="referral_code">🎁 Code de parrainage <span class="optional">(optionnel)</span></label>
+      <input type="text" id="referral_code" maxlength="9" placeholder="Ex: KOFF-252C" autocomplete="off" />
+      <div class="referral-feedback" id="referral-feedback"></div>
+      <div class="referral-hint">
+        💡 Si un ami t'a parrainé, entre son code ici. Tu recevras des <strong>jours gratuits</strong> lors de ton premier abonnement !
+      </div>
     </div>
 
     <div class="checkbox-group">
