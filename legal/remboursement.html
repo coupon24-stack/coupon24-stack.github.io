@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Politique de remboursement — COUPON24</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --navy: #0A1F44; --blue: #1E4FD8; --blue-gradient: linear-gradient(135deg, #0A1F44 0%, #1E4FD8 100%); --sky: #E8F0FE; --gray-text: #4A5568; --gray-light: #F7F9FC; --gold: #F5A623; --green: #27AE60; --red: #E53E3E; --radius: 16px; --radius-pill: 999px; --shadow: 0 4px 20px rgba(10,31,68,0.06); }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-light); color: var(--navy); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: var(--blue); }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; line-height: 1.3; }
+    .navbar { background: white; border-bottom: 1px solid rgba(10,31,68,0.06); position: sticky; top: 0; z-index: 100; }
+    .navbar .container { max-width: 1200px; display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 12px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-family: 'Poppins'; font-weight: 800; font-size: 1.5rem; flex-shrink: 0; }
+    .logo-ball { width: 32px; height: 32px; background: var(--blue-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1rem; }
+    .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 22px; border-radius: var(--radius-pill); font-family: 'Inter'; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; white-space: nowrap; }
+    .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid rgba(10,31,68,0.15); }
+    .btn-outline:hover { border-color: var(--blue); color: var(--blue); text-decoration: none; }
+    .page-header { background: var(--navy); color: white; padding: 60px 0 48px; text-align: center; }
+    .page-header h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: 10px; }
+    .page-header p { color: rgba(255,255,255,0.75); font-size: 0.9rem; }
+    .legal-content { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 48px; margin: 40px auto 60px; }
+    .legal-content h2 { font-size: 1.3rem; margin-top: 36px; margin-bottom: 16px; padding-top: 24px; border-top: 1px solid rgba(10,31,68,0.08); color: var(--navy); }
+    .legal-content h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+    .legal-content h3 { font-size: 1.05rem; margin-top: 20px; margin-bottom: 10px; color: var(--navy); }
+    .legal-content p { margin-bottom: 14px; color: var(--gray-text); font-size: 0.95rem; }
+    .legal-content ul, .legal-content ol { margin-left: 24px; margin-bottom: 16px; color: var(--gray-text); font-size: 0.95rem; }
+    .legal-content li { margin-bottom: 8px; }
+    .legal-content strong { color: var(--navy); font-weight: 600; }
+    .warning-box { background: rgba(245, 166, 35, 0.1); border-left: 4px solid var(--gold); border-radius: 12px; padding: 20px 24px; margin: 24px 0; font-size: 0.92rem; color: var(--navy); }
+    .info-box { background: var(--sky); border-left: 4px solid var(--blue); border-radius: 12px; padding: 20px 24px; margin: 24px 0; font-size: 0.92rem; }
+    .info-box strong { color: var(--navy); }
+    .green-box { background: rgba(39, 174, 96, 0.08); border-left: 4px solid var(--green); border-radius: 12px; padding: 20px 24px; margin: 24px 0; font-size: 0.92rem; }
+    .red-box { background: rgba(229, 62, 62, 0.08); border-left: 4px solid var(--red); border-radius: 12px; padding: 20px 24px; margin: 24px 0; font-size: 0.92rem; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid rgba(10,31,68,0.08); color: var(--gray-text); }
+    th { background: var(--gray-light); font-weight: 700; color: var(--navy); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .last-update { text-align: center; padding: 24px 0; color: var(--gray-text); font-size: 0.85rem; font-style: italic; }
+    @media (max-width: 640px) {
+      body { overflow-x: hidden; }
+      .navbar .container { height: auto; min-height: 60px; padding: 8px 16px; gap: 8px; }
+      .logo { font-size: 1.2rem; gap: 6px; }
+      .logo-ball { width: 28px; height: 28px; font-size: 0.9rem; }
+      .legal-content { padding: 28px 20px; margin: 24px 16px 40px; }
+      .legal-content h2 { font-size: 1.15rem; }
+      .container { padding: 0 16px; }
+      table { font-size: 0.82rem; }
+      th, td { padding: 8px 10px; }
+    }
+    @supports (padding: max(0px)) {
+      .navbar .container { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="/index.html" class="logo">
+      <span class="logo-ball">⚽</span>
+      <span>COUPON<span style="color:var(--blue);">24</span></span>
+    </a>
+    <div class="nav-right">
+      <a href="/index.html" class="btn btn-outline">Retour à l'accueil</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Politique de remboursement</h1>
+    <p>Dernière mise à jour : 25 octobre 2026</p>
+  </div>
+</header>
+
+<main class="container">
+  <div class="legal-content">
+
+    <div class="info-box">
+      <strong>ℹ️ Principe général :</strong> COUPON24 est un service numérique à accès immédiat. Sauf cas particuliers détaillés ci-dessous, les abonnements souscrits ne sont pas remboursables une fois activés, conformément à la réglementation sur les contenus numériques.
+    </div>
+
+    <h2>1. Objet</h2>
+    <p>La présente Politique de remboursement définit les conditions dans lesquelles un utilisateur de COUPON24 peut demander le remboursement d'un abonnement premium souscrit sur le Site.</p>
+    <p>Elle s'applique à tous les paiements effectués via notre plateforme, quel que soit le moyen de paiement utilisé (Orange Money, MTN MoMo, Wave, Moov Money, carte bancaire).</p>
+
+    <h2>2. Principe général : pas de remboursement après activation</h2>
+    <div class="warning-box">
+      <strong>⚠️ Important :</strong> L'abonnement premium donne un accès immédiat au contenu numérique (coupons premium). En conséquence, une fois l'abonnement activé, <strong>aucun remboursement ne peut être effectué</strong>, sauf dans les cas exceptionnels listés à la section 3.
+    </div>
+    <p>Cette règle s'applique indépendamment de :</p>
+    <ul>
+      <li>L'utilisation effective ou non du service par l'utilisateur ;</li>
+      <li>Le nombre de coupons consultés pendant la période d'abonnement ;</li>
+      <li>Les résultats des pronostics publiés (voir section 5).</li>
+    </ul>
+
+    <h2>3. Cas exceptionnels de remboursement</h2>
+    <p>Un remboursement total ou partiel peut être accordé dans les situations suivantes :</p>
+
+    <h3>3.1 Double paiement avéré</h3>
+    <p>Si l'utilisateur a été débité deux fois pour un même abonnement suite à un dysfonctionnement technique, le trop-perçu sera remboursé intégralement.</p>
+    <p><strong>Procédure</strong> : contacter notre support avec la preuve des deux transactions (capture d'écran des SMS de débit Mobile Money ou du relevé bancaire).</p>
+
+    <h3>3.2 Paiement sans activation de l'abonnement</h3>
+    <p>Si le paiement a été débité mais que l'abonnement n'a pas été activé sur le compte (défaillance technique de notre prestataire de paiement), l'utilisateur a droit à :</p>
+    <ul>
+      <li>Soit l'activation immédiate de l'abonnement (solution privilégiée) ;</li>
+      <li>Soit le remboursement intégral du montant payé si l'activation est impossible.</li>
+    </ul>
+
+    <h3>3.3 Erreur de montant</h3>
+    <p>Si l'utilisateur a été débité d'un montant supérieur à celui affiché au moment de la souscription (bug d'affichage, frais non annoncés), la différence sera remboursée.</p>
+
+    <h3>3.4 Indisponibilité prolongée du service</h3>
+    <p>Si le service COUPON24 est indisponible de manière prolongée (plus de 7 jours consécutifs sur la période d'abonnement) pour des raisons techniques imputables à l'Éditeur, l'utilisateur peut demander :</p>
+    <ul>
+      <li>Une prolongation gratuite de la durée d'abonnement équivalente à la période d'indisponibilité ;</li>
+      <li>Ou un remboursement au prorata de la période non utilisée.</li>
+    </ul>
+
+    <h3>3.5 Suspension abusive du compte</h3>
+    <p>Si le compte d'un utilisateur est suspendu par erreur (non-respect des CGU non caractérisé), l'abonnement sera réactivé et le préjudice corrigé. Un remboursement pourra être accordé au prorata.</p>
+
+    <h2>4. Cas NON remboursables</h2>
+    <div class="red-box">
+      <strong>❌ Aucun remboursement ne sera accordé dans les cas suivants :</strong>
+    </div>
+    <ul>
+      <li><strong>Changement d'avis</strong> après activation de l'abonnement ;</li>
+      <li><strong>Non-utilisation</strong> du service (oubli de se connecter, etc.) ;</li>
+      <li><strong>Résultats des pronostics</strong> non conformes aux attentes (voir section 5) ;</li>
+      <li><strong>Perte de mot de passe</strong> ou d'accès au compte ;</li>
+      <li><strong>Suspension pour violation des CGU</strong> (partage de contenu premium, fraude, etc.) ;</li>
+      <li><strong>Abonnement souscrit sur un compte tiers</strong> par erreur de l'utilisateur.</li>
+    </ul>
+
+    <h2>5. Absence de garantie sur les pronostics</h2>
+    <div class="warning-box">
+      <strong>⚠️ Rappel :</strong> Les coupons publiés sur COUPON24 sont des pronostics, <strong>pas des certitudes</strong>. Les résultats sportifs sont imprévisibles. L'utilisateur ne peut en aucun cas demander un remboursement en raison de pronostics perdus.
+    </div>
+    <p>Le prix de l'abonnement rémunère uniquement :</p>
+    <ul>
+      <li>La production et la publication des analyses et coupons par notre équipe ;</li>
+      <li>L'accès à la plateforme et aux contenus premium ;</li>
+      <li>Le fonctionnement technique du service.</li>
+    </ul>
+    <p>Il ne rémunère en aucun cas un quelconque résultat sportif ou financier.</p>
+
+    <h2>6. Procédure de demande de remboursement</h2>
+    <p>Pour toute demande de remboursement dans les cas prévus à la section 3 :</p>
+
+    <h3>6.1 Contacter le support</h3>
+    <p>Envoyez votre demande à <a href="mailto:coupon24ci@gmail.com">coupon24ci@gmail.com</a> ou par WhatsApp au <a href="https://wa.me/2250100600218">+225 01 00 60 0218</a>, en précisant :</p>
+    <ul>
+      <li>Votre nom complet et email du compte concerné ;</li>
+      <li>La date du paiement et son montant ;</li>
+      <li>Le moyen de paiement utilisé (Orange Money, Wave, etc.) ;</li>
+      <li>Le motif de la demande ;</li>
+      <li>Les preuves disponibles (capture d'écran, SMS, relevé, etc.).</li>
+    </ul>
+
+    <h3>6.2 Délai d'examen</h3>
+    <p>Nous nous engageons à examiner votre demande dans un délai de <strong>7 jours ouvrés</strong> à compter de la réception de tous les éléments nécessaires.</p>
+
+    <h3>6.3 Décision</h3>
+    <p>Nous vous informerons par email ou WhatsApp de notre décision. En cas d'accord, le remboursement sera effectué sur le moyen de paiement d'origine (ou par tout autre moyen convenu d'un commun accord) dans un délai de <strong>14 jours ouvrés</strong>.</p>
+
+    <h2>7. Délais de traitement des remboursements</h2>
+    <p>Une fois la décision favorable notifiée :</p>
+    <table>
+      <thead>
+        <tr><th>Moyen de paiement</th><th>Délai de remboursement</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Orange Money</td><td>3 à 7 jours ouvrés</td></tr>
+        <tr><td>MTN MoMo</td><td>3 à 7 jours ouvrés</td></tr>
+        <tr><td>Wave</td><td>3 à 7 jours ouvrés</td></tr>
+        <tr><td>Moov Money</td><td>3 à 7 jours ouvrés</td></tr>
+        <tr><td>Carte bancaire</td><td>5 à 14 jours ouvrés</td></tr>
+      </tbody>
+    </table>
+    <p>Ces délais dépendent du prestataire de paiement et ne sont donc pas entièrement sous notre contrôle.</p>
+
+    <h2>8. Litige</h2>
+    <p>En cas de désaccord persistant sur une demande de remboursement, l'utilisateur est invité à :</p>
+    <ul>
+      <li>Nous réécrire en adressant une réclamation formelle ;</li>
+      <li>Saisir, à défaut de solution amiable, l'<strong>Autorité de Régulation des Télécommunications/TIC de Côte d'Ivoire (ARTCI)</strong> ou les tribunaux compétents d'Abidjan.</li>
+    </ul>
+
+    <h2>9. Contact</h2>
+    <p>Pour toute question relative à cette politique de remboursement :</p>
+    <ul>
+      <li><strong>Email</strong> : <a href="mailto:coupon24ci@gmail.com">coupon24ci@gmail.com</a></li>
+      <li><strong>WhatsApp</strong> : <a href="https://wa.me/2250100600218">+225 01 00 60 0218</a></li>
+      <li><strong>Page contact</strong> : <a href="/legal/contact.html">Formulaire de contact</a></li>
+    </ul>
+
+  </div>
+  <p class="last-update">Cette politique de remboursement a été mise à jour le 25 octobre 2026.</p>
+</main>
+
+</body>
+</html>
