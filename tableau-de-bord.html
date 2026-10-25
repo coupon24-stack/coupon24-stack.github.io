@@ -222,7 +222,6 @@
     }
     .ref-benefits li strong { color: var(--navy); }
 
-    /* Table filleuls */
     .ref-filleuls { margin-top: 24px; }
     .ref-filleuls h4 {
       font-size: 1rem;
@@ -236,10 +235,7 @@
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(10,31,68,0.04);
     }
-    .filleuls-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+    .filleuls-table { width: 100%; border-collapse: collapse; }
     .filleuls-table thead th {
       text-align: left;
       padding: 12px 14px;
@@ -260,6 +256,7 @@
     .filleuls-table .badge-inactive { background: #E2E8F0; color: #4A5568; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 700; }
     .empty-filleuls { text-align: center; padding: 30px 20px; color: var(--gray-text); font-size: 0.9rem; }
 
+    /* ============ ACTIONS RAPIDES ============ */
     .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 8px; }
     .action-card { display: flex; align-items: center; gap: 14px; padding: 18px 20px; background: white; border-radius: 12px; box-shadow: var(--shadow); transition: all 0.2s; border: 1px solid rgba(10,31,68,0.04); }
     .action-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
@@ -291,7 +288,6 @@
     }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
 
-    /* ============ RESPONSIVE MOBILE ============ */
     @media (max-width: 768px) {
       .ref-stats-grid { grid-template-columns: repeat(2, 1fr); }
     }
@@ -339,7 +335,6 @@
       .ref-benefits { padding: 16px; }
       .ref-benefits li { font-size: 0.82rem; }
 
-      /* Table filleuls en mode carte */
       .filleuls-table-wrapper { background: transparent; box-shadow: none; overflow: visible; }
       .filleuls-table { display: block; background: transparent; }
       .filleuls-table thead { display: none; }
@@ -521,6 +516,20 @@
             <div>
               <h4>Abonnements</h4>
               <p>Souscrire ou renouveler</p>
+            </div>
+          </a>
+          <a href="/profil.html" class="action-card">
+            <div class="action-icon">👤</div>
+            <div>
+              <h4>Mon profil</h4>
+              <p>Modifier mes infos</p>
+            </div>
+          </a>
+          <a href="/historique-paiements.html" class="action-card">
+            <div class="action-icon">📊</div>
+            <div>
+              <h4>Mes paiements</h4>
+              <p>Historique et commissions</p>
             </div>
           </a>
           <a href="/admin/dashboard.html" id="admin-link" class="action-card" style="display:none;">
