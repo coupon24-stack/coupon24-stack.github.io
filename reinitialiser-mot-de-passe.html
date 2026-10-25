@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nouveau mot de passe — COUPON24</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --navy:#0A1F44; --blue:#1E4FD8; --blue-gradient:linear-gradient(135deg,#0A1F44 0%,#1E4FD8 100%); --gray-text:#4A5568; --radius:16px; --radius-pill:999px; --shadow:0 4px 20px rgba(10,31,68,0.06); }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background:#F7F9FC; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:24px; color:var(--navy); }
+    .auth-card { background:white; width:100%; max-width:440px; border-radius:var(--radius); box-shadow:var(--shadow); padding:40px 32px; }
+    .logo { display:flex; align-items:center; justify-content:center; gap:10px; font-family:'Poppins'; font-weight:800; font-size:1.6rem; margin-bottom:8px; }
+    .logo-ball { width:34px; height:34px; background:var(--blue-gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.1rem; }
+    h1 { font-family:'Poppins'; font-size:1.5rem; text-align:center; margin-bottom:8px; }
+    .subtitle { text-align:center; color:var(--gray-text); font-size:0.9rem; margin-bottom:28px; }
+    .form-group { margin-bottom:18px; }
+    label { display:block; font-size:0.85rem; font-weight:600; margin-bottom:6px; }
+    input[type="password"] { width:100%; padding:12px 16px; border:1.5px solid #E2E8F0; border-radius:10px; font-family:'Inter'; font-size:0.95rem; }
+    input:focus { outline:none; border-color:var(--blue); }
+    .btn { display:inline-flex; align-items:center; justify-content:center; width:100%; padding:14px; border-radius:var(--radius-pill); font-family:'Inter'; font-size:1rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; }
+    .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
+    .btn-primary:hover { transform:translateY(-2px); }
+    .btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+    .alert { padding:12px 16px; border-radius:10px; font-size:0.85rem; margin-bottom:20px; display:none; }
+    .alert-error { background:#FED7D7; color:#9B2C2C; border:1px solid #FEB2B2; }
+    .alert-success { background:#C6F6D5; color:#22543D; border:1px solid #9AE6B4; }
+    .alert-info { background:#E8F0FE; color:var(--blue); border:1px solid #BFD5FD; }
+    .footer-link { text-align:center; font-size:0.85rem; color:var(--gray-text); margin-top:24px; }
+    .footer-link a { color:var(--blue); font-weight:600; text-decoration:none; }
+    .footer-link a:hover { text-decoration:underline; }
+    .loader-box { text-align:center; padding:30px 0; }
+    .loader-box .spinner { width:44px; height:44px; border:3px solid #E8F0FE; border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .hidden { display:none !important; }
+  </style>
+</head>
+<body>
+
+<div class="auth-card">
+  <div class="logo">
+    <span class="logo-ball">⚽</span>
+    <span>COUPON<span style="color:var(--blue);">24</span></span>
+  </div>
+
+  <div id="loader-state" class="loader-box">
+    <div class="spinner"></div>
+    <p style="color:var(--gray-text); font-size:0.9rem;">Vérification du lien…</p>
+  </div>
+
+  <div id="main-state" class="hidden">
+    <h1>Nouveau mot de passe</h1>
+    <p class="subtitle">Choisis un nouveau mot de passe sécurisé.</p>
+
+    <div id="alert-box" class="alert"></div>
+
+    <form id="reset-password-form">
+      <div class="form-group">
+        <label for="new_password">Nouveau mot de passe</label>
+        <input type="password" id="new_password" placeholder="Minimum 8 caractères" required minlength="8" autocomplete="new-password" />
+      </div>
+      <div class="form-group">
+        <label for="confirm_new_password">Confirmer le mot de passe</label>
+        <input type="password" id="confirm_new_password" placeholder="Répète le mot de passe" required autocomplete="new-password" />
+      </div>
+      <button type="submit" class="btn btn-primary" id="submit-btn">Mettre à jour le mot de passe</button>
+    </form>
+  </div>
+
+  <div id="error-state" class="hidden">
+    <div id="error-message-box" class="alert alert-error" style="display:block;">
+      Le lien de réinitialisation est invalide ou a expiré.
+    </div>
+    <a href="/mot-de-passe-oublie.html" class="btn btn-primary" style="text-decoration:none;">Refaire une demande</a>
+  </div>
+
+  <p class="footer-link">
+    <a href="/connexion.html">← Retour à la connexion</a>
+  </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script>
+  // Vérifier que Supabase a bien établi une session via le token du lien
+  (async function checkSession() {
+    const loader = document.getElementById('loader-state');
+    const main = document.getElementById('main-state');
+    const errorState = document.getElementById('error-state');
+
+    try {
+      // Attendre un peu que Supabase traite le hash du lien
+      await new Promise(r => setTimeout(r, 800));
+
+      const { data: { session } } = await supabaseClient.auth.getSession();
+
+      if (session) {
+        loader.classList.add('hidden');
+        main.classList.remove('hidden');
+      } else {
+        // Supabase a détecté un hash mais le token est peut-être encore en traitement
+        // ou invalide. On retente une fois après un délai plus long.
+        await new Promise(r => setTimeout(r, 1500));
+        const retry = await supabaseClient.auth.getSession();
+        if (retry.data.session) {
+          loader.classList.add('hidden');
+          main.classList.remove('hidden');
+        } else {
+          loader.classList.add('hidden');
+          errorState.classList.remove('hidden');
+        }
+      }
+    } catch (e) {
+      console.warn('[reset] session check failed:', e);
+      loader.classList.add('hidden');
+      errorState.classList.remove('hidden');
+    }
+  })();
+</script>
+</body>
+</html>
