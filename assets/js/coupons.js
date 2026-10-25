@@ -1,11 +1,13 @@
 // frontend/assets/js/coupons.js
 // Chargement et affichage des coupons depuis la vue coupons_list.
+// Impose l'authentification pour voir le détail d'un coupon.
 
 const state = {
   page: 1,
   pageSize: 9,
   filters: { search: '', category: '', status: '' },
   total: 0,
+  isAuthenticated: false,
 };
 
 async function loadCoupons() {
@@ -23,6 +25,10 @@ async function loadCoupons() {
     if (typeof supabaseClient === 'undefined') {
       throw new Error('supabaseClient non chargé.');
     }
+
+    // Vérifier l'authentification AVANT de charger les coupons
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    state.isAuthenticated = !!session;
 
     let query = supabaseClient
       .from('coupons_list')
@@ -63,6 +69,7 @@ async function loadCoupons() {
 
 function renderCard(c) {
   const isLocked = c.is_locked;
+  const isAuth = state.isAuthenticated;
   const datePub = formatDate(c.publication_date);
   const badge = c.category === 'gratuit'
     ? `<span class="coupon-badge badge-gratuit">Gratuit</span>`
@@ -74,8 +81,25 @@ function renderCard(c) {
   const statusLabels = {
     disponible: 'Disponible', en_cours: 'En cours', termine: 'Terminé', archive: 'Archivé',
   };
-  const ctaLabel = isLocked ? "S'abonner pour voir" : 'Voir le coupon';
-  const ctaHref = isLocked ? '/abonnements.html' : `/coupon-detail.html?id=${c.id}`;
+
+  // Logique de redirection selon l'état d'authentification
+  let ctaLabel, ctaHref;
+  const couponUrl = `/coupon-detail.html?id=${c.id}`;
+
+  if (!isAuth) {
+    // Non connecté → forcer l'inscription avec retour vers le coupon
+    ctaLabel = 'Se connecter pour voir';
+    ctaHref = `/inscription.html?redirect=${encodeURIComponent(couponUrl)}`;
+  } else if (isLocked) {
+    // Connecté mais pas abonné + premium → abonnement
+    ctaLabel = "S'abonner pour voir";
+    ctaHref = '/abonnements.html';
+  } else {
+    // Connecté et autorisé
+    ctaLabel = 'Voir le coupon';
+    ctaHref = couponUrl;
+  }
+
   const bgStyle = c.cover_image ? `background-image: url('${escapeAttr(c.cover_image)}');` : '';
   const matchCount = c.matches_count || 0;
 
@@ -151,7 +175,6 @@ function escapeHtml(str) {
 }
 function escapeAttr(str) { return escapeHtml(str).replace(/"/g, '&quot;'); }
 
-// Filtres et recherche
 let searchTimeout;
 document.getElementById('search-input')?.addEventListener('input', (e) => {
   clearTimeout(searchTimeout);
@@ -172,7 +195,6 @@ document.getElementById('filter-status')?.addEventListener('change', (e) => {
   loadCoupons();
 });
 
-// Chargement initial
 if (document.getElementById('coupons-grid')) {
   loadCoupons();
 }
