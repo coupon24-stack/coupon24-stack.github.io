@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paiement effectué — COUPON24</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --navy:#0A1F44; --blue:#1E4FD8; --blue-gradient:linear-gradient(135deg,#0A1F44 0%,#1E4FD8 100%); --sky:#E8F0FE; --gray-text:#4A5568; --gray-light:#F7F9FC; --green:#27AE60; --gold:#F5A623; --whatsapp:#25D366; --radius:16px; --radius-pill:999px; --shadow:0 4px 20px rgba(10,31,68,0.06); }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background:var(--gray-light); color:var(--navy); line-height:1.6; -webkit-font-smoothing:antialiased; min-height:100vh; display:flex; flex-direction:column; }
+    a { text-decoration:none; color:inherit; }
+    .container { max-width:700px; margin:0 auto; padding:0 24px; width:100%; }
+    h1,h3 { font-family:'Poppins',sans-serif; line-height:1.2; }
+
+    .navbar { background:white; border-bottom:1px solid rgba(10,31,68,0.06); position:sticky; top:0; z-index:100; }
+    .navbar .container { max-width:1200px; display:flex; align-items:center; justify-content:space-between; height:72px; gap:12px; }
+    .logo { display:flex; align-items:center; gap:10px; font-family:'Poppins'; font-weight:800; font-size:1.5rem; flex-shrink:0; }
+    .logo-ball { width:32px; height:32px; background:var(--blue-gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1rem; }
+
+    main { flex:1; padding:60px 0 80px; }
+    .success-card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:48px 40px; text-align:center; }
+    .success-icon { width:100px; height:100px; margin:0 auto 24px; border-radius:50%; background:linear-gradient(135deg,#E6F9EF,#C6F6D5); display:flex; align-items:center; justify-content:center; font-size:3rem; }
+    .success-card h1 { font-size:1.8rem; margin-bottom:12px; color:var(--navy); }
+    .success-card > p { color:var(--gray-text); font-size:1rem; margin-bottom:32px; max-width:500px; margin-left:auto; margin-right:auto; }
+
+    .steps-box { background:var(--gray-light); border-radius:12px; padding:28px; text-align:left; margin-bottom:32px; }
+    .steps-box h3 { font-size:1.05rem; margin-bottom:20px; color:var(--navy); }
+    .steps-list { list-style:none; }
+    .steps-list li { display:flex; gap:14px; padding:14px 0; border-bottom:1px solid rgba(10,31,68,0.08); font-size:0.92rem; color:var(--gray-text); align-items:flex-start; }
+    .steps-list li:last-child { border-bottom:none; padding-bottom:0; }
+    .steps-list li:first-child { padding-top:0; }
+    .step-num { flex-shrink:0; width:32px; height:32px; border-radius:50%; background:var(--blue-gradient); color:white; display:flex; align-items:center; justify-content:center; font-family:'Poppins'; font-weight:700; font-size:0.9rem; }
+
+    .actions { display:flex; flex-direction:column; gap:12px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:16px 28px; border-radius:var(--radius-pill); font-family:'Inter'; font-size:1rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; }
+    .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
+    .btn-primary:hover { transform:translateY(-2px); }
+    .btn-whatsapp { background:var(--whatsapp); color:white; box-shadow:0 4px 14px rgba(37,211,102,0.35); }
+    .btn-whatsapp:hover { transform:translateY(-2px); }
+    .btn-outline { background:transparent; color:var(--navy); border:1.5px solid rgba(10,31,68,0.15); }
+
+    .warning-box { background:rgba(245,166,35,0.1); border-left:4px solid var(--gold); border-radius:12px; padding:18px 22px; margin-top:28px; text-align:left; font-size:0.88rem; color:var(--navy); }
+
+    @media (max-width:640px) {
+      body { overflow-x:hidden; }
+      .navbar .container { height:auto; min-height:60px; padding:8px 16px; gap:8px; }
+      .logo { font-size:1.2rem; gap:6px; }
+      .logo-ball { width:28px; height:28px; font-size:0.9rem; }
+      .container { padding:0 16px; }
+      main { padding:32px 0 60px; }
+      .success-card { padding:32px 24px; }
+      .success-card h1 { font-size:1.4rem; }
+      .success-icon { width:80px; height:80px; font-size:2.5rem; }
+      .steps-box { padding:20px; }
+    }
+    @supports (padding: max(0px)) {
+      .navbar .container { padding-left:max(16px, env(safe-area-inset-left)); padding-right:max(16px, env(safe-area-inset-right)); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="/index.html" class="logo">
+      <span class="logo-ball">⚽</span>
+      <span>COUPON<span style="color:var(--blue);">24</span></span>
+    </a>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <div class="success-card">
+      <div class="success-icon">✅</div>
+      <h1>Merci pour ton paiement !</h1>
+      <p>Ton paiement a bien été enregistré par Money Fusion. Notre équipe va maintenant vérifier la transaction et activer ton abonnement.</p>
+
+      <div class="steps-box">
+        <h3>⏱️ Ce qui se passe maintenant</h3>
+        <ul class="steps-list">
+          <li>
+            <span class="step-num">1</span>
+            <span><strong>Vérification en cours</strong> — notre équipe vérifie ton paiement sur notre compte marchand Money Fusion.</span>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <span><strong>Activation de ton abonnement</strong> — dès que le paiement est confirmé, ton accès premium est activé sur ton compte COUPON24 (même email).</span>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <span><strong>Délai habituel : 5 à 30 minutes.</strong> Tu peux rafraîchir ton espace personnel pour voir l'activation.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="actions">
+        <a href="/tableau-de-bord.html" class="btn btn-primary">
+          👤 Vérifier mon abonnement
+        </a>
+        <a href="https://wa.me/2250100600218?text=Bonjour%20COUPON24%2C%20je%20viens%20d%27effectuer%20un%20paiement%20et%20j%27attends%20l%27activation%20de%20mon%20abonnement." target="_blank" rel="noopener" class="btn btn-whatsapp">
+          💬 Contacter le support
+        </a>
+        <a href="/coupons.html" class="btn btn-outline">
+          ⚽ Voir les coupons
+        </a>
+      </div>
+
+      <div class="warning-box">
+        <strong>⚠️ Si ton abonnement n'est pas activé après 1 heure :</strong> contacte-nous sur WhatsApp au <strong>+225 01 00 60 0218</strong> en précisant l'email utilisé lors du paiement Money Fusion.
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
