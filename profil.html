@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mon profil — COUPON24</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --navy:#0A1F44; --blue:#1E4FD8; --blue-gradient:linear-gradient(135deg,#0A1F44 0%,#1E4FD8 100%); --sky:#E8F0FE; --gray-text:#4A5568; --gray-light:#F7F9FC; --green:#27AE60; --gold:#F5A623; --red:#E53E3E; --radius:16px; --radius-pill:999px; --shadow:0 4px 20px rgba(10,31,68,0.06); }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { max-width:100vw; overflow-x:hidden; }
+    body { font-family:'Inter',sans-serif; background:var(--gray-light); color:var(--navy); line-height:1.6; -webkit-font-smoothing:antialiased; }
+    a { text-decoration:none; color:inherit; }
+    .container { max-width:800px; margin:0 auto; padding:0 24px; width:100%; }
+    h1,h2,h3 { font-family:'Poppins',sans-serif; line-height:1.2; }
+
+    .navbar { background:white; border-bottom:1px solid rgba(10,31,68,0.06); position:sticky; top:0; z-index:100; }
+    .navbar .container { max-width:1200px; display:flex; align-items:center; justify-content:space-between; height:72px; gap:12px; }
+    .logo { display:flex; align-items:center; gap:10px; font-family:'Poppins'; font-weight:800; font-size:1.5rem; flex-shrink:0; }
+    .logo-ball { width:32px; height:32px; background:var(--blue-gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1rem; flex-shrink:0; }
+    .nav-right { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 22px; border-radius:var(--radius-pill); font-family:'Inter'; font-size:0.9rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; white-space:nowrap; }
+    .btn-outline { background:transparent; color:var(--navy); border:1.5px solid rgba(10,31,68,0.15); }
+    .btn-outline:hover { border-color:var(--blue); color:var(--blue); }
+    .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
+    .btn-primary:hover { transform:translateY(-2px); }
+    .btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+
+    main { padding:40px 0 80px; }
+    .page-title { font-size:1.9rem; font-weight:700; margin-bottom:8px; }
+    .page-subtitle { color:var(--gray-text); margin-bottom:32px; }
+
+    .card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:32px; margin-bottom:24px; }
+    .card h2 { font-size:1.15rem; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid rgba(10,31,68,0.08); }
+
+    .profile-header { display:flex; align-items:center; gap:20px; margin-bottom:24px; padding-bottom:24px; border-bottom:1px solid rgba(10,31,68,0.08); flex-wrap:wrap; }
+    .avatar { width:72px; height:72px; border-radius:50%; background:var(--blue-gradient); display:flex; align-items:center; justify-content:center; color:white; font-family:'Poppins'; font-weight:800; font-size:1.5rem; flex-shrink:0; }
+    .profile-header h2 { font-size:1.3rem; margin:0; padding:0; border:none; word-break:break-word; }
+    .role-badge { display:inline-block; padding:3px 12px; border-radius:var(--radius-pill); font-size:0.72rem; font-weight:700; text-transform:uppercase; background:var(--sky); color:var(--blue); margin-top:4px; }
+
+    .form-field { margin-bottom:20px; }
+    .form-field label { display:block; font-size:0.85rem; font-weight:600; margin-bottom:6px; color:var(--navy); }
+    .form-field label .hint-inline { font-weight:400; color:var(--gray-text); font-size:0.78rem; }
+    .form-field input { width:100%; padding:12px 16px; border:1.5px solid #E2E8F0; border-radius:10px; font-family:'Inter'; font-size:0.95rem; color:var(--navy); background:white; transition:border-color 0.2s; }
+    .form-field input:focus { outline:none; border-color:var(--blue); }
+    .form-field input:disabled { background:var(--gray-light); color:var(--gray-text); cursor:not-allowed; }
+    .form-field .help { font-size:0.75rem; color:var(--gray-text); margin-top:6px; }
+
+    .info-box { background:var(--sky); border-left:4px solid var(--blue); border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:0.85rem; color:var(--navy); }
+    .info-box.gold { background:#FFF4E5; border-left-color:var(--gold); }
+    .info-box .label { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.5px; font-weight:700; margin-bottom:4px; opacity:0.7; }
+    .info-box .value { font-family:'Poppins'; font-weight:700; font-size:1rem; word-break:break-word; }
+
+    .actions-bar { display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-end; margin-top:8px; }
+    .actions-bar .btn { padding:12px 28px; }
+
+    .alert { padding:12px 16px; border-radius:10px; font-size:0.88rem; margin-bottom:20px; display:none; }
+    .alert.show { display:block; }
+    .alert-error { background:#FED7D7; color:#9B2C2C; border:1px solid #FEB2B2; }
+    .alert-success { background:#C6F6D5; color:#22543D; border:1px solid #9AE6B4; }
+
+    .loader { display:flex; justify-content:center; padding:60px 0; }
+    .spinner { width:44px; height:44px; border:3px solid var(--sky); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    @media (max-width:640px) {
+      body { overflow-x:hidden; }
+      .container { padding:0 16px; }
+      main { padding:24px 0 60px; }
+      .page-title { font-size:1.5rem; }
+      .card { padding:20px 16px; }
+      .profile-header { flex-direction:column; text-align:center; }
+      .actions-bar { flex-direction:column-reverse; }
+      .actions-bar .btn { width:100%; }
+      .navbar .container { height:60px; padding:8px 16px; gap:8px; }
+      .logo { font-size:1.2rem; gap:6px; }
+      .logo-ball { width:28px; height:28px; font-size:0.9rem; }
+      .nav-right .btn { padding:8px 14px; font-size:0.8rem; }
+      .nav-right .btn-outline { display:none; }
+    }
+    @supports (padding: max(0px)) {
+      .navbar .container { padding-left:max(16px, env(safe-area-inset-left)); padding-right:max(16px, env(safe-area-inset-right)); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="/index.html" class="logo">
+      <span class="logo-ball">⚽</span>
+      <span>COUPON<span style="color:var(--blue);">24</span></span>
+    </a>
+    <div class="nav-right">
+      <a href="/tableau-de-bord.html" class="btn btn-outline">Mon espace</a>
+      <button id="logout-btn" class="btn btn-primary">Déconnexion</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <h1 class="page-title">Mon profil</h1>
+    <p class="page-subtitle">Modifie tes informations personnelles.</p>
+
+    <div id="page-alert" class="alert"></div>
+
+    <div id="loading" class="loader"><div class="spinner"></div></div>
+
+    <div id="content" style="display:none;">
+
+      <div class="card">
+        <div class="profile-header">
+          <div class="avatar" id="user-initials">?</div>
+          <div>
+            <h2 id="user-fullname-display">Chargement…</h2>
+            <span class="role-badge" id="user-role">Membre</span>
+          </div>
+        </div>
+
+        <form id="profile-form">
+
+          <div class="form-field">
+            <label for="full_name">Nom complet</label>
+            <input type="text" id="full_name" required minlength="2" placeholder="Ex: Koffi Yao" />
+          </div>
+
+          <div class="form-field">
+            <label for="phone">Numéro de téléphone</label>
+            <input type="tel" id="phone" placeholder="+225 07 00 00 00 00" />
+            <div class="help">Format ivoirien : +225 suivi de 8 à 10 chiffres.</div>
+          </div>
+
+          <div class="form-field">
+            <label for="email">Adresse e-mail <span class="hint-inline">(non modifiable)</span></label>
+            <input type="email" id="email" disabled />
+            <div class="help">Pour changer ton email, contacte le support.</div>
+          </div>
+
+          <div class="actions-bar">
+            <a href="/tableau-de-bord.html" class="btn btn-outline">Annuler</a>
+            <button type="submit" class="btn btn-primary" id="save-btn">Enregistrer les modifications</button>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>🎁 Mon code de parrainage</h2>
+        <div class="info-box gold">
+          <div class="label">Ton code unique</div>
+          <div class="value" id="ref-code-display">—</div>
+        </div>
+        <p style="font-size:0.88rem;color:var(--gray-text);margin-bottom:16px;">
+          Partage ce code à tes amis. Ils gagneront des jours gratuits à leur premier abonnement, et tu gagneras 20% de commission sur chaque paiement.
+        </p>
+        <a href="/tableau-de-bord.html" class="btn btn-outline">Voir mes gains de parrainage →</a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/auth-guard.js"></script>
+<script>
+(async function init() {
+  const loading = document.getElementById('loading');
+  const content = document.getElementById('content');
+  const alertBox = document.getElementById('page-alert');
+
+  const showAlert = (msg, type = 'error') => {
+    alertBox.textContent = msg;
+    alertBox.className = `alert alert-${type} show`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const hideAlert = () => { alertBox.className = 'alert'; };
+
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) {
+      window.location.replace('/connexion.html');
+      return;
+    }
+
+    const user = session.user;
+
+    const { data: profile, error } = await supabaseClient
+      .from('profiles')
+      .select('full_name, phone, role, referral_code')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    const fullName = (profile && profile.full_name) || '';
+    const phone = (profile && profile.phone) || '';
+
+    document.getElementById('full_name').value = fullName;
+    document.getElementById('phone').value = phone;
+    document.getElementById('email').value = user.email || '';
+    document.getElementById('user-fullname-display').textContent = fullName || 'Utilisateur';
+    document.getElementById('user-role').textContent = profile && profile.role === 'admin' ? 'Administrateur' : 'Membre';
+    document.getElementById('user-initials').textContent = getInitials(fullName || user.email || '?');
+    document.getElementById('ref-code-display').textContent = (profile && profile.referral_code) || '—';
+
+    loading.style.display = 'none';
+    content.style.display = 'block';
+
+  } catch (err) {
+    console.error('[profil] erreur:', err);
+    loading.style.display = 'none';
+    alertBox.textContent = 'Erreur : ' + (err.message || 'impossible de charger ton profil.');
+    alertBox.className = 'alert alert-error show';
+  }
+
+  // Soumission
+  document.getElementById('profile-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideAlert();
+
+    const fullName = document.getElementById('full_name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const saveBtn = document.getElementById('save-btn');
+
+    if (!fullName || fullName.length < 2) {
+      return showAlert('Le nom complet doit contenir au moins 2 caractères.');
+    }
+
+    if (phone && !/^\+225[0-9]{8,10}$/.test(phone.replace(/[\s-]/g, ''))) {
+      return showAlert('Numéro invalide. Format : +225 suivi de 8 à 10 chiffres.');
+    }
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Enregistrement…';
+
+    try {
+      const { error } = await supabaseClient.rpc('update_my_profile', {
+        p_full_name: fullName,
+        p_phone: phone
+      });
+      if (error) throw error;
+
+      showAlert('✅ Profil mis à jour !', 'success');
+      document.getElementById('user-fullname-display').textContent = fullName;
+      document.getElementById('user-initials').textContent = getInitials(fullName);
+      setTimeout(() => hideAlert(), 3000);
+    } catch (err) {
+      console.error('[profil save]', err);
+      showAlert('Erreur : ' + (err.message || 'impossible d\'enregistrer.'));
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Enregistrer les modifications';
+    }
+  });
+
+  // Déconnexion
+  document.getElementById('logout-btn')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    await supabaseClient.auth.signOut();
+    window.location.href = '/index.html';
+  });
+})();
+
+function getInitials(name) {
+  if (!name) return '?';
+  const parts = String(name).trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+</script>
+</body>
+</html>
