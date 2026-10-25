@@ -1,11 +1,16 @@
 // frontend/assets/js/admin-utilisateurs.js
-// Gestion des utilisateurs : liste, activation et annulation d'abonnement.
+// Gestion des utilisateurs : liste, activation et annulation d'abonnement avec parrainage.
 
 let allUsers = [];
 let currentUserId = null;
 let currentUserName = null;
 let currentUserEmail = null;
-let currentSubscription = null; // Pour l'annulation
+let currentReferrer = null;
+let currentSubscription = null;
+
+const PLAN_PRICES = { '7j': 1500, '30j': 5000, 'annuel': 45000 };
+const BONUS_DAYS = { '7j': 3, '30j': 7, 'annuel': 30 };
+const COMMISSION_RATE = 0.20;
 
 // ============================================================
 // CHARGEMENT
@@ -112,25 +117,91 @@ function renderUsers() {
 // ============================================================
 // MODALE ACTIVATION
 // ============================================================
-function openActivationModal(userId) {
+async function openActivationModal(userId) {
   const user = allUsers.find(u => u.id === userId);
   if (!user) return;
 
   currentUserId = userId;
   currentUserName = user.full_name || 'Utilisateur';
   currentUserEmail = user.email;
+  currentReferrer = null;
 
   document.getElementById('modal-user-name').textContent = currentUserName;
   document.getElementById('modal-user-email').textContent = user.email;
   document.getElementById('modal-plan').value = '30j';
   document.getElementById('modal-days').value = '';
+  document.getElementById('modal-amount').value = '5000';
   document.getElementById('modal-note').value = '';
+
+  // Cacher les encadrés par défaut
+  document.getElementById('referral-info').style.display = 'none';
+  document.getElementById('commission-preview').classList.add('hidden');
+  updateCommissionPreview();
+
+  // Charger les infos de parrainage
+  try {
+    const { data: refData, error } = await supabaseClient.rpc('get_referrer_info', { p_user_id: userId });
+    if (!error && refData) {
+      currentReferrer = refData;
+      const refBox = document.getElementById('referral-info');
+      const refName = document.getElementById('ref-name');
+      const refBonus = document.getElementById('ref-bonus');
+
+      refName.textContent = `${refData.referrer_name} (${refData.referrer_code})`;
+      refBox.style.display = 'block';
+
+      const isFirst = refData.is_first_subscription;
+      const alreadyApplied = refData.bonus_already_applied;
+
+      if (isFirst && !alreadyApplied) {
+        refBonus.textContent = `🎁 Bonus disponible : +${BONUS_DAYS['30j']} jours (selon formule)`;
+        refBonus.className = 'ref-bonus';
+      } else if (alreadyApplied) {
+        refBonus.textContent = `✓ Bonus de parrainage déjà utilisé`;
+        refBonus.className = 'ref-bonus used';
+      } else {
+        refBonus.textContent = `✓ Bonus déjà consommé (renouvellement)`;
+        refBonus.className = 'ref-bonus used';
+      }
+    }
+  } catch (e) {
+    console.warn('[referral info]', e);
+  }
 
   document.getElementById('sub-modal').classList.add('active');
 }
+
+function updateReferralBonusLabel(planCode) {
+  if (!currentReferrer) return;
+  const refBonus = document.getElementById('ref-bonus');
+  if (!refBonus) return;
+  const isFirst = currentReferrer.is_first_subscription;
+  const alreadyApplied = currentReferrer.bonus_already_applied;
+  if (isFirst && !alreadyApplied) {
+    refBonus.textContent = `🎁 Bonus disponible : +${BONUS_DAYS[planCode]} jours`;
+    refBonus.className = 'ref-bonus';
+  }
+}
+
+function updateCommissionPreview() {
+  const amount = parseFloat(document.getElementById('modal-amount')?.value) || 0;
+  const preview = document.getElementById('commission-preview');
+  const valueEl = document.getElementById('comm-value');
+
+  if (!currentReferrer || amount <= 0) {
+    preview.classList.add('hidden');
+    return;
+  }
+
+  const commission = Math.round(amount * COMMISSION_RATE * 100) / 100;
+  valueEl.textContent = `${commission.toLocaleString('fr-FR')} FCFA`;
+  preview.classList.remove('hidden');
+}
+
 function closeActivationModal() {
   document.getElementById('sub-modal').classList.remove('active');
   currentUserId = null;
+  currentReferrer = null;
 }
 
 async function confirmActivation() {
@@ -142,6 +213,7 @@ async function confirmActivation() {
   const planDays = parseInt(selectedOption.dataset.days);
   const customDays = document.getElementById('modal-days').value.trim();
   const days = customDays ? parseInt(customDays) : planDays;
+  const amount = parseFloat(document.getElementById('modal-amount').value) || 0;
   const note = document.getElementById('modal-note').value.trim();
 
   if (!days || days <= 0) {
@@ -158,6 +230,7 @@ async function confirmActivation() {
       p_user_id: currentUserId,
       p_plan_code: planCode,
       p_days: days,
+      p_amount: amount,
     });
     if (error) throw error;
 
@@ -169,12 +242,20 @@ async function confirmActivation() {
           action: 'manual_subscription_note',
           target_type: 'user',
           target_id: currentUserId,
-          details: { note, days, plan: planCode },
+          details: { note, days, plan: planCode, amount },
         });
       } catch (e) { console.warn('[note]', e); }
     }
 
-    showToast(`Abonnement de ${days} jours activé pour ${currentUserName}`, 'success');
+    let successMsg = `Abonnement de ${days} jours activé pour ${currentUserName}`;
+    if (currentReferrer && currentReferrer.is_first_subscription && !currentReferrer.bonus_already_applied) {
+      successMsg += ` (+${BONUS_DAYS[planCode]}j bonus parrainage)`;
+    }
+    if (amount > 0 && currentReferrer) {
+      successMsg += `. Commission ${Math.round(amount * COMMISSION_RATE)} FCFA en attente.`;
+    }
+
+    showToast(successMsg, 'success', 6000);
     closeActivationModal();
     loadUsers();
   } catch (err) {
@@ -203,9 +284,8 @@ async function openCancelModal(userId) {
   document.getElementById('cancel-note').value = '';
   document.getElementById('cancel-refund').value = '';
 
-  // Charger les détails de l'abonnement actif pour afficher le récap
-  const infoBox = document.getElementById('cancel-info');
-  infoBox.textContent = 'Chargement des détails…';
+  const infoText = document.getElementById('cancel-info-text');
+  infoText.textContent = 'Chargement…';
 
   try {
     const { data: subs, error } = await supabaseClient
@@ -219,24 +299,21 @@ async function openCancelModal(userId) {
     if (error) throw error;
 
     if (!subs || subs.length === 0) {
-      infoBox.textContent = 'Aucun abonnement actif trouvé.';
+      infoText.textContent = 'Aucun abonnement actif trouvé.';
       currentSubscription = null;
     } else {
       currentSubscription = subs[0];
       const exp = new Date(currentSubscription.expires_at);
       const now = new Date();
       const daysLeft = Math.max(0, Math.ceil((exp - now) / (1000 * 60 * 60 * 24)));
-      const priceMap = { '7j': 1500, '30j': 5000, 'annuel': 45000 };
 
-      infoBox.innerHTML = `
-        <strong>Abonnement actif :</strong><br />
+      infoText.innerHTML = `
         Formule : <strong>${currentSubscription.plan_code}</strong><br />
         Expire le : <strong>${exp.toLocaleDateString('fr-FR')}</strong><br />
         Jours restants : <strong>${daysLeft} jour${daysLeft > 1 ? 's' : ''}</strong>
       `;
 
-      // Pré-remplir le montant à rembourser avec le prix de la formule
-      const suggestedPrice = priceMap[currentSubscription.plan_code] || '';
+      const suggestedPrice = PLAN_PRICES[currentSubscription.plan_code] || '';
       if (suggestedPrice) {
         document.getElementById('cancel-refund').value = suggestedPrice;
       }
@@ -275,14 +352,13 @@ async function confirmCancel() {
   btn.textContent = 'Annulation...';
 
   try {
-    const { data, error } = await supabaseClient.rpc('admin_cancel_subscription', {
+    const { error } = await supabaseClient.rpc('admin_cancel_subscription', {
       p_user_id: currentUserId,
       p_reason: reasonText,
       p_refund_amount: refundAmount,
     });
     if (error) throw error;
 
-    // Message de succès détaillé
     let msg = `Abonnement annulé pour ${currentUserName}.`;
     if (refundAmount && refundAmount > 0) {
       msg += ` ⚠️ N'oublie pas de rembourser ${refundAmount} FCFA via Wave/Orange Money.`;
@@ -320,6 +396,17 @@ async function confirmCancel() {
   document.getElementById('sub-modal')?.addEventListener('click', (e) => {
     if (e.target.id === 'sub-modal') closeActivationModal();
   });
+
+  // Écouteurs pour mise à jour dynamique
+  document.getElementById('modal-plan')?.addEventListener('change', (e) => {
+    const planCode = e.target.value;
+    const price = PLAN_PRICES[planCode];
+    const amountInput = document.getElementById('modal-amount');
+    if (amountInput && price) amountInput.value = price;
+    updateReferralBonusLabel(planCode);
+    updateCommissionPreview();
+  });
+  document.getElementById('modal-amount')?.addEventListener('input', updateCommissionPreview);
 
   // Modale annulation
   document.getElementById('cancel-dismiss')?.addEventListener('click', closeCancelModal);
