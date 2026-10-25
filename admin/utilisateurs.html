@@ -15,77 +15,21 @@
     .modal p { color: var(--gray-text); font-size: 0.9rem; margin-bottom: 16px; }
     .modal .form-field { margin-bottom: 16px; }
     .modal .form-field label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; }
-    .modal .form-field select,
-    .modal .form-field input,
-    .modal .form-field textarea { width: 100%; padding: 10px 14px; border: 1.5px solid #E2E8F0; border-radius: 10px; font-family: 'Inter'; font-size: 0.92rem; }
+    .modal .form-field select, .modal .form-field input, .modal .form-field textarea { width: 100%; padding: 10px 14px; border: 1.5px solid #E2E8F0; border-radius: 10px; font-family: 'Inter'; font-size: 0.92rem; }
     .modal .form-field textarea { resize: vertical; min-height: 60px; }
-    .modal .form-field select:focus,
-    .modal .form-field input:focus,
-    .modal .form-field textarea:focus { outline: none; border-color: var(--blue); }
+    .modal .form-field select:focus, .modal .form-field input:focus, .modal .form-field textarea:focus { outline: none; border-color: var(--blue); }
     .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
     .modal-warning { background: #FED7D7; border-left: 4px solid #E53E3E; color: #9B2C2C; padding: 14px 18px; border-radius: 10px; font-size: 0.85rem; margin-bottom: 20px; }
-
-    /* Encadré parrainage */
-    .referral-info-box {
-      background: linear-gradient(135deg, #FFF9E6, #FFF4E5);
-      border: 1.5px solid #FFD98A;
-      border-radius: 12px;
-      padding: 14px 18px;
-      margin-bottom: 16px;
-    }
-    .referral-info-box .ref-label {
-      font-size: 0.75rem;
-      color: #B45309;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .referral-info-box .ref-value {
-      font-weight: 700;
-      color: var(--navy);
-      font-size: 0.95rem;
-    }
-    .referral-info-box .ref-bonus {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px dashed #FFD98A;
-      font-size: 0.88rem;
-      color: #1E7E45;
-      font-weight: 600;
-    }
-    .referral-info-box .ref-bonus.used {
-      color: #B45309;
-    }
-
-    /* Encadré commission */
-    .commission-preview {
-      background: linear-gradient(135deg, #E8F0FE, #C6DBFE);
-      border-radius: 12px;
-      padding: 14px 18px;
-      margin-bottom: 16px;
-    }
-    .commission-preview .comm-label {
-      font-size: 0.75rem;
-      color: var(--blue);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .commission-preview .comm-value {
-      font-family: 'Poppins';
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--blue);
-    }
-    .commission-preview .comm-note {
-      font-size: 0.75rem;
-      color: var(--gray-text);
-      margin-top: 4px;
-    }
+    .referral-info-box { background: linear-gradient(135deg, #FFF9E6, #FFF4E5); border: 1.5px solid #FFD98A; border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; }
+    .referral-info-box .ref-label { font-size: 0.75rem; color: #B45309; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 4px; }
+    .referral-info-box .ref-value { font-weight: 700; color: var(--navy); font-size: 0.95rem; }
+    .referral-info-box .ref-bonus { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #FFD98A; font-size: 0.88rem; color: #1E7E45; font-weight: 600; }
+    .referral-info-box .ref-bonus.used { color: #B45309; }
+    .commission-preview { background: linear-gradient(135deg, #E8F0FE, #C6DBFE); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; }
+    .commission-preview .comm-label { font-size: 0.75rem; color: var(--blue); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 4px; }
+    .commission-preview .comm-value { font-family: 'Poppins'; font-size: 1.4rem; font-weight: 800; color: var(--blue); }
+    .commission-preview .comm-note { font-size: 0.75rem; color: var(--gray-text); margin-top: 4px; }
     .commission-preview.hidden { display: none; }
-
     @media (max-width: 640px) {
       .modal-actions { flex-direction: column-reverse; }
       .modal-actions .btn { width: 100%; }
@@ -107,6 +51,7 @@
       <a href="/admin/coupons.html">Coupons</a>
       <a href="/admin/utilisateurs.html" class="active">Utilisateurs</a>
       <a href="/admin/resultats.html">Résultats</a>
+      <a href="/admin/commissions.html">Commissions</a>
     </div>
     <div class="admin-nav-actions">
       <a href="/tableau-de-bord.html" class="btn btn-outline btn-sm">Mon espace</a>
@@ -158,13 +103,11 @@
   </div>
 </main>
 
-<!-- Modale d'activation -->
 <div class="modal-overlay" id="sub-modal">
   <div class="modal">
     <h2>✅ Activer / prolonger un abonnement</h2>
     <p>Utilisateur : <strong id="modal-user-name">—</strong><br /><span id="modal-user-email" style="font-size:0.85rem;"></span></p>
 
-    <!-- Encadré parrainage -->
     <div id="referral-info" class="referral-info-box" style="display:none;">
       <div class="ref-label">🎁 Parrain</div>
       <div class="ref-value" id="ref-name">—</div>
@@ -191,7 +134,6 @@
       <div style="font-size:0.75rem;color:var(--gray-text);margin-top:4px;">Montant réellement reçu via Money Fusion. Sert à calculer la commission du parrain.</div>
     </div>
 
-    <!-- Aperçu commission -->
     <div id="commission-preview" class="commission-preview hidden">
       <div class="comm-label">💰 Commission parrain (20%)</div>
       <div class="comm-value" id="comm-value">0 FCFA</div>
@@ -210,7 +152,6 @@
   </div>
 </div>
 
-<!-- Modale d'annulation -->
 <div class="modal-overlay" id="cancel-modal">
   <div class="modal">
     <h2>🛑 Annuler l'abonnement</h2>
