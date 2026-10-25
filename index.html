@@ -42,11 +42,8 @@
     .nav-links a { font-size: 0.95rem; font-weight: 500; color: var(--gray-text); transition: color 0.25s ease; }
     .nav-links a:hover, .nav-links a.active { color: var(--blue); }
     .nav-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-    .nav-guest, .nav-auth { display: flex; gap: 12px; align-items: center; }
 
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 28px; border-radius: var(--radius-pill); font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.25s ease; white-space: nowrap; }
-    .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid rgba(10, 31, 68, 0.15); }
-    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
     .btn-primary { background: var(--blue-gradient); color: white; box-shadow: 0 4px 14px rgba(30, 79, 216, 0.35); }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(30, 79, 216, 0.45); }
     .btn-white { background: white; color: var(--navy); }
@@ -157,11 +154,9 @@
 
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ============ RESPONSIVE ============ */
     @media (max-width: 968px) {
       .nav-links { display: none; }
-      .nav-actions .nav-guest,
-      .nav-actions .nav-auth { display: none; }
+      .nav-actions .btn-primary { display: none; }
       .hamburger { display: flex; }
       .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
     }
@@ -191,7 +186,6 @@
       <span>COUPON<span style="color: var(--blue);">24</span></span>
     </a>
 
-    <!-- Liens desktop -->
     <div class="nav-links">
       <a href="/index.html" class="active">Accueil</a>
       <a href="/coupons.html">Coupons du jour</a>
@@ -199,19 +193,11 @@
       <a href="#comment-ca-marche">Comment ça marche ?</a>
     </div>
 
-    <!-- Actions desktop -->
     <div class="nav-actions">
-      <!-- État NON connecté -->
-      <div class="nav-guest" id="nav-guest">
-        <a href="/connexion.html" class="btn btn-outline">Connexion</a>
-        <a href="/inscription.html" class="btn btn-primary">Créer un compte</a>
-      </div>
-      <!-- État CONNECTÉ (sans bouton déconnexion) -->
-      <div class="nav-auth" id="nav-auth" style="display:none;">
-        <a href="/tableau-de-bord.html" class="btn btn-primary">Mon espace</a>
-      </div>
+      <!-- UN SEUL bouton visible : dépend de l'état de connexion -->
+      <a href="/inscription.html" class="btn btn-primary" id="nav-btn-guest">Créer un compte</a>
+      <a href="/tableau-de-bord.html" class="btn btn-primary" id="nav-btn-auth" style="display:none;">Mon espace</a>
 
-      <!-- Hamburger -->
       <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -219,7 +205,6 @@
   </div>
 </nav>
 
-<!-- Menu mobile (s'ouvre sous la navbar) -->
 <div class="mobile-menu" id="mobile-menu">
   <a href="/index.html" class="active">🏠 Accueil</a>
   <a href="/coupons.html">⚽ Coupons du jour</a>
@@ -227,16 +212,8 @@
   <a href="#comment-ca-marche" data-close-menu>❓ Comment ça marche ?</a>
   <div class="mobile-divider"></div>
 
-  <!-- État NON connecté (mobile) -->
-  <div id="mobile-guest">
-    <a href="/connexion.html" class="btn btn-outline">Connexion</a>
-    <a href="/inscription.html" class="btn btn-primary" style="margin-top:10px;">Créer un compte</a>
-  </div>
-
-  <!-- État CONNECTÉ (mobile) -->
-  <div id="mobile-auth" style="display:none;">
-    <a href="/tableau-de-bord.html" class="btn btn-primary">Mon espace</a>
-  </div>
+  <a href="/inscription.html" class="btn btn-primary" id="mobile-btn-guest">Créer un compte</a>
+  <a href="/tableau-de-bord.html" class="btn btn-primary" id="mobile-btn-auth" style="display:none;">Mon espace</a>
 </div>
 
 <header class="hero">
@@ -398,7 +375,7 @@
           <li>Coupons gratuits inclus</li>
           <li>Support par email</li>
         </ul>
-        <a href="/abonnements.html" class="btn btn-outline">Choisir cette formule</a>
+        <a href="/abonnements.html" class="btn btn-outline" style="background:transparent;color:var(--navy);border:1.5px solid rgba(10,31,68,0.15);">Choisir cette formule</a>
       </div>
 
       <div class="pricing-card featured">
@@ -423,7 +400,7 @@
           <li>Économie de 15 000 FCFA vs 12 mois mensuels</li>
           <li>Accès prioritaire aux nouveaux coupons</li>
         </ul>
-        <a href="/abonnements.html" class="btn btn-outline">Choisir cette formule</a>
+        <a href="/abonnements.html" class="btn btn-outline" style="background:transparent;color:var(--navy);border:1.5px solid rgba(10,31,68,0.15);">Choisir cette formule</a>
       </div>
     </div>
     <p style="text-align: center; margin-top: 32px; font-size: 0.88rem; color: var(--gray-text);">
@@ -482,52 +459,40 @@
 <script src="/assets/js/supabase-client.js"></script>
 
 <script>
-  // ============ NAVBAR DYNAMIQUE ============
+  // ============ NAVBAR : 1 SEUL BOUTON ============
   (async function initNavbar() {
-    const guestNav = document.getElementById('nav-guest');
-    const authNav = document.getElementById('nav-auth');
-    const mobileGuest = document.getElementById('mobile-guest');
-    const mobileAuth = document.getElementById('mobile-auth');
+    const btnGuest = document.getElementById('nav-btn-guest');
+    const btnAuth = document.getElementById('nav-btn-auth');
+    const mobileBtnGuest = document.getElementById('mobile-btn-guest');
+    const mobileBtnAuth = document.getElementById('mobile-btn-auth');
 
     try {
       if (typeof supabaseClient !== 'undefined') {
         const { data: { session } } = await supabaseClient.auth.getSession();
-        if (session) {
-          if (guestNav) guestNav.style.display = 'none';
-          if (authNav) authNav.style.display = 'flex';
-          if (mobileGuest) mobileGuest.style.display = 'none';
-          if (mobileAuth) mobileAuth.style.display = 'block';
-        } else {
-          if (guestNav) guestNav.style.display = 'flex';
-          if (authNav) authNav.style.display = 'none';
-          if (mobileGuest) mobileGuest.style.display = 'block';
-          if (mobileAuth) mobileAuth.style.display = 'none';
-        }
+        const isAuth = !!session;
+
+        if (btnGuest) btnGuest.style.display = isAuth ? 'none' : 'inline-flex';
+        if (btnAuth) btnAuth.style.display = isAuth ? 'inline-flex' : 'none';
+        if (mobileBtnGuest) mobileBtnGuest.style.display = isAuth ? 'none' : 'flex';
+        if (mobileBtnAuth) mobileBtnAuth.style.display = isAuth ? 'flex' : 'none';
       }
     } catch (e) {
       console.warn('[navbar] auth check failed:', e);
     }
   })();
 
-  // ============ MENU HAMBURGER MOBILE ============
+  // ============ HAMBURGER ============
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobile-menu');
 
   if (hamburger && mobileMenu) {
     hamburger.addEventListener('click', () => {
       const isOpen = mobileMenu.classList.contains('open');
-      if (isOpen) {
-        mobileMenu.classList.remove('open');
-        hamburger.classList.remove('active');
-        hamburger.setAttribute('aria-expanded', 'false');
-      } else {
-        mobileMenu.classList.add('open');
-        hamburger.classList.add('active');
-        hamburger.setAttribute('aria-expanded', 'true');
-      }
+      mobileMenu.classList.toggle('open', !isOpen);
+      hamburger.classList.toggle('active', !isOpen);
+      hamburger.setAttribute('aria-expanded', String(!isOpen));
     });
 
-    // Fermer le menu au clic sur un lien
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu.classList.remove('open');
@@ -536,7 +501,6 @@
       });
     });
 
-    // Fermer le menu au clic en dehors
     document.addEventListener('click', (e) => {
       if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
         mobileMenu.classList.remove('open');
