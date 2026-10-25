@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retraits — COUPON24 Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <style>
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(10,31,68,0.7); z-index:1000; align-items:center; justify-content:center; padding:20px; }
+    .modal-overlay.active { display:flex; }
+    .modal { background:white; border-radius:var(--radius); padding:28px; max-width:520px; width:100%; max-height:90vh; overflow-y:auto; }
+    .modal h2 { font-size:1.25rem; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(10,31,68,0.08); }
+    .modal .form-field { margin-bottom:16px; }
+    .modal .form-field label { display:block; font-size:0.82rem; font-weight:600; margin-bottom:6px; }
+    .modal .form-field select, .modal .form-field input, .modal .form-field textarea { width:100%; padding:10px 14px; border:1.5px solid #E2E8F0; border-radius:10px; font-family:'Inter'; font-size:0.92rem; }
+    .modal .form-field textarea { resize:vertical; min-height:60px; }
+    .modal .form-field select:focus, .modal .form-field input:focus, .modal .form-field textarea:focus { outline:none; border-color:var(--blue); }
+    .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; }
+    .modal-info { background:var(--sky); border-left:4px solid var(--blue); border-radius:10px; padding:14px 18px; margin-bottom:16px; font-size:0.88rem; }
+    .modal-info .label { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.5px; font-weight:700; opacity:0.7; margin-bottom:4px; }
+    .modal-info .value { font-family:'Poppins'; font-weight:700; font-size:1.1rem; }
+    .wd-method-badge { display:inline-block; padding:4px 12px; border-radius:var(--radius-pill); font-size:0.75rem; font-weight:700; background:var(--sky); color:var(--blue); }
+    @media (max-width:640px) {
+      .modal-actions { flex-direction:column-reverse; }
+      .modal-actions .btn { width:100%; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="admin-navbar">
+  <div class="container">
+    <a href="/admin/dashboard.html" class="admin-logo">
+      <span class="ball">⚽</span>
+      <span>COUPON<span style="color: var(--blue);">24</span></span>
+      <span class="badge-admin">Admin</span>
+    </a>
+    <div class="admin-nav-links">
+      <a href="/admin/dashboard.html">Tableau de bord</a>
+      <a href="/admin/coupons.html">Coupons</a>
+      <a href="/admin/utilisateurs.html">Utilisateurs</a>
+      <a href="/admin/resultats.html">Résultats</a>
+      <a href="/admin/commissions.html">Commissions</a>
+      <a href="/admin/retraits.html" class="active">Retraits</a>
+    </div>
+    <div class="admin-nav-actions">
+      <a href="/tableau-de-bord.html" class="btn btn-outline btn-sm">Mon espace</a>
+      <button id="logout-btn" class="btn btn-danger btn-sm">Déconnexion</button>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="admin-header">
+    <h1>Demandes de retrait</h1>
+    <p>Gère les demandes de retrait des parrains.</p>
+  </div>
+
+  <div id="page-alert" class="alert"></div>
+  <div id="loading" class="loader"><div class="spinner"></div></div>
+
+  <div id="content" style="display:none;">
+
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <div class="filters-row" style="margin-top:24px;">
+      <input type="text" id="search-input" placeholder="🔍 Rechercher un utilisateur..." style="flex:1;min-width:250px;" />
+      <select id="filter-status">
+        <option value="">Tous les statuts</option>
+        <option value="pending">⏳ En attente</option>
+        <option value="approved">🔄 Approuvée</option>
+        <option value="paid">✅ Payée</option>
+        <option value="rejected">❌ Rejetée</option>
+      </select>
+    </div>
+
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Utilisateur</th>
+          <th>Montant</th>
+          <th>Moyen</th>
+          <th>Numéro</th>
+          <th>Date</th>
+          <th>Statut</th>
+          <th style="text-align:right;">Action</th>
+        </tr>
+      </thead>
+      <tbody id="withdrawals-body">
+        <tr><td colspan="7" style="text-align:center;padding:40px;">Chargement…</td></tr>
+      </tbody>
+    </table>
+
+    <div id="empty" class="empty-state" style="display:none;margin-top:20px;">
+      <div class="icon">💸</div>
+      <p>Aucune demande de retrait pour le moment.</p>
+    </div>
+
+  </div>
+</main>
+
+<div class="modal-overlay" id="wd-modal">
+  <div class="modal">
+    <h2>Traiter la demande</h2>
+    <div class="modal-info">
+      <div class="label">Utilisateur</div>
+      <div class="value" id="wd-user">—</div>
+      <div style="margin-top:8px;font-size:0.85rem;" id="wd-contact">—</div>
+    </div>
+    <div class="modal-info" style="background:#FFF4E5;border-left-color:#F5A623;">
+      <div class="label" style="color:#B45309;">Montant à verser</div>
+      <div class="value" style="color:#B45309;" id="wd-amount">—</div>
+      <div style="margin-top:8px;font-size:0.85rem;" id="wd-method-info">—</div>
+    </div>
+    <div class="form-field">
+      <label>Nouveau statut</label>
+      <select id="wd-new-status">
+        <option value="approved">🔄 Approuvée (en cours de versement)</option>
+        <option value="paid">✅ Payée (versement effectué)</option>
+        <option value="rejected">❌ Rejetée</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label>Note / référence du versement</label>
+      <textarea id="wd-note" placeholder="Ex: Wave - réf. WF12345 - versé le 26/10/2026"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="wd-cancel">Annuler</button>
+      <button class="btn btn-primary" id="wd-confirm">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/admin-common.js"></script>
+<script src="/assets/js/admin-retraits.js"></script>
+</body>
+</html>
