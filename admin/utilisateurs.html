@@ -8,78 +8,83 @@
   <link rel="stylesheet" href="/assets/css/admin.css" />
   <style>
     .user-actions { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
-    .modal-overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(10,31,68,0.7);
-      z-index: 1000;
-      align-items: center; justify-content: center;
-      padding: 20px;
-    }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,31,68,0.7); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.active { display: flex; }
-    .modal {
-      background: white;
-      border-radius: var(--radius);
-      padding: 28px;
-      max-width: 520px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-    .modal h2 {
-      font-size: 1.25rem;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(10,31,68,0.08);
-    }
+    .modal { background: white; border-radius: var(--radius); padding: 28px; max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    .modal h2 { font-size: 1.25rem; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(10,31,68,0.08); }
     .modal p { color: var(--gray-text); font-size: 0.9rem; margin-bottom: 16px; }
     .modal .form-field { margin-bottom: 16px; }
-    .modal .form-field label {
-      display: block;
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
+    .modal .form-field label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; }
     .modal .form-field select,
     .modal .form-field input,
-    .modal .form-field textarea {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1.5px solid #E2E8F0;
-      border-radius: 10px;
-      font-family: 'Inter';
-      font-size: 0.92rem;
-    }
-    .modal .form-field textarea { resize: vertical; min-height: 70px; }
+    .modal .form-field textarea { width: 100%; padding: 10px 14px; border: 1.5px solid #E2E8F0; border-radius: 10px; font-family: 'Inter'; font-size: 0.92rem; }
+    .modal .form-field textarea { resize: vertical; min-height: 60px; }
     .modal .form-field select:focus,
     .modal .form-field input:focus,
-    .modal .form-field textarea:focus {
-      outline: none;
-      border-color: var(--blue);
-    }
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      margin-top: 20px;
-    }
-    .modal-warning {
-      background: #FED7D7;
-      border-left: 4px solid #E53E3E;
-      color: #9B2C2C;
+    .modal .form-field textarea:focus { outline: none; border-color: var(--blue); }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+    .modal-warning { background: #FED7D7; border-left: 4px solid #E53E3E; color: #9B2C2C; padding: 14px 18px; border-radius: 10px; font-size: 0.85rem; margin-bottom: 20px; }
+
+    /* Encadré parrainage */
+    .referral-info-box {
+      background: linear-gradient(135deg, #FFF9E6, #FFF4E5);
+      border: 1.5px solid #FFD98A;
+      border-radius: 12px;
       padding: 14px 18px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
-    .modal-info {
-      background: var(--sky);
-      border-left: 4px solid var(--blue);
+    .referral-info-box .ref-label {
+      font-size: 0.75rem;
+      color: #B45309;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .referral-info-box .ref-value {
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 0.95rem;
+    }
+    .referral-info-box .ref-bonus {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #FFD98A;
+      font-size: 0.88rem;
+      color: #1E7E45;
+      font-weight: 600;
+    }
+    .referral-info-box .ref-bonus.used {
+      color: #B45309;
+    }
+
+    /* Encadré commission */
+    .commission-preview {
+      background: linear-gradient(135deg, #E8F0FE, #C6DBFE);
+      border-radius: 12px;
       padding: 14px 18px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
+    .commission-preview .comm-label {
+      font-size: 0.75rem;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .commission-preview .comm-value {
+      font-family: 'Poppins';
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--blue);
+    }
+    .commission-preview .comm-note {
+      font-size: 0.75rem;
+      color: var(--gray-text);
+      margin-top: 4px;
+    }
+    .commission-preview.hidden { display: none; }
 
     @media (max-width: 640px) {
       .modal-actions { flex-direction: column-reverse; }
@@ -153,11 +158,18 @@
   </div>
 </main>
 
-<!-- Modale : activer un abonnement -->
+<!-- Modale d'activation -->
 <div class="modal-overlay" id="sub-modal">
   <div class="modal">
     <h2>✅ Activer / prolonger un abonnement</h2>
     <p>Utilisateur : <strong id="modal-user-name">—</strong><br /><span id="modal-user-email" style="font-size:0.85rem;"></span></p>
+
+    <!-- Encadré parrainage -->
+    <div id="referral-info" class="referral-info-box" style="display:none;">
+      <div class="ref-label">🎁 Parrain</div>
+      <div class="ref-value" id="ref-name">—</div>
+      <div class="ref-bonus" id="ref-bonus">—</div>
+    </div>
 
     <div class="form-field">
       <label>Formule</label>
@@ -174,6 +186,19 @@
     </div>
 
     <div class="form-field">
+      <label>Montant payé (FCFA)</label>
+      <input type="number" id="modal-amount" min="0" step="50" placeholder="Ex: 5000" />
+      <div style="font-size:0.75rem;color:var(--gray-text);margin-top:4px;">Montant réellement reçu via Money Fusion. Sert à calculer la commission du parrain.</div>
+    </div>
+
+    <!-- Aperçu commission -->
+    <div id="commission-preview" class="commission-preview hidden">
+      <div class="comm-label">💰 Commission parrain (20%)</div>
+      <div class="comm-value" id="comm-value">0 FCFA</div>
+      <div class="comm-note">Sera versée au parrain via Wave/Orange Money.</div>
+    </div>
+
+    <div class="form-field">
       <label>Note interne (visible dans le journal d'audit)</label>
       <input type="text" id="modal-note" placeholder="Ex: Paiement reçu par Wave manuellement" />
     </div>
@@ -185,21 +210,18 @@
   </div>
 </div>
 
-<!-- Modale : annuler un abonnement -->
+<!-- Modale d'annulation -->
 <div class="modal-overlay" id="cancel-modal">
   <div class="modal">
     <h2>🛑 Annuler l'abonnement</h2>
-
     <div class="modal-warning">
-      ⚠️ <strong>Attention :</strong> l'utilisateur perdra <strong>immédiatement</strong> l'accès aux coupons premium. Cette action est irréversible (il devra souscrire un nouvel abonnement).
+      ⚠️ <strong>Attention :</strong> l'utilisateur perdra <strong>immédiatement</strong> l'accès aux coupons premium. Cette action est irréversible.
     </div>
-
     <p>Utilisateur : <strong id="cancel-user-name">—</strong><br /><span id="cancel-user-email" style="font-size:0.85rem;"></span></p>
-
-    <div class="modal-info" id="cancel-info">
-      <!-- Rempli dynamiquement -->
+    <div class="referral-info-box" id="cancel-info" style="background:var(--sky);border-color:#BFD5FD;">
+      <div class="ref-label" style="color:var(--blue);">Abonnement actuel</div>
+      <div class="ref-value" id="cancel-info-text">—</div>
     </div>
-
     <div class="form-field">
       <label>Motif de l'annulation <span style="color:#E53E3E;">*</span></label>
       <select id="cancel-reason">
@@ -207,22 +229,18 @@
         <option value="Demande de l'utilisateur">Demande de l'utilisateur (remboursement)</option>
         <option value="Fraude suspectée">Fraude suspectée</option>
         <option value="Violation des CGU">Violation des CGU (partage de contenu)</option>
-        <option value="Problème technique">Problème technique (abonnement non utilisé)</option>
+        <option value="Problème technique">Problème technique</option>
         <option value="Autre">Autre</option>
       </select>
     </div>
-
     <div class="form-field">
       <label>Détails / note</label>
-      <textarea id="cancel-note" placeholder="Ex: L'utilisateur a payé deux fois par Wave le 25/10. Rembourser 5000 FCFA."></textarea>
+      <textarea id="cancel-note" placeholder="Détails de l'annulation..."></textarea>
     </div>
-
     <div class="form-field">
       <label>Montant à rembourser (FCFA)</label>
       <input type="number" id="cancel-refund" min="0" placeholder="Laisser vide si pas de remboursement" />
-      <div style="font-size:0.75rem;color:var(--gray-text);margin-top:4px;">Le remboursement est à effectuer manuellement via Wave/Orange Money.</div>
     </div>
-
     <div class="modal-actions">
       <button class="btn btn-outline" id="cancel-dismiss">Retour</button>
       <button class="btn btn-danger" id="cancel-confirm">Confirmer l'annulation</button>
