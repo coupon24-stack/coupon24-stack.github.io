@@ -1,5 +1,5 @@
 // frontend/assets/js/auth.js
-// Logique d'authentification avec support du paramètre ?redirect=
+// Authentification avec support du parrainage.
 
 function showAlert(message, type = 'error') {
   const box = document.getElementById('alert-box');
@@ -24,23 +24,93 @@ function isValidIvorianPhone(phone) {
   return /^\+225\d{8,10}$/.test(cleaned);
 }
 
-// Récupère l'URL de redirection depuis ?redirect=
 function getRedirectUrl(defaultUrl = '/tableau-de-bord.html') {
   const redirect = new URLSearchParams(window.location.search).get('redirect');
   if (!redirect) return defaultUrl;
+  try { return decodeURIComponent(redirect); } catch (e) { return defaultUrl; }
+}
+
+// ============================================================
+// VÉRIFICATION DU CODE DE PARRAINAGE (temps réel)
+// ============================================================
+async function checkReferralCode(code) {
+  if (!code || code.length < 5) return null;
   try {
-    return decodeURIComponent(redirect);
+    const { data, error } = await supabaseClient
+      .from('profiles')
+      .select('full_name')
+      .eq('referral_code', code.toUpperCase())
+      .maybeSingle();
+    if (error || !data) return null;
+    return data.full_name || 'un membre';
   } catch (e) {
-    return defaultUrl;
+    console.warn('[referral check]', e);
+    return null;
   }
 }
 
-// ---------- INSCRIPTION ----------
+// Pré-remplir le code depuis l'URL ?ref=XXX
+function initReferralFromUrl() {
+  const input = document.getElementById('referral_code');
+  if (!input) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const refFromUrl = params.get('ref');
+  if (refFromUrl) {
+    input.value = refFromUrl.toUpperCase();
+    // Déclencher la vérification
+    input.dispatchEvent(new Event('input'));
+  }
+}
+
+// ============================================================
+// INSCRIPTION
+// ============================================================
 const signupForm = document.getElementById('signup-form');
 if (signupForm) {
   const submitBtn = document.getElementById('submit-btn');
   if (submitBtn) submitBtn.dataset.originalText = submitBtn.textContent;
 
+  // Pré-remplir depuis l'URL
+  initReferralFromUrl();
+
+  // Vérification temps réel du code de parrainage
+  const referralInput = document.getElementById('referral_code');
+  const referralFeedback = document.getElementById('referral-feedback');
+  let referralTimeout;
+
+  referralInput?.addEventListener('input', (e) => {
+    e.target.value = e.target.value.toUpperCase();
+    clearTimeout(referralTimeout);
+
+    const code = e.target.value.trim();
+    if (!referralFeedback) return;
+
+    if (!code) {
+      referralFeedback.className = 'referral-feedback';
+      referralFeedback.textContent = '';
+      return;
+    }
+
+    if (code.length < 5) {
+      referralFeedback.className = 'referral-feedback';
+      referralFeedback.textContent = '';
+      return;
+    }
+
+    referralTimeout = setTimeout(async () => {
+      const name = await checkReferralCode(code);
+      if (name) {
+        referralFeedback.className = 'referral-feedback valid';
+        referralFeedback.textContent = `✅ Parrain : ${name}`;
+      } else {
+        referralFeedback.className = 'referral-feedback invalid';
+        referralFeedback.textContent = `❌ Code invalide`;
+      }
+    }, 500);
+  });
+
+  // Soumission
   signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideAlert();
@@ -50,6 +120,7 @@ if (signupForm) {
     const phone = document.getElementById('phone').value.trim();
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm_password').value;
+    const referralCode = (document.getElementById('referral_code')?.value || '').trim().toUpperCase();
 
     if (!fullName || !email || !phone || !password) {
       return showAlert('Veuillez remplir tous les champs.');
@@ -64,13 +135,24 @@ if (signupForm) {
       return showAlert('Les deux mots de passe ne correspondent pas.');
     }
 
+    // Valider le code de parrainage s'il est renseigné
+    if (referralCode) {
+      const referrerName = await checkReferralCode(referralCode);
+      if (!referrerName) {
+        return showAlert('Le code de parrainage est invalide. Vérifie-le ou laisse vide.');
+      }
+    }
+
     setLoading(true);
 
     try {
+      const metadata = { full_name: fullName, phone };
+      if (referralCode) metadata.referral_code_used = referralCode;
+
       const { data: authData, error: authError } = await supabaseClient.auth.signUp({
         email,
         password,
-        options: { data: { full_name: fullName, phone } }
+        options: { data: metadata }
       });
 
       if (authError) throw authError;
@@ -78,8 +160,11 @@ if (signupForm) {
       const target = getRedirectUrl();
 
       if (authData.session) {
-        showAlert('Compte créé ! Redirection...', 'success');
-        setTimeout(() => { window.location.href = target; }, 1500);
+        const msg = referralCode
+          ? 'Compte créé ! Ton bonus de parrainage sera appliqué à ton premier abonnement. Redirection...'
+          : 'Compte créé ! Redirection...';
+        showAlert(msg, 'success');
+        setTimeout(() => { window.location.href = target; }, 2000);
       } else {
         showAlert('Compte créé ! Vérifie ta boîte mail pour confirmer, puis connecte-toi.', 'success');
         signupForm.reset();
@@ -87,7 +172,7 @@ if (signupForm) {
     } catch (error) {
       console.error('Erreur inscription:', error);
       if (error.message && error.message.includes('already registered')) {
-        showAlert('Un compte existe déjà avec cet email. Connecte-toi.');
+        showAlert('Un compte existe déjà avec cet email.');
       } else if (error.message && error.message.includes('Password')) {
         showAlert('Le mot de passe est trop faible.');
       } else {
@@ -99,7 +184,9 @@ if (signupForm) {
   });
 }
 
-// ---------- CONNEXION ----------
+// ============================================================
+// CONNEXION
+// ============================================================
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
   const submitBtn = document.getElementById('submit-btn');
@@ -117,11 +204,9 @@ if (loginForm) {
     }
 
     setLoading(true);
-
     try {
       const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
       if (error) throw error;
-
       const target = getRedirectUrl();
       showAlert('Connexion réussie ! Redirection...', 'success');
       setTimeout(() => { window.location.href = target; }, 1000);
@@ -134,7 +219,9 @@ if (loginForm) {
   });
 }
 
-// ---------- MOT DE PASSE OUBLIÉ ----------
+// ============================================================
+// MOT DE PASSE OUBLIÉ
+// ============================================================
 const forgotForm = document.getElementById('forgot-password-form');
 if (forgotForm) {
   const submitBtn = document.getElementById('submit-btn');
@@ -155,7 +242,6 @@ if (forgotForm) {
       showAlert('Si un compte existe avec cet email, un lien de réinitialisation a été envoyé.', 'success');
       forgotForm.reset();
     } catch (error) {
-      console.error('Erreur mot de passe oublié:', error);
       showAlert('Impossible d\'envoyer l\'email pour le moment.');
     } finally {
       setLoading(false);
@@ -163,7 +249,9 @@ if (forgotForm) {
   });
 }
 
-// ---------- RÉINITIALISATION ----------
+// ============================================================
+// RÉINITIALISATION
+// ============================================================
 const resetForm = document.getElementById('reset-password-form');
 if (resetForm) {
   const submitBtn = document.getElementById('submit-btn');
@@ -174,7 +262,6 @@ if (resetForm) {
     hideAlert();
     const newPassword = document.getElementById('new_password').value;
     const confirmNew = document.getElementById('confirm_new_password').value;
-
     if (newPassword.length < 8) return showAlert('Le mot de passe doit contenir au moins 8 caractères.');
     if (newPassword !== confirmNew) return showAlert('Les deux mots de passe ne correspondent pas.');
 
@@ -185,7 +272,6 @@ if (resetForm) {
       showAlert('Mot de passe mis à jour ! Redirection...', 'success');
       setTimeout(() => { window.location.href = '/connexion.html'; }, 2000);
     } catch (error) {
-      console.error('Erreur réinitialisation:', error);
       showAlert('Le lien est peut-être expiré. Refais une demande.');
     } finally {
       setLoading(false);
