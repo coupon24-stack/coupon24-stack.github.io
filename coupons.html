@@ -23,7 +23,6 @@
     .container { max-width:1200px; margin:0 auto; padding:0 24px; }
     h1,h2,h3 { font-family:'Poppins',sans-serif; line-height:1.2; }
 
-    /* ============ NAVBAR ============ */
     .navbar { background:white; border-bottom:1px solid rgba(10,31,68,0.06); position:sticky; top:0; z-index:100; }
     .navbar .container { display:flex; align-items:center; justify-content:space-between; height:72px; gap:12px; }
     .logo { display:flex; align-items:center; gap:10px; font-family:'Poppins'; font-weight:800; font-size:1.5rem; flex-shrink:0; }
@@ -35,17 +34,14 @@
     .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
     .btn-primary:hover { transform:translateY(-2px); }
 
-    /* ============ HEADER PAGE ============ */
     .page-header { background:var(--navy); color:white; padding:60px 0 48px; text-align:center; }
     .page-header h1 { font-size:clamp(1.8rem,4vw,2.6rem); margin-bottom:10px; letter-spacing:-0.5px; }
     .page-header p { color:rgba(255,255,255,0.75); max-width:600px; margin:0 auto; }
 
-    /* ============ FILTRES ============ */
     .filters-bar { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin:-32px auto 32px; max-width:1000px; position:relative; z-index:2; display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:16px; }
     .filters-bar input, .filters-bar select { width:100%; padding:12px 16px; border:1.5px solid #E2E8F0; border-radius:10px; font-family:'Inter'; font-size:0.9rem; background:white; }
     .filters-bar input:focus, .filters-bar select:focus { outline:none; border-color:var(--blue); }
 
-    /* ============ GRILLE COUPONS ============ */
     .coupons-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; padding-bottom:60px; }
 
     .coupon-card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column; transition:all 0.25s; position:relative; }
@@ -70,7 +66,6 @@
     .status-termine { background:#E8F0FE; color:var(--blue); }
     .coupon-card .btn { margin-top:auto; width:100%; }
 
-    /* ============ ÉTATS ============ */
     .empty-state { text-align:center; padding:80px 20px; color:var(--gray-text); }
     .empty-state .icon { font-size:3rem; margin-bottom:16px; }
 
@@ -84,7 +79,6 @@
     .spinner { width:44px; height:44px; border:3px solid var(--sky); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; }
     @keyframes spin { to { transform:rotate(360deg); } }
 
-    /* ============ RESPONSIVE ============ */
     @media (max-width: 768px) {
       body { overflow-x: hidden; }
       .navbar .container { height:auto; min-height:60px; padding:8px 16px; gap:8px; flex-wrap:nowrap; }
@@ -92,6 +86,7 @@
       .logo-ball { width:28px; height:28px; font-size:0.9rem; }
       .nav-right { gap:6px; margin-left:auto; }
       .nav-right .btn { padding:10px 14px; font-size:0.82rem; min-height:40px; min-width:44px; }
+      .nav-right .btn-outline { display:none; }
       .filters-bar { grid-template-columns:1fr; margin:-24px 16px 24px; }
       .container { padding:0 16px; }
     }
@@ -116,7 +111,7 @@
       <span>COUPON<span style="color:var(--blue);">24</span></span>
     </a>
     <div class="nav-right">
-      <a href="/index.html" class="btn btn-outline">Accueil</a>
+      <a href="/resultats-historique.html" class="btn btn-outline">📊 Résultats</a>
       <a href="/tableau-de-bord.html" class="btn btn-primary">Mon espace</a>
     </div>
   </div>
