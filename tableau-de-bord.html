@@ -48,122 +48,172 @@
     .page-title { font-size: 1.9rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
     .page-subtitle { color: var(--gray-text); margin-bottom: 32px; }
 
-    .card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding: 32px; margin-bottom: 24px; }
-    .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid rgba(10,31,68,0.08); flex-wrap: wrap; }
-    .avatar { width: 72px; height: 72px; border-radius: 50%; background: var(--blue-gradient); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Poppins'; font-weight: 800; font-size: 1.5rem; flex-shrink: 0; }
-    .profile-header h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; word-break: break-word; }
-    .role-badge { display: inline-block; padding: 3px 12px; border-radius: var(--radius-pill); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; background: var(--sky); color: var(--blue); }
+    .card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding: 28px; margin-bottom: 20px; }
+    .profile-header { display: flex; align-items: center; gap: 18px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(10,31,68,0.08); flex-wrap: wrap; }
+    .avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--blue-gradient); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Poppins'; font-weight: 800; font-size: 1.3rem; flex-shrink: 0; }
+    .profile-header h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; word-break: break-word; }
+    .role-badge { display: inline-block; padding: 3px 12px; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; background: var(--sky); color: var(--blue); }
 
-    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
     .info-item { min-width: 0; }
-    .info-item .info-label { font-size: 0.78rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
-    .info-item .info-value { font-size: 1rem; font-weight: 500; color: var(--navy); word-break: break-word; overflow-wrap: break-word; }
+    .info-item .info-label { font-size: 0.72rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
+    .info-item .info-value { font-size: 0.95rem; font-weight: 500; color: var(--navy); word-break: break-word; overflow-wrap: break-word; }
 
     .subscription-card { background: linear-gradient(135deg, #F7F9FC, #E8F0FE); border-left: 4px solid var(--blue); }
-    .subscription-card h3 { font-size: 1.15rem; margin-bottom: 8px; }
-    .subscription-card p { color: var(--gray-text); font-size: 0.92rem; margin-bottom: 16px; }
+    .subscription-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .subscription-card p { color: var(--gray-text); font-size: 0.88rem; margin-bottom: 14px; }
     #subscription-status { font-weight: 600; color: var(--navy); }
 
+    /* ============ SECTION PARRAINAGE COMPACTE ============ */
     .referral-card {
       background: linear-gradient(135deg, #FFF9E6, #FFF4E5);
-      border: 2px solid #FFD98A;
+      border: 1.5px solid #FFD98A;
       border-radius: var(--radius);
-      padding: 32px;
-      margin-bottom: 24px;
+      padding: 24px;
+      margin-bottom: 20px;
       position: relative;
       overflow: hidden;
     }
     .referral-card::before {
       content: '🎁';
       position: absolute;
-      top: -30px;
-      right: -20px;
-      font-size: 10rem;
-      opacity: 0.08;
+      top: -20px;
+      right: -10px;
+      font-size: 8rem;
+      opacity: 0.06;
       pointer-events: none;
     }
     .referral-card h3 {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       color: #B45309;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
     }
-    .referral-card .ref-subtitle { color: #92400E; font-size: 0.92rem; margin-bottom: 24px; }
-    .ref-code-box {
-      background: white;
-      border: 2px dashed #FFD98A;
-      border-radius: 12px;
-      padding: 20px;
+    .referral-card .ref-subtitle {
+      color: #92400E;
+      font-size: 0.82rem;
       margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    /* Code inline compact */
+    .ref-code-compact {
+      background: white;
+      border: 1.5px dashed #FFD98A;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 12px;
       flex-wrap: wrap;
     }
-    .ref-code-box > div:first-child { min-width: 0; flex: 1; }
-    .ref-code-box .ref-code-label { font-size: 0.75rem; color: #B45309; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 4px; }
-    .ref-code-box .ref-code-value { font-family: 'Courier New', monospace; font-size: 1.6rem; font-weight: 800; color: var(--navy); letter-spacing: 3px; word-break: break-all; }
-    .ref-code-box .btn { flex-shrink: 0; }
+    .ref-code-compact > div:first-child { min-width: 0; flex: 1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .ref-code-compact .ref-code-label {
+      font-size: 0.68rem;
+      color: #B45309;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+    .ref-code-compact .ref-code-value {
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 2px;
+    }
+    .ref-code-compact .btn { flex-shrink: 0; padding: 8px 14px; font-size: 0.8rem; }
 
-    .ref-link-box { background: white; border-radius: 10px; padding: 14px 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .ref-link-box label { font-size: 0.78rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; width: 100%; margin-bottom: 4px; }
-    .ref-link-box input { flex: 1 1 200px; min-width: 0; padding: 10px 12px; border: 1.5px solid #E2E8F0; border-radius: 8px; font-family: monospace; font-size: 0.82rem; color: var(--gray-text); background: var(--gray-light); width: 100%; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+    /* Lien compact */
+    .ref-link-compact {
+      background: white;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .ref-link-compact label {
+      font-size: 0.68rem;
+      color: var(--gray-text);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .ref-link-compact input {
+      flex: 1 1 200px;
+      min-width: 0;
+      padding: 8px 10px;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: var(--gray-text);
+      background: var(--gray-light);
+    }
+    .ref-link-compact .btn { flex-shrink: 0; padding: 8px 14px; font-size: 0.78rem; }
 
-    .ref-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
-    .ref-stat { background: white; border-radius: 12px; padding: 20px 12px; text-align: center; box-shadow: 0 2px 8px rgba(10,31,68,0.04); min-width: 0; }
-    .ref-stat .stat-value { font-family: 'Poppins'; font-size: 1.5rem; font-weight: 800; color: #B45309; line-height: 1; margin-bottom: 4px; word-break: break-word; }
-    .ref-stat .stat-label { font-size: 0.7rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+    /* Stats compact */
+    .ref-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+    .ref-stat { background: white; border-radius: 10px; padding: 14px 8px; text-align: center; box-shadow: 0 2px 8px rgba(10,31,68,0.04); min-width: 0; }
+    .ref-stat .stat-value { font-family: 'Poppins'; font-size: 1.2rem; font-weight: 800; color: #B45309; line-height: 1; margin-bottom: 4px; word-break: break-word; }
+    .ref-stat .stat-label { font-size: 0.65rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
     .ref-stat.paid .stat-value { color: var(--green); }
     .ref-stat.total .stat-value { color: var(--blue); }
 
-    /* WITHDRAWAL BOX */
+    /* Withdraw compact */
     .withdraw-box {
       background: white;
-      border-radius: 12px;
-      padding: 20px 24px;
-      margin-bottom: 24px;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
       box-shadow: 0 2px 8px rgba(10,31,68,0.04);
     }
     .withdraw-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
       flex-wrap: wrap;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
-    .withdraw-label { font-size: 0.75rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 4px; }
-    .withdraw-balance { font-family: 'Poppins'; font-size: 1.8rem; font-weight: 800; color: var(--green); line-height: 1; }
-    .withdraw-note { font-size: 0.78rem; color: var(--gray-text); }
-    .withdraw-pending { margin-top: 12px; padding: 10px 14px; background: #FFF4E5; border-radius: 8px; font-size: 0.85rem; color: #B45309; font-weight: 500; }
+    .withdraw-label { font-size: 0.68rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 2px; }
+    .withdraw-balance { font-family: 'Poppins'; font-size: 1.4rem; font-weight: 800; color: var(--green); line-height: 1; }
+    .withdraw-note { font-size: 0.72rem; color: var(--gray-text); }
+    .withdraw-pending { margin-top: 10px; padding: 8px 12px; background: #FFF4E5; border-radius: 6px; font-size: 0.78rem; color: #B45309; font-weight: 500; }
+    .withdraw-box .btn { padding: 8px 16px; font-size: 0.82rem; }
 
-    .ref-benefits { background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 8px; }
-    .ref-benefits h4 { font-size: 0.95rem; color: var(--navy); margin-bottom: 12px; font-family: 'Poppins'; }
+    .ref-benefits { background: white; border-radius: 10px; padding: 14px 18px; }
+    .ref-benefits h4 { font-size: 0.85rem; color: var(--navy); margin-bottom: 10px; font-family: 'Poppins'; }
     .ref-benefits ul { list-style: none; }
-    .ref-benefits li { padding: 6px 0; font-size: 0.88rem; color: var(--gray-text); display: flex; gap: 8px; align-items: flex-start; }
+    .ref-benefits li { padding: 4px 0; font-size: 0.82rem; color: var(--gray-text); display: flex; gap: 8px; align-items: flex-start; line-height: 1.5; }
     .ref-benefits li strong { color: var(--navy); }
 
-    .ref-filleuls { margin-top: 24px; }
-    .ref-filleuls h4 { font-size: 1rem; color: var(--navy); margin-bottom: 12px; font-family: 'Poppins'; }
-    .filleuls-table-wrapper { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(10,31,68,0.04); }
+    .ref-filleuls { margin-top: 16px; }
+    .ref-filleuls h4 { font-size: 0.9rem; color: var(--navy); margin-bottom: 10px; font-family: 'Poppins'; }
+    .filleuls-table-wrapper { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(10,31,68,0.04); }
     .filleuls-table { width: 100%; border-collapse: collapse; }
-    .filleuls-table thead th { text-align: left; padding: 12px 14px; background: #FFF9E6; font-size: 0.72rem; text-transform: uppercase; color: #B45309; letter-spacing: 0.5px; font-weight: 700; }
-    .filleuls-table tbody td { padding: 12px 14px; border-bottom: 1px solid rgba(10,31,68,0.06); font-size: 0.88rem; }
+    .filleuls-table thead th { text-align: left; padding: 10px 12px; background: #FFF9E6; font-size: 0.68rem; text-transform: uppercase; color: #B45309; letter-spacing: 0.4px; font-weight: 700; }
+    .filleuls-table tbody td { padding: 10px 12px; border-bottom: 1px solid rgba(10,31,68,0.06); font-size: 0.82rem; }
     .filleuls-table tbody tr:last-child td { border-bottom: none; }
-    .filleuls-table .badge-active { background: #E6F9EF; color: #1E7E45; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 700; }
-    .filleuls-table .badge-inactive { background: #E2E8F0; color: #4A5568; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 700; }
-    .empty-filleuls { text-align: center; padding: 30px 20px; color: var(--gray-text); font-size: 0.9rem; }
+    .filleuls-table .badge-active { background: #E6F9EF; color: #1E7E45; padding: 2px 8px; border-radius: var(--radius-pill); font-size: 0.68rem; font-weight: 700; }
+    .filleuls-table .badge-inactive { background: #E2E8F0; color: #4A5568; padding: 2px 8px; border-radius: var(--radius-pill); font-size: 0.68rem; font-weight: 700; }
+    .empty-filleuls { text-align: center; padding: 20px 16px; color: var(--gray-text); font-size: 0.85rem; }
 
-    .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 8px; }
-    .action-card { display: flex; align-items: center; gap: 14px; padding: 18px 20px; background: white; border-radius: 12px; box-shadow: var(--shadow); transition: all 0.2s; border: 1px solid rgba(10,31,68,0.04); }
+    .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 8px; }
+    .action-card { display: flex; align-items: center; gap: 12px; padding: 16px 18px; background: white; border-radius: 12px; box-shadow: var(--shadow); transition: all 0.2s; border: 1px solid rgba(10,31,68,0.04); }
     .action-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
-    .action-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--sky); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
-    .action-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; color: var(--navy); }
-    .action-card p { font-size: 0.8rem; color: var(--gray-text); }
+    .action-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--sky); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .action-card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; color: var(--navy); }
+    .action-card p { font-size: 0.78rem; color: var(--gray-text); }
 
     .loader { display: flex; justify-content: center; padding: 60px 0; }
     .spinner { width: 40px; height: 40px; border: 3px solid var(--sky); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
@@ -189,25 +239,9 @@
     }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
 
-    /* MODALE RETRAIT */
-    .wd-modal-overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(10,31,68,0.7);
-      z-index: 1000;
-      align-items: center; justify-content: center;
-      padding: 20px;
-    }
+    .wd-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,31,68,0.7); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
     .wd-modal-overlay.active { display: flex; }
-    .wd-modal {
-      background: white;
-      border-radius: 16px;
-      padding: 28px;
-      max-width: 500px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
+    .wd-modal { background: white; border-radius: 16px; padding: 28px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; }
     .wd-modal h2 { font-size: 1.25rem; margin-bottom: 8px; }
     .wd-modal .wd-sub { color: var(--gray-text); font-size: 0.88rem; margin-bottom: 20px; }
     .wd-modal .wd-field { margin-bottom: 16px; }
@@ -229,63 +263,57 @@
       main { padding: 24px 0 60px; }
       .page-title { font-size: 1.5rem; }
       .page-subtitle { margin-bottom: 20px; font-size: 0.9rem; }
-
       .navbar .container { height: 60px; padding: 8px 16px; gap: 8px; }
       .logo { font-size: 1.2rem; gap: 6px; }
       .logo-ball { width: 28px; height: 28px; font-size: 0.9rem; }
       .nav-right { gap: 6px; }
       .nav-right .btn { padding: 8px 14px; font-size: 0.8rem; }
       .nav-right .btn-outline { display: none; }
-
-      .card { padding: 20px 16px; border-radius: 12px; }
-      .referral-card { padding: 20px 16px; border-radius: 12px; }
-      .referral-card h3 { font-size: 1.1rem; }
-      .referral-card .ref-subtitle { font-size: 0.85rem; margin-bottom: 16px; }
+      .card { padding: 18px 16px; border-radius: 12px; }
+      .referral-card { padding: 18px 16px; border-radius: 12px; }
+      .referral-card h3 { font-size: 1rem; }
+      .referral-card .ref-subtitle { font-size: 0.78rem; margin-bottom: 14px; }
       .referral-card::before { display: none; }
 
-      .profile-header { flex-direction: column; text-align: center; gap: 12px; padding-bottom: 20px; margin-bottom: 20px; }
-      .profile-header > div:last-child { min-width: 0; max-width: 100%; }
-      .profile-header h2 { font-size: 1.15rem; }
-      .avatar { width: 60px; height: 60px; font-size: 1.2rem; }
+      .profile-header { flex-direction: column; text-align: center; gap: 10px; padding-bottom: 18px; margin-bottom: 18px; }
+      .profile-header h2 { font-size: 1.1rem; }
+      .avatar { width: 56px; height: 56px; font-size: 1.1rem; }
+      .info-grid { grid-template-columns: 1fr; gap: 12px; }
 
-      .info-grid { grid-template-columns: 1fr; gap: 14px; }
+      .ref-code-compact { padding: 10px 12px; flex-direction: column; align-items: stretch; }
+      .ref-code-compact > div:first-child { justify-content: center; }
+      .ref-code-compact .ref-code-value { font-size: 0.95rem; letter-spacing: 1.5px; }
+      .ref-code-compact .btn { width: 100%; }
 
-      .ref-code-box { padding: 16px; flex-direction: column; align-items: stretch; }
-      .ref-code-box .ref-code-value { font-size: 1.3rem; letter-spacing: 2px; text-align: center; }
-      .ref-code-box .btn { width: 100%; }
+      .ref-link-compact { flex-direction: column; align-items: stretch; padding: 10px 12px; }
+      .ref-link-compact label { text-align: center; }
+      .ref-link-compact input { font-size: 0.7rem; }
+      .ref-link-compact .btn { width: 100%; }
 
-      .ref-link-box { flex-direction: column; align-items: stretch; padding: 12px; }
-      .ref-link-box input { font-size: 0.72rem; }
-      .ref-link-box .btn { width: 100%; }
-
-      .ref-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
-      .ref-stat { padding: 14px 8px; }
-      .ref-stat .stat-value { font-size: 1.15rem; }
-      .ref-stat .stat-label { font-size: 0.65rem; }
+      .ref-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
+      .ref-stat { padding: 12px 6px; }
+      .ref-stat .stat-value { font-size: 1rem; }
+      .ref-stat .stat-label { font-size: 0.6rem; }
 
       .withdraw-header { flex-direction: column; align-items: stretch; }
       .withdraw-header .btn { width: 100%; }
-      .withdraw-balance { font-size: 1.4rem; }
+      .withdraw-balance { font-size: 1.2rem; }
 
-      .ref-benefits { padding: 16px; }
-      .ref-benefits li { font-size: 0.82rem; }
+      .ref-benefits { padding: 12px 16px; }
+      .ref-benefits li { font-size: 0.78rem; }
 
       .filleuls-table-wrapper { background: transparent; box-shadow: none; overflow: visible; }
       .filleuls-table { display: block; background: transparent; }
       .filleuls-table thead { display: none; }
       .filleuls-table tbody { display: block; }
-      .filleuls-table tbody tr { display: block; background: white; border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(10,31,68,0.04); }
-      .filleuls-table tbody td { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border: none; text-align: left !important; }
-      .filleuls-table tbody td::before { content: attr(data-label); font-weight: 700; color: var(--gray-text); font-size: 0.68rem; text-transform: uppercase; margin-right: 12px; flex-shrink: 0; }
-      .filleuls-table tbody td strong { font-size: 0.88rem; }
+      .filleuls-table tbody tr { display: block; background: white; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(10,31,68,0.04); }
+      .filleuls-table tbody td { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border: none; text-align: left !important; font-size: 0.8rem; }
+      .filleuls-table tbody td::before { content: attr(data-label); font-weight: 700; color: var(--gray-text); font-size: 0.65rem; text-transform: uppercase; margin-right: 12px; flex-shrink: 0; }
 
-      .actions-grid { grid-template-columns: 1fr; gap: 12px; }
-      .action-card { padding: 14px 16px; }
-
-      .subscription-card .btn { width: 100%; }
+      .actions-grid { grid-template-columns: 1fr; gap: 10px; }
+      .action-card { padding: 12px 14px; }
 
       .toast-copy { bottom: 16px; font-size: 0.85rem; padding: 10px 20px; }
-
       .wd-actions { flex-direction: column-reverse; }
       .wd-actions .btn { width: 100%; }
     }
@@ -294,8 +322,8 @@
       .container { padding: 0 12px; }
       .logo { font-size: 1.05rem; }
       .logo-ball { width: 24px; height: 24px; font-size: 0.8rem; }
-      .ref-code-box .ref-code-value { font-size: 1.15rem; }
-      .ref-stat .stat-value { font-size: 1rem; }
+      .ref-code-compact .ref-code-value { font-size: 0.85rem; }
+      .ref-stat .stat-value { font-size: 0.9rem; }
     }
 
     @supports (padding: max(0px)) {
@@ -362,22 +390,25 @@
 
       <div class="referral-card" id="referral-section">
         <h3>🎁 Mon programme de parrainage</h3>
-        <p class="ref-subtitle">Invite tes amis avec ton code unique. Ils gagnent des jours gratuits, tu gagnes 20% de commission.</p>
+        <p class="ref-subtitle">Invite tes amis, ils gagnent des jours gratuits et tu gagnes 20% de commission.</p>
 
-        <div class="ref-code-box">
+        <!-- CODE PARRAINAGE COMPACT -->
+        <div class="ref-code-compact">
           <div>
-            <div class="ref-code-label">Ton code de parrainage</div>
-            <div class="ref-code-value" id="ref-code-display">—</div>
+            <span class="ref-code-label">Mon code</span>
+            <span class="ref-code-value" id="ref-code-display">—</span>
           </div>
-          <button class="btn btn-primary" id="copy-code-btn">📋 Copier mon code</button>
+          <button class="btn btn-primary" id="copy-code-btn">📋 Copier</button>
         </div>
 
-        <div class="ref-link-box">
-          <label>Lien de partage (envoie-le par WhatsApp)</label>
+        <!-- LIEN COMPACT -->
+        <div class="ref-link-compact">
+          <label>Lien</label>
           <input type="text" id="ref-link-display" readonly value="Chargement..." />
-          <button class="btn btn-outline btn-sm" id="copy-link-btn">📋 Copier le lien</button>
+          <button class="btn btn-outline" id="copy-link-btn">📋 Copier</button>
         </div>
 
+        <!-- STATS -->
         <div class="ref-stats-grid">
           <div class="ref-stat">
             <div class="stat-value" id="stat-referred-count">0</div>
@@ -389,11 +420,11 @@
           </div>
           <div class="ref-stat paid">
             <div class="stat-value" id="stat-paid">0</div>
-            <div class="stat-label">Déjà perçu</div>
+            <div class="stat-label">Perçu</div>
           </div>
           <div class="ref-stat total">
             <div class="stat-value" id="stat-total">0</div>
-            <div class="stat-label">Total gagné</div>
+            <div class="stat-label">Total</div>
           </div>
         </div>
 
@@ -404,20 +435,20 @@
               <div class="withdraw-label">💰 Solde disponible</div>
               <div class="withdraw-balance" id="available-balance">0 F</div>
             </div>
-            <button class="btn btn-primary" id="request-withdraw-btn">💸 Demander un retrait</button>
+            <button class="btn btn-primary" id="request-withdraw-btn">💸 Retrait</button>
           </div>
-          <div class="withdraw-note">Minimum 500 FCFA · Versement via Wave, Orange Money, MTN ou Moov</div>
+          <div class="withdraw-note">Min. 500 FCFA · Wave, Orange Money, MTN, Moov</div>
           <div id="pending-withdraw-info" class="withdraw-pending" style="display:none;">
             ⏳ <span id="pending-withdraw-text"></span>
           </div>
         </div>
 
         <div class="ref-benefits">
-          <h4>💡 Ce que ton filleul gagne à son 1er abonnement :</h4>
+          <h4>💡 Ton filleul gagne au 1er abonnement :</h4>
           <ul>
-            <li><strong>+3 jours gratuits</strong> avec la formule 7 jours</li>
-            <li><strong>+7 jours gratuits</strong> avec la formule 30 jours</li>
-            <li><strong>+30 jours gratuits</strong> avec la formule annuelle</li>
+            <li><strong>+3 jours</strong> avec la formule 7 jours</li>
+            <li><strong>+7 jours</strong> avec la formule 30 jours</li>
+            <li><strong>+30 jours</strong> avec la formule annuelle</li>
           </ul>
         </div>
 
@@ -430,7 +461,7 @@
       </div>
 
       <div class="card">
-        <h3 style="margin-bottom: 16px;">Actions rapides</h3>
+        <h3 style="margin-bottom: 14px;">Actions rapides</h3>
         <div class="actions-grid">
           <a href="/coupons.html" class="action-card">
             <div class="action-icon">⚽</div>
