@@ -31,156 +31,180 @@
     .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
     .btn-primary:hover { transform:translateY(-2px); }
 
-    .breadcrumb { padding:24px 0 16px; font-size:0.85rem; color:var(--gray-text); }
+    .breadcrumb { padding:20px 0 14px; font-size:0.82rem; color:var(--gray-text); }
     .breadcrumb a:hover { color:var(--blue); }
     .breadcrumb .sep { margin:0 8px; opacity:0.5; }
 
-    .coupon-header { background:white; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; margin-bottom:24px; }
-    .coupon-hero { height:200px; background-size:cover; background-position:center; position:relative; background-color:var(--navy); }
+    .coupon-header { background:white; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; margin-bottom:20px; }
+    .coupon-hero { height:180px; background-size:cover; background-position:center; position:relative; background-color:var(--navy); }
     .coupon-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(10,31,68,0.2),rgba(10,31,68,0.85)); }
-    .coupon-hero-content { position:absolute; bottom:24px; left:28px; right:28px; z-index:2; color:white; }
-    .coupon-badges { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
-    .badge { padding:5px 14px; border-radius:var(--radius-pill); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+    .coupon-hero-content { position:absolute; bottom:20px; left:24px; right:24px; z-index:2; color:white; }
+    .coupon-badges { display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+    .badge { padding:4px 12px; border-radius:var(--radius-pill); font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
     .badge-gratuit { background:var(--green); color:white; }
     .badge-premium { background:var(--gold); color:var(--navy); }
     .badge-status { background:rgba(255,255,255,0.15); color:white; backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.2); }
-    .coupon-hero h1 { font-size:clamp(1.5rem,3.5vw,2.1rem); }
-    .coupon-meta-block { padding:24px 28px; display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:20px; }
-    .meta-item .label { font-size:0.72rem; text-transform:uppercase; color:var(--gray-text); letter-spacing:0.5px; font-weight:600; margin-bottom:4px; }
-    .meta-item .value { font-weight:600; font-size:1rem; }
-    .meta-item .value.highlight { color:var(--blue); font-family:'Poppins'; font-size:1.3rem; }
+    .coupon-hero h1 { font-size:clamp(1.4rem,3.2vw,1.9rem); }
+    .coupon-meta-block { padding:20px 24px; display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:16px; }
+    .meta-item .label { font-size:0.68rem; text-transform:uppercase; color:var(--gray-text); letter-spacing:0.5px; font-weight:600; margin-bottom:3px; }
+    .meta-item .value { font-weight:600; font-size:0.95rem; }
+    .meta-item .value.highlight { color:var(--blue); font-family:'Poppins'; font-size:1.2rem; }
 
-    .card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:28px; margin-bottom:24px; }
-    .card h2 { font-size:1.2rem; margin-bottom:20px; display:flex; align-items:center; gap:8px; }
+    .card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:24px; margin-bottom:20px; }
+    .card h2 { font-size:1.1rem; margin-bottom:18px; display:flex; align-items:center; gap:8px; }
 
-    .selections-table { width:100%; border-collapse:collapse; font-size:0.9rem; }
-    .selections-table thead th { text-align:left; padding:12px 10px; background:var(--gray-light); font-size:0.72rem; text-transform:uppercase; color:var(--gray-text); letter-spacing:0.5px; font-weight:600; }
+    .selections-table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .selections-table thead th { text-align:left; padding:10px 8px; background:var(--gray-light); font-size:0.68rem; text-transform:uppercase; color:var(--gray-text); letter-spacing:0.5px; font-weight:600; }
     .selections-table thead th:first-child { border-radius:10px 0 0 10px; }
     .selections-table thead th:last-child { border-radius:0 10px 10px 0; text-align:right; }
-    .selections-table tbody td { padding:14px 10px; border-bottom:1px solid rgba(10,31,68,0.06); vertical-align:top; }
+    .selections-table tbody td { padding:12px 8px; border-bottom:1px solid rgba(10,31,68,0.06); vertical-align:top; }
     .selections-table tbody td:last-child { text-align:right; font-weight:700; color:var(--blue); }
     .match-teams { font-weight:600; color:var(--navy); display:block; margin-bottom:2px; }
-    .match-comp { font-size:0.78rem; color:var(--gray-text); }
-    .prediction-badge { display:inline-block; padding:4px 10px; background:var(--sky); color:var(--blue); border-radius:8px; font-size:0.8rem; font-weight:600; }
-    .result-badge { display:inline-block; padding:3px 10px; border-radius:6px; font-size:0.72rem; font-weight:700; text-transform:uppercase; margin-left:6px; }
+    .match-comp { font-size:0.75rem; color:var(--gray-text); }
+    .prediction-badge { display:inline-block; padding:3px 9px; background:var(--sky); color:var(--blue); border-radius:6px; font-size:0.78rem; font-weight:600; }
+    .result-badge { display:inline-block; padding:2px 9px; border-radius:5px; font-size:0.7rem; font-weight:700; text-transform:uppercase; margin-left:5px; }
     .result-gagnee { background:#E6F9EF; color:#1E7E45; }
     .result-perdue { background:#FED7D7; color:#9B2C2C; }
     .result-en_attente { background:#FFF4E5; color:#B45309; }
     .result-annulee { background:#E2E8F0; color:#4A5568; }
 
-    .total-odds-box { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; background:linear-gradient(135deg,#F7F9FC,#E8F0FE); border-radius:12px; margin-top:20px; }
-    .total-odds-box .label { font-size:0.85rem; color:var(--gray-text); font-weight:600; }
-    .total-odds-box .value { font-family:'Poppins'; font-size:1.8rem; font-weight:800; color:var(--blue); }
+    .total-odds-box { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; background:linear-gradient(135deg,#F7F9FC,#E8F0FE); border-radius:10px; margin-top:16px; }
+    .total-odds-box .label { font-size:0.82rem; color:var(--gray-text); font-weight:600; }
+    .total-odds-box .value { font-family:'Poppins'; font-size:1.5rem; font-weight:800; color:var(--blue); }
 
-    /* ============ CARTE CODE BOOKMAKER ============ */
+    /* ============ CARTE CODE BOOKMAKER PROFESSIONNELLE (COMPACTE) ============ */
     .betting-code-card {
-      background: linear-gradient(135deg, #0B7A3E 0%, #1E88E5 100%);
-      border-radius: var(--radius);
-      padding: 28px;
-      margin-bottom: 24px;
+      background: linear-gradient(135deg, #0B7A3E 0%, #0E6B32 100%);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
       color: white;
-      box-shadow: 0 8px 24px rgba(11, 122, 62, 0.25);
+      box-shadow: 0 4px 14px rgba(11, 122, 62, 0.2);
       position: relative;
       overflow: hidden;
-    }
-    .betting-code-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -10%;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
-      border-radius: 50%;
-    }
-    .betting-code-card .bc-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-      position: relative;
-      z-index: 1;
-    }
-    .betting-code-card .bc-logo {
-      background: white;
-      color: #0B7A3E;
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-family: 'Poppins';
-      font-weight: 800;
-      font-size: 0.95rem;
-      text-transform: lowercase;
-    }
-    .betting-code-card .bc-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      opacity: 0.95;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .betting-code-card .bc-code-display {
       display: flex;
       align-items: center;
       gap: 16px;
       flex-wrap: wrap;
-      margin-bottom: 16px;
+    }
+    .betting-code-card::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -5%;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .bc-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
       position: relative;
       z-index: 1;
+      flex: 1;
+      min-width: 140px;
     }
-    .betting-code-card .bc-code-value {
-      font-family: 'Courier New', monospace;
-      font-size: 2.2rem;
+    .bc-brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .bc-logo {
+      background: white;
+      color: #0B7A3E;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Poppins';
       font-weight: 800;
-      letter-spacing: 8px;
-      background: rgba(255,255,255,0.15);
-      border: 2px dashed rgba(255,255,255,0.4);
-      padding: 10px 24px;
-      border-radius: 12px;
-      backdrop-filter: blur(4px);
+      font-size: 0.7rem;
+      text-transform: lowercase;
+      letter-spacing: -0.3px;
     }
-    .betting-code-card .bc-instructions {
-      font-size: 0.88rem;
-      opacity: 0.92;
-      margin-bottom: 20px;
+    .bc-title {
+      font-size: 0.68rem;
+      font-weight: 600;
+      opacity: 0.85;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .bc-code-value {
+      font-family: 'Courier New', monospace;
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      line-height: 1.1;
+      margin-top: 2px;
+    }
+    .bc-code-value.compact {
+      font-size: 1.3rem;
+      letter-spacing: 3px;
+    }
+    .bc-center {
       position: relative;
       z-index: 1;
-      line-height: 1.6;
+      font-size: 0.78rem;
+      opacity: 0.9;
+      line-height: 1.4;
+      flex: 1;
+      min-width: 180px;
     }
-    .betting-code-card .bc-button {
+    .bc-center strong { font-weight: 700; }
+    .bc-right {
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+    .bc-button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
       background: white;
       color: #0B7A3E;
-      padding: 14px 28px;
+      padding: 10px 20px;
       border-radius: var(--radius-pill);
       font-family: 'Poppins';
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.82rem;
       cursor: pointer;
       border: none;
       transition: all 0.2s;
-      position: relative;
-      z-index: 1;
-      width: 100%;
+      white-space: nowrap;
     }
-    .betting-code-card .bc-button:hover {
+    .bc-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
-    .betting-code-card .bc-button:active {
-      transform: translateY(0);
-    }
-    .betting-code-card .bc-button.copied {
+    .bc-button:active { transform: translateY(0); }
+    .bc-button.copied {
       background: #E6F9EF;
       color: #0B7A3E;
     }
 
-    .locked-panel { text-align:center; padding:60px 32px; }
-    .locked-icon { width:80px; height:80px; margin:0 auto 20px; background:var(--sky); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; }
-    .locked-panel h2 { font-size:1.4rem; margin-bottom:12px; }
-    .locked-panel p { color:var(--gray-text); max-width:450px; margin:0 auto 24px; }
+    /* Message succès compact */
+    .bc-success {
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      font-size: 0.8rem;
+      position: relative;
+      z-index: 1;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .bc-success.show { display: flex; }
+
+    .locked-panel { text-align:center; padding:50px 28px; }
+    .locked-icon { width:70px; height:70px; margin:0 auto 18px; background:var(--sky); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.8rem; }
+    .locked-panel h2 { font-size:1.3rem; margin-bottom:10px; }
+    .locked-panel p { color:var(--gray-text); max-width:450px; margin:0 auto 22px; font-size:0.92rem; }
     .locked-cta { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
 
     .alert-error { background:#FED7D7; color:#9B2C2C; border:1px solid #FEB2B2; padding:16px; border-radius:12px; margin:20px 0; }
@@ -197,23 +221,31 @@
       .nav-right .btn { padding:10px 14px; font-size:0.82rem; min-height:40px; min-width:44px; }
       .nav-right .btn-outline { display:none; }
       .container { padding:0 16px; }
-      .card { padding:20px 16px; }
-      .coupon-meta-block { padding:20px; gap:16px; }
-      .coupon-hero-content { left:20px; right:20px; bottom:20px; }
+      .card { padding:18px 16px; }
+      .coupon-meta-block { padding:16px 18px; gap:14px; }
+      .coupon-hero-content { left:18px; right:18px; bottom:18px; }
+      .coupon-hero { height: 160px; }
+
+      .betting-code-card { padding: 14px 16px; gap: 12px; }
+      .bc-left { min-width: 100%; flex-direction: row; align-items: center; justify-content: space-between; gap: 8px; }
+      .bc-brand { margin-bottom: 0; }
+      .bc-code-value { font-size: 1.1rem; letter-spacing: 2.5px; margin-top: 0; }
+      .bc-center { display: none; }
+      .bc-right { width: 100%; }
+      .bc-button { width: 100%; padding: 10px 16px; font-size: 0.8rem; }
+
       .selections-table thead { display:none; }
       .selections-table, .selections-table tbody, .selections-table tr, .selections-table td { display:block; width:100%; }
-      .selections-table tr { background:var(--gray-light); border-radius:12px; padding:12px; margin-bottom:12px; }
-      .selections-table td { padding:6px 4px; border:none; text-align:left !important; }
-      .locked-panel { padding:40px 20px; }
+      .selections-table tr { background:var(--gray-light); border-radius:10px; padding:10px; margin-bottom:10px; }
+      .selections-table td { padding:5px 3px; border:none; text-align:left !important; }
+      .locked-panel { padding:36px 18px; }
       .locked-cta { flex-direction:column; }
       .locked-cta .btn { width:100%; }
-      .betting-code-card { padding:20px; }
-      .betting-code-card .bc-code-value { font-size:1.6rem; letter-spacing:5px; padding:8px 18px; }
-      .betting-code-card .bc-button { padding:12px 20px; font-size:0.92rem; }
     }
     @media (max-width:360px) {
       .logo { font-size:1.05rem; }
       .logo-ball { width:24px; height:24px; font-size:0.8rem; }
+      .bc-code-value { font-size: 1rem; letter-spacing: 2px; }
     }
     @supports (padding: max(0px)) {
       .navbar .container {
