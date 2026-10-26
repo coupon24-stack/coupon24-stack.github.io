@@ -1,8 +1,9 @@
 // frontend/assets/js/admin-coupon-edit.js
-// Formulaire de création/édition de coupon — avec matchs dynamiques et code bookmaker.
+// Formulaire de création/édition de coupon — avec matchs dynamiques, code bookmaker et upload d'image.
 
 let editingId = null;
 let selections = [];
+let uploadedImageUrl = null;
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
@@ -11,6 +12,120 @@ function tomorrowISO() {
   const d = new Date();
   d.setDate(d.getDate() + 1);
   return d.toISOString().slice(0, 10);
+}
+
+// ============================================================
+// UPLOAD D'IMAGE
+// ============================================================
+function initImageUpload() {
+  const pickBtn = document.getElementById('pick-image-btn');
+  const changeBtn = document.getElementById('change-image-btn');
+  const removeBtn = document.getElementById('remove-image-btn');
+  const fileInput = document.getElementById('image-file');
+  const hiddenInput = document.getElementById('cover_image');
+
+  if (!pickBtn || !fileInput) return;
+
+  pickBtn.addEventListener('click', () => fileInput.click());
+  if (changeBtn) changeBtn.addEventListener('click', () => fileInput.click());
+  if (removeBtn) removeBtn.addEventListener('click', () => {
+    uploadedImageUrl = null;
+    if (hiddenInput) hiddenInput.value = '';
+    showImagePreview(null);
+  });
+
+  fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    await uploadImage(file);
+    fileInput.value = ''; // reset pour permettre re-sélection
+  });
+}
+
+async function uploadImage(file) {
+  // Validations
+  if (!file.type.startsWith('image/')) {
+    showToast('❌ Le fichier doit être une image', 'error');
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('❌ Image trop volumineuse (max 5 Mo)', 'error');
+    return;
+  }
+
+  const progressBox = document.getElementById('upload-progress');
+  const progressBar = document.getElementById('upload-progress-bar');
+  const pickBtn = document.getElementById('pick-image-btn');
+
+  if (progressBox) progressBox.classList.add('active');
+  if (progressBar) progressBar.style.width = '30%';
+  if (pickBtn) { pickBtn.disabled = true; pickBtn.textContent = 'Envoi en cours...'; }
+
+  try {
+    const fileExt = file.name.split('.').pop().toLowerCase();
+    const fileName = `coupon-${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+    const filePath = fileName;
+
+    if (progressBar) progressBar.style.width = '60%';
+
+    const { data, error } = await supabaseClient.storage
+      .from('coupon-images')
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: file.type
+      });
+
+    if (error) throw error;
+
+    if (progressBar) progressBar.style.width = '90%';
+
+    // Récupérer l'URL publique
+    const { data: urlData } = supabaseClient.storage
+      .from('coupon-images')
+      .getPublicUrl(filePath);
+
+    uploadedImageUrl = urlData.publicUrl;
+
+    const hiddenInput = document.getElementById('cover_image');
+    if (hiddenInput) hiddenInput.value = uploadedImageUrl;
+
+    showImagePreview(uploadedImageUrl);
+    showToast('✅ Image uploadée !', 'success');
+
+    if (progressBar) progressBar.style.width = '100%';
+    setTimeout(() => {
+      if (progressBox) progressBox.classList.remove('active');
+      if (progressBar) progressBar.style.width = '0%';
+    }, 500);
+
+  } catch (err) {
+    console.error('[upload]', err);
+    showToast('Erreur upload : ' + (err.message || 'inconnue'), 'error');
+    if (progressBox) progressBox.classList.remove('active');
+    if (progressBar) progressBar.style.width = '0%';
+  } finally {
+    if (pickBtn) { pickBtn.disabled = false; pickBtn.textContent = '📁 Choisir une image'; }
+  }
+}
+
+function showImagePreview(url) {
+  const placeholder = document.getElementById('image-placeholder');
+  const previewWrapper = document.getElementById('image-preview-wrapper');
+  const preview = document.getElementById('image-preview');
+  const imageBox = document.getElementById('image-box');
+
+  if (url) {
+    if (preview) preview.src = url;
+    if (placeholder) placeholder.style.display = 'none';
+    if (previewWrapper) previewWrapper.style.display = 'block';
+    if (imageBox) imageBox.classList.add('has-image');
+  } else {
+    if (preview) preview.src = '';
+    if (placeholder) placeholder.style.display = 'block';
+    if (previewWrapper) previewWrapper.style.display = 'none';
+    if (imageBox) imageBox.classList.remove('has-image');
+  }
 }
 
 // ============================================================
@@ -111,7 +226,7 @@ function updateRecap() {
 }
 
 // ============================================================
-// CHARGEMENT DU COUPON (mode édition)
+// CHARGEMENT DU COUPON
 // ============================================================
 async function loadCouponForEdit(id) {
   try {
@@ -127,8 +242,13 @@ async function loadCouponForEdit(id) {
     document.getElementById('publication_date').value = coupon.publication_date || todayISO();
     document.getElementById('matches_date').value = coupon.matches_date || tomorrowISO();
     document.getElementById('type').value = coupon.type || 'Combiné';
-    document.getElementById('cover_image').value = coupon.cover_image || '';
     document.getElementById('betting_code').value = coupon.betting_code || '';
+
+    if (coupon.cover_image) {
+      uploadedImageUrl = coupon.cover_image;
+      document.getElementById('cover_image').value = coupon.cover_image;
+      showImagePreview(coupon.cover_image);
+    }
 
     const catRadio = document.querySelector(`input[name="category"][value="${coupon.category}"]`);
     if (catRadio) catRadio.checked = true;
@@ -170,7 +290,6 @@ function validateCoupon() {
   if (!matchDate) return 'La date des matchs est requise.';
   if (selections.length === 0) return 'Ajoute au moins un match.';
 
-  // Valider le code bookmaker si renseigné
   const bettingCode = document.getElementById('betting_code').value.trim();
   if (bettingCode && bettingCode.length > 5) {
     return 'Le code bookmaker doit faire 5 caractères maximum.';
@@ -178,15 +297,9 @@ function validateCoupon() {
 
   for (let i = 0; i < selections.length; i++) {
     const s = selections[i];
-    if (!s.home_team || !s.away_team) {
-      return `Match ${i + 1} : les deux équipes sont requises.`;
-    }
-    if (!s.prediction) {
-      return `Match ${i + 1} : le pronostic est requis.`;
-    }
-    if (!s.match_date) {
-      return `Match ${i + 1} : la date et l'heure du match sont requises.`;
-    }
+    if (!s.home_team || !s.away_team) return `Match ${i + 1} : les deux équipes sont requises.`;
+    if (!s.prediction) return `Match ${i + 1} : le pronostic est requis.`;
+    if (!s.match_date) return `Match ${i + 1} : la date et l'heure du match sont requises.`;
   }
   return null;
 }
@@ -223,145 +336,4 @@ async function saveCoupon(status) {
       title,
       description: description || null,
       publication_date,
-      matches_date,
-      category,
-      type,
-      cover_image,
-      betting_code,
-      status,
-    };
-
-    let couponId = editingId;
-
-    if (editingId) {
-      const { error } = await supabaseClient
-        .from('coupons')
-        .update(couponData)
-        .eq('id', editingId);
-      if (error) throw error;
-    } else {
-      couponData.created_by = user.id;
-      const { data: created, error } = await supabaseClient
-        .from('coupons')
-        .insert(couponData)
-        .select('id')
-        .single();
-      if (error) throw error;
-      couponId = created.id;
-      editingId = couponId;
-    }
-
-    const { error: delErr } = await supabaseClient
-      .from('selections')
-      .delete()
-      .eq('coupon_id', couponId);
-    if (delErr) throw delErr;
-
-    if (selections.length > 0) {
-      const newSels = selections.map((s, i) => ({
-        coupon_id: couponId,
-        match_order: i + 1,
-        competition: s.competition || '',
-        home_team: s.home_team,
-        away_team: s.away_team,
-        match_date: s.match_date,
-        market: s.market || 'Autre',
-        prediction: s.prediction,
-        odds: s.odds || null,
-        result: 'en_attente',
-      }));
-      const { error: insErr } = await supabaseClient.from('selections').insert(newSels);
-      if (insErr) throw insErr;
-    }
-
-    try {
-      await supabaseClient.from('admin_actions').insert({
-        admin_id: user.id,
-        action: editingId === couponId && status !== 'brouillon' ? 'publish_coupon' : 'save_coupon',
-        target_type: 'coupon',
-        target_id: couponId,
-        details: { status, title, betting_code },
-      });
-    } catch (e) { console.warn('[audit]', e); }
-
-    showToast(
-      status === 'brouillon' ? 'Coupon enregistré en brouillon' : 'Coupon publié avec succès',
-      'success'
-    );
-
-    setTimeout(() => {
-      window.location.href = '/admin/coupons.html';
-    }, 1200);
-
-  } catch (error) {
-    console.error('[saveCoupon]', error);
-    showAlert('Erreur enregistrement : ' + error.message, 'error');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  } finally {
-    if (btnPublish) btnPublish.disabled = false;
-    if (btnDraft) btnDraft.disabled = false;
-  }
-}
-
-// ============================================================
-// INIT
-// ============================================================
-(async function init() {
-  const ctx = await requireAdmin();
-  if (!ctx) return;
-
-  const loading = document.getElementById('loading');
-  const form = document.getElementById('coupon-form');
-
-  const params = new URLSearchParams(window.location.search);
-  editingId = params.get('id');
-
-  if (editingId) {
-    document.getElementById('page-title').textContent = 'Éditer le coupon';
-    document.getElementById('page-subtitle').textContent = 'Modifie les informations du coupon et ses sélections.';
-  }
-
-  document.getElementById('publication_date').value = todayISO();
-  document.getElementById('matches_date').value = tomorrowISO();
-
-  // Force l'uppercase à la saisie du code
-  document.getElementById('betting_code')?.addEventListener('input', (e) => {
-    e.target.value = e.target.value.toUpperCase();
-  });
-
-  if (editingId) {
-    await loadCouponForEdit(editingId);
-  } else {
-    selections = [{
-      competition: '',
-      home_team: '',
-      away_team: '',
-      match_date: null,
-      market: 'Résultat du match',
-      prediction: '',
-      odds: null,
-    }];
-    renderSelections();
-  }
-
-  document.getElementById('add-selection-btn')?.addEventListener('click', () => {
-    selections.push({
-      competition: '',
-      home_team: '',
-      away_team: '',
-      match_date: null,
-      market: 'Résultat du match',
-      prediction: '',
-      odds: null,
-    });
-    renderSelections();
-  });
-
-  document.getElementById('save-draft-btn')?.addEventListener('click', () => saveCoupon('brouillon'));
-  document.getElementById('publish-btn')?.addEventListener('click', () => saveCoupon('disponible'));
-
-  form?.addEventListener('submit', (e) => e.preventDefault());
-
-  if (loading) loading.style.display = 'none';
-  if (form) form.style.display = 'block';
-})();
+      matches
