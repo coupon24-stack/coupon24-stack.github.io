@@ -129,46 +129,59 @@
     }
     .ref-code-compact .btn { flex-shrink: 0; padding: 8px 14px; font-size: 0.8rem; }
 
-    /* Lien de partage TRÈS COMPACT */
+    /* LIEN DE PARTAGE ULTRA COMPACT — 30px */
     .ref-link-compact {
       background: white;
-      border-radius: 8px;
-      padding: 6px 10px;
-      margin-bottom: 12px;
+      border: 1px solid #E2E8F0;
+      border-radius: 6px;
+      padding: 2px 4px 2px 8px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-      min-height: 0;
+      gap: 4px;
+      flex-wrap: nowrap;
+      height: 30px;
+      overflow: hidden;
     }
     .ref-link-compact label {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       color: var(--gray-text);
       text-transform: uppercase;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.3px;
       font-weight: 700;
       flex-shrink: 0;
       margin: 0;
+      padding-right: 4px;
+      border-right: 1px solid #E2E8F0;
+      line-height: 1;
     }
     .ref-link-compact input {
-      flex: 1 1 180px;
+      flex: 1 1 auto;
       min-width: 0;
-      padding: 5px 8px;
-      border: 1px solid #E2E8F0;
-      border-radius: 5px;
+      padding: 0 6px;
+      border: none;
+      border-radius: 0;
       font-family: monospace;
-      font-size: 0.7rem;
-      line-height: 1.2;
+      font-size: 0.68rem;
+      line-height: 1;
       color: var(--gray-text);
+      background: transparent;
+      height: 100%;
+      outline: none;
+    }
+    .ref-link-compact input:focus {
       background: var(--gray-light);
-      height: 28px;
+      border-radius: 3px;
     }
     .ref-link-compact .btn {
       flex-shrink: 0;
-      padding: 5px 10px;
-      font-size: 0.72rem;
-      line-height: 1.2;
-      min-height: 28px;
+      padding: 0 10px;
+      font-size: 0.68rem;
+      line-height: 1;
+      height: 24px;
+      min-height: 24px;
+      border-radius: 4px;
+      margin: 0;
     }
 
     /* Stats compact */
@@ -296,10 +309,29 @@
       .ref-code-compact .ref-code-value { font-size: 0.95rem; letter-spacing: 1.5px; }
       .ref-code-compact .btn { width: 100%; }
 
-      .ref-link-compact { flex-direction: column; align-items: stretch; padding: 6px 8px; gap: 4px; }
-      .ref-link-compact label { text-align: center; font-size: 0.62rem; margin-bottom: 2px; }
-      .ref-link-compact input { font-size: 0.65rem; padding: 4px 6px; height: 26px; }
-      .ref-link-compact .btn { width: 100%; padding: 5px 10px; font-size: 0.72rem; min-height: 28px; }
+      /* Lien compact sur mobile — reste horizontal */
+      .ref-link-compact {
+        flex-direction: row;
+        align-items: center;
+        padding: 2px 4px 2px 8px;
+        gap: 3px;
+        height: 30px;
+      }
+      .ref-link-compact label {
+        font-size: 0.58rem;
+        padding-right: 3px;
+        border-right: 1px solid #E2E8F0;
+      }
+      .ref-link-compact input {
+        font-size: 0.62rem;
+        padding: 0 4px;
+      }
+      .ref-link-compact .btn {
+        padding: 0 8px;
+        font-size: 0.65rem;
+        height: 24px;
+        min-height: 24px;
+      }
 
       .ref-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
       .ref-stat { padding: 12px 6px; }
@@ -335,6 +367,8 @@
       .logo-ball { width: 24px; height: 24px; font-size: 0.8rem; }
       .ref-code-compact .ref-code-value { font-size: 0.85rem; }
       .ref-stat .stat-value { font-size: 0.9rem; }
+      .ref-link-compact input { font-size: 0.58rem; }
+      .ref-link-compact .btn { padding: 0 6px; font-size: 0.6rem; }
     }
 
     @supports (padding: max(0px)) {
@@ -414,7 +448,7 @@
         <div class="ref-link-compact">
           <label>Lien</label>
           <input type="text" id="ref-link-display" readonly value="Chargement..." />
-          <button class="btn btn-outline" id="copy-link-btn">📋 Copier</button>
+          <button class="btn btn-outline" id="copy-link-btn">📋</button>
         </div>
 
         <div class="ref-stats-grid">
