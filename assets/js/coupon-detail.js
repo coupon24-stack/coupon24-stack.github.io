@@ -9,15 +9,10 @@
   const params = new URLSearchParams(window.location.search);
   const couponId = params.get('id');
 
-  if (!couponId) {
-    showError('Aucun coupon spécifié dans l\'URL.');
-    return;
-  }
+  if (!couponId) { showError('Aucun coupon spécifié dans l\'URL.'); return; }
 
   try {
-    if (typeof supabaseClient === 'undefined') {
-      throw new Error('supabaseClient non chargé.');
-    }
+    if (typeof supabaseClient === 'undefined') throw new Error('supabaseClient non chargé.');
 
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (!session) {
@@ -33,10 +28,7 @@
       .maybeSingle();
 
     if (metaError) throw metaError;
-    if (!meta) {
-      showError('Ce coupon est introuvable ou a été archivé.');
-      return;
-    }
+    if (!meta) { showError('Ce coupon est introuvable ou a été archivé.'); return; }
 
     document.title = `${meta.title} — COUPON24`;
     const breadcrumb = document.getElementById('breadcrumb-title');
@@ -115,7 +107,7 @@ function renderCouponHeader(c) {
           <div class="value">${escapeHtml(c.type)}</div>
         </div>
         <div class="meta-item">
-          <div class="label">Nombre de matchs</div>
+          <div class="label">Matchs</div>
           <div class="value">${c.matches_count || 0}</div>
         </div>
         <div class="meta-item">
@@ -128,27 +120,29 @@ function renderCouponHeader(c) {
 }
 
 // ============================================================
-// CARTE CODE BOOKMAKER — Copie uniquement
+// CARTE CODE BOOKMAKER — Version compacte et pro
 // ============================================================
 function renderBettingCodeCard(code) {
   if (!code) return '';
   return `
     <div class="betting-code-card">
-      <div class="bc-header">
-        <span class="bc-logo">1xbet</span>
-        <span class="bc-title">Code du coupon</span>
+      <div class="bc-left">
+        <div class="bc-brand">
+          <span class="bc-logo">1xbet</span>
+          <span class="bc-title">Code du coupon</span>
+        </div>
+        <div class="bc-code-value" id="bc-code-text">${escapeHtml(code)}</div>
       </div>
-      <div class="bc-code-display">
-        <span class="bc-code-value" id="bc-code-text">${escapeHtml(code)}</span>
+      <div class="bc-center">
+        📋 Clique sur <strong>Copier</strong>, puis ouvre ton app <strong>1xbet</strong> et colle le code pour charger le ticket.
       </div>
-      <div class="bc-instructions">
-        📋 Clique sur le bouton pour <strong>copier le code</strong>, puis ouvre ton application <strong>1xbet</strong> et colle-le pour télécharger le ticket.
+      <div class="bc-right">
+        <button class="bc-button" id="bc-copy-btn" data-code="${escapeAttr(code)}">
+          📋 Copier le code
+        </button>
       </div>
-      <button class="bc-button" id="bc-copy-btn" data-code="${escapeAttr(code)}">
-        📋 Copier le code
-      </button>
-      <div id="bc-success-message" style="display:none; margin-top:16px; padding:14px 18px; background:rgba(255,255,255,0.2); border-radius:10px; font-size:0.9rem; position:relative; z-index:1;">
-        ✅ <strong>Code copié !</strong> Ouvre maintenant ton application 1xbet et colle le code dans le champ prévu pour télécharger le ticket.
+      <div class="bc-success" id="bc-success-message">
+        ✅ <span>Code copié ! Ouvre ton app 1xbet et colle-le.</span>
       </div>
     </div>
   `;
@@ -157,7 +151,6 @@ function renderBettingCodeCard(code) {
 async function copyCouponCode(code, btn) {
   let success = false;
 
-  // Méthode moderne
   try {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(code);
@@ -165,7 +158,6 @@ async function copyCouponCode(code, btn) {
     }
   } catch (e) { console.warn('[clipboard] API error:', e); }
 
-  // Fallback (ancienne méthode)
   if (!success) {
     try {
       const textarea = document.createElement('textarea');
@@ -185,12 +177,12 @@ async function copyCouponCode(code, btn) {
   if (btn) {
     if (success) {
       btn.classList.add('copied');
-      btn.innerHTML = '✅ Code copié !';
+      btn.innerHTML = '✅ Copié !';
       const msg = document.getElementById('bc-success-message');
-      if (msg) msg.style.display = 'block';
+      if (msg) msg.classList.add('show');
     } else {
       const original = btn.innerHTML;
-      btn.innerHTML = '❌ Erreur de copie';
+      btn.innerHTML = '❌ Erreur';
       setTimeout(() => { btn.innerHTML = original; }, 2500);
     }
   }
@@ -198,7 +190,6 @@ async function copyCouponCode(code, btn) {
   return success;
 }
 
-// Listener du bouton "Copier le code"
 document.addEventListener('click', async (e) => {
   const btn = e.target.closest('#bc-copy-btn');
   if (!btn) return;
