@@ -64,13 +64,13 @@
     .subscription-card p { color: var(--gray-text); font-size: 0.88rem; margin-bottom: 14px; }
     #subscription-status { font-weight: 600; color: var(--navy); }
 
-    /* ============ SECTION PARRAINAGE ============ */
+    /* ============ SECTION PARRAINAGE (AFFINÉE) ============ */
     .referral-card {
       background: linear-gradient(135deg, #FFF9E6, #FFF4E5);
-      border: 1.5px solid #FFD98A;
-      border-radius: var(--radius);
-      padding: 24px;
-      margin-bottom: 20px;
+      border: 1px solid #FFD98A;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
       position: relative;
       overflow: hidden;
     }
@@ -84,28 +84,28 @@
       pointer-events: none;
     }
     .referral-card h3 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: #B45309;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
     .referral-card .ref-subtitle {
       color: #92400E;
-      font-size: 0.82rem;
-      margin-bottom: 16px;
-      line-height: 1.5;
+      font-size: 0.78rem;
+      margin-bottom: 12px;
+      line-height: 1.4;
     }
 
     /* Code parrainage compact */
     .ref-code-compact {
       background: white;
-      border: 1.5px dashed #FFD98A;
-      border-radius: 10px;
-      padding: 12px 16px;
-      margin-bottom: 10px;
+      border: 1px dashed #FFD98A;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -114,22 +114,22 @@
     }
     .ref-code-compact > div:first-child { min-width: 0; flex: 1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .ref-code-compact .ref-code-label {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       color: #B45309;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
       font-weight: 700;
     }
     .ref-code-compact .ref-code-value {
       font-family: 'Courier New', monospace;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 800;
       color: var(--navy);
       letter-spacing: 2px;
     }
-    .ref-code-compact .btn { flex-shrink: 0; padding: 8px 14px; font-size: 0.8rem; }
+    .ref-code-compact .btn { flex-shrink: 0; padding: 6px 12px; font-size: 0.75rem; }
 
-    /* LIEN DE PARTAGE ULTRA COMPACT — 30px */
+    /* Lien de partage ULTRA COMPACT — 30px */
     .ref-link-compact {
       background: white;
       border: 1px solid #E2E8F0;
@@ -185,10 +185,10 @@
     }
 
     /* Stats compact */
-    .ref-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
-    .ref-stat { background: white; border-radius: 10px; padding: 14px 8px; text-align: center; box-shadow: 0 2px 8px rgba(10,31,68,0.04); min-width: 0; }
-    .ref-stat .stat-value { font-family: 'Poppins'; font-size: 1.2rem; font-weight: 800; color: #B45309; line-height: 1; margin-bottom: 4px; word-break: break-word; }
-    .ref-stat .stat-label { font-size: 0.65rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
+    .ref-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
+    .ref-stat { background: white; border-radius: 10px; padding: 12px 6px; text-align: center; box-shadow: 0 2px 8px rgba(10,31,68,0.04); min-width: 0; }
+    .ref-stat .stat-value { font-family: 'Poppins'; font-size: 1.1rem; font-weight: 800; color: #B45309; line-height: 1; margin-bottom: 3px; word-break: break-word; }
+    .ref-stat .stat-label { font-size: 0.62rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
     .ref-stat.paid .stat-value { color: var(--green); }
     .ref-stat.total .stat-value { color: var(--blue); }
 
@@ -196,8 +196,8 @@
     .withdraw-box {
       background: white;
       border-radius: 10px;
-      padding: 14px 18px;
-      margin-bottom: 16px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
       box-shadow: 0 2px 8px rgba(10,31,68,0.04);
     }
     .withdraw-header {
@@ -206,30 +206,30 @@
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-    .withdraw-label { font-size: 0.68rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 2px; }
-    .withdraw-balance { font-family: 'Poppins'; font-size: 1.4rem; font-weight: 800; color: var(--green); line-height: 1; }
-    .withdraw-note { font-size: 0.72rem; color: var(--gray-text); }
-    .withdraw-pending { margin-top: 10px; padding: 8px 12px; background: #FFF4E5; border-radius: 6px; font-size: 0.78rem; color: #B45309; font-weight: 500; }
-    .withdraw-box .btn { padding: 8px 16px; font-size: 0.82rem; }
+    .withdraw-label { font-size: 0.65rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 700; margin-bottom: 2px; }
+    .withdraw-balance { font-family: 'Poppins'; font-size: 1.3rem; font-weight: 800; color: var(--green); line-height: 1; }
+    .withdraw-note { font-size: 0.7rem; color: var(--gray-text); }
+    .withdraw-pending { margin-top: 8px; padding: 6px 10px; background: #FFF4E5; border-radius: 6px; font-size: 0.75rem; color: #B45309; font-weight: 500; }
+    .withdraw-box .btn { padding: 6px 14px; font-size: 0.78rem; }
 
-    .ref-benefits { background: white; border-radius: 10px; padding: 14px 18px; }
-    .ref-benefits h4 { font-size: 0.85rem; color: var(--navy); margin-bottom: 10px; font-family: 'Poppins'; }
+    .ref-benefits { background: white; border-radius: 10px; padding: 12px 16px; }
+    .ref-benefits h4 { font-size: 0.8rem; color: var(--navy); margin-bottom: 8px; font-family: 'Poppins'; }
     .ref-benefits ul { list-style: none; }
-    .ref-benefits li { padding: 4px 0; font-size: 0.82rem; color: var(--gray-text); display: flex; gap: 8px; align-items: flex-start; line-height: 1.5; }
+    .ref-benefits li { padding: 3px 0; font-size: 0.78rem; color: var(--gray-text); display: flex; gap: 8px; align-items: flex-start; line-height: 1.4; }
     .ref-benefits li strong { color: var(--navy); }
 
-    .ref-filleuls { margin-top: 16px; }
-    .ref-filleuls h4 { font-size: 0.9rem; color: var(--navy); margin-bottom: 10px; font-family: 'Poppins'; }
+    .ref-filleuls { margin-top: 12px; }
+    .ref-filleuls h4 { font-size: 0.85rem; color: var(--navy); margin-bottom: 8px; font-family: 'Poppins'; }
     .filleuls-table-wrapper { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(10,31,68,0.04); }
     .filleuls-table { width: 100%; border-collapse: collapse; }
-    .filleuls-table thead th { text-align: left; padding: 10px 12px; background: #FFF9E6; font-size: 0.68rem; text-transform: uppercase; color: #B45309; letter-spacing: 0.4px; font-weight: 700; }
-    .filleuls-table tbody td { padding: 10px 12px; border-bottom: 1px solid rgba(10,31,68,0.06); font-size: 0.82rem; }
+    .filleuls-table thead th { text-align: left; padding: 8px 10px; background: #FFF9E6; font-size: 0.65rem; text-transform: uppercase; color: #B45309; letter-spacing: 0.4px; font-weight: 700; }
+    .filleuls-table tbody td { padding: 8px 10px; border-bottom: 1px solid rgba(10,31,68,0.06); font-size: 0.78rem; }
     .filleuls-table tbody tr:last-child td { border-bottom: none; }
-    .filleuls-table .badge-active { background: #E6F9EF; color: #1E7E45; padding: 2px 8px; border-radius: var(--radius-pill); font-size: 0.68rem; font-weight: 700; }
-    .filleuls-table .badge-inactive { background: #E2E8F0; color: #4A5568; padding: 2px 8px; border-radius: var(--radius-pill); font-size: 0.68rem; font-weight: 700; }
-    .empty-filleuls { text-align: center; padding: 20px 16px; color: var(--gray-text); font-size: 0.85rem; }
+    .filleuls-table .badge-active { background: #E6F9EF; color: #1E7E45; padding: 2px 8px; border-radius: var(--radius-pill); font-size: 0.65rem; font-weight: 700; }
+    .filleuls-table .badge-inactive { background: #E2E8F0; color: #4A5568; padding: 2px 8px; border-radius: var(--radius-pill); font-size: 0.65rem; font-weight: 700; }
+    .empty-filleuls { text-align: center; padding: 16px 12px; color: var(--gray-text); font-size: 0.82rem; }
 
     .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 8px; }
     .action-card { display: flex; align-items: center; gap: 12px; padding: 16px 18px; background: white; border-radius: 12px; box-shadow: var(--shadow); transition: all 0.2s; border: 1px solid rgba(10,31,68,0.04); }
@@ -294,9 +294,9 @@
       .nav-right .btn { padding: 8px 14px; font-size: 0.8rem; }
       .nav-right .btn-outline { display: none; }
       .card { padding: 18px 16px; border-radius: 12px; }
-      .referral-card { padding: 18px 16px; border-radius: 12px; }
-      .referral-card h3 { font-size: 1rem; }
-      .referral-card .ref-subtitle { font-size: 0.78rem; margin-bottom: 14px; }
+      .referral-card { padding: 14px 14px; border-radius: 12px; }
+      .referral-card h3 { font-size: 0.95rem; }
+      .referral-card .ref-subtitle { font-size: 0.72rem; margin-bottom: 10px; }
       .referral-card::before { display: none; }
 
       .profile-header { flex-direction: column; text-align: center; gap: 10px; padding-bottom: 18px; margin-bottom: 18px; }
@@ -304,12 +304,11 @@
       .avatar { width: 56px; height: 56px; font-size: 1.1rem; }
       .info-grid { grid-template-columns: 1fr; gap: 12px; }
 
-      .ref-code-compact { padding: 10px 12px; flex-direction: column; align-items: stretch; }
+      .ref-code-compact { padding: 8px 10px; flex-direction: column; align-items: stretch; gap: 6px; }
       .ref-code-compact > div:first-child { justify-content: center; }
-      .ref-code-compact .ref-code-value { font-size: 0.95rem; letter-spacing: 1.5px; }
+      .ref-code-compact .ref-code-value { font-size: 0.9rem; letter-spacing: 1.5px; }
       .ref-code-compact .btn { width: 100%; }
 
-      /* Lien compact sur mobile — reste horizontal */
       .ref-link-compact {
         flex-direction: row;
         align-items: center;
@@ -333,25 +332,27 @@
         min-height: 24px;
       }
 
-      .ref-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
-      .ref-stat { padding: 12px 6px; }
-      .ref-stat .stat-value { font-size: 1rem; }
-      .ref-stat .stat-label { font-size: 0.6rem; }
+      .ref-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
+      .ref-stat { padding: 10px 6px; }
+      .ref-stat .stat-value { font-size: 0.95rem; }
+      .ref-stat .stat-label { font-size: 0.58rem; }
 
       .withdraw-header { flex-direction: column; align-items: stretch; }
       .withdraw-header .btn { width: 100%; }
-      .withdraw-balance { font-size: 1.2rem; }
+      .withdraw-balance { font-size: 1.15rem; }
 
-      .ref-benefits { padding: 12px 16px; }
-      .ref-benefits li { font-size: 0.78rem; }
+      .ref-benefits { padding: 10px 12px; }
+      .ref-benefits h4 { font-size: 0.75rem; }
+      .ref-benefits li { font-size: 0.72rem; }
 
+      .ref-filleuls h4 { font-size: 0.8rem; }
       .filleuls-table-wrapper { background: transparent; box-shadow: none; overflow: visible; }
       .filleuls-table { display: block; background: transparent; }
       .filleuls-table thead { display: none; }
       .filleuls-table tbody { display: block; }
-      .filleuls-table tbody tr { display: block; background: white; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(10,31,68,0.04); }
-      .filleuls-table tbody td { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border: none; text-align: left !important; font-size: 0.8rem; }
-      .filleuls-table tbody td::before { content: attr(data-label); font-weight: 700; color: var(--gray-text); font-size: 0.65rem; text-transform: uppercase; margin-right: 12px; flex-shrink: 0; }
+      .filleuls-table tbody tr { display: block; background: white; border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; box-shadow: 0 2px 8px rgba(10,31,68,0.04); }
+      .filleuls-table tbody td { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border: none; text-align: left !important; font-size: 0.75rem; }
+      .filleuls-table tbody td::before { content: attr(data-label); font-weight: 700; color: var(--gray-text); font-size: 0.6rem; text-transform: uppercase; margin-right: 12px; flex-shrink: 0; }
 
       .actions-grid { grid-template-columns: 1fr; gap: 10px; }
       .action-card { padding: 12px 14px; }
@@ -365,8 +366,8 @@
       .container { padding: 0 12px; }
       .logo { font-size: 1.05rem; }
       .logo-ball { width: 24px; height: 24px; font-size: 0.8rem; }
-      .ref-code-compact .ref-code-value { font-size: 0.85rem; }
-      .ref-stat .stat-value { font-size: 0.9rem; }
+      .ref-code-compact .ref-code-value { font-size: 0.8rem; }
+      .ref-stat .stat-value { font-size: 0.85rem; }
       .ref-link-compact input { font-size: 0.58rem; }
       .ref-link-compact .btn { padding: 0 6px; font-size: 0.6rem; }
     }
