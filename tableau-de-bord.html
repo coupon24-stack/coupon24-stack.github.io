@@ -64,7 +64,7 @@
     .subscription-card p { color: var(--gray-text); font-size: 0.88rem; margin-bottom: 14px; }
     #subscription-status { font-weight: 600; color: var(--navy); }
 
-    /* ============ SECTION PARRAINAGE COMPACTE ============ */
+    /* ============ SECTION PARRAINAGE ============ */
     .referral-card {
       background: linear-gradient(135deg, #FFF9E6, #FFF4E5);
       border: 1.5px solid #FFD98A;
@@ -99,7 +99,7 @@
       line-height: 1.5;
     }
 
-    /* Code inline compact */
+    /* Code parrainage compact */
     .ref-code-compact {
       background: white;
       border: 1.5px dashed #FFD98A;
@@ -129,37 +129,47 @@
     }
     .ref-code-compact .btn { flex-shrink: 0; padding: 8px 14px; font-size: 0.8rem; }
 
-    /* Lien compact */
+    /* Lien de partage TRÈS COMPACT */
     .ref-link-compact {
       background: white;
-      border-radius: 10px;
-      padding: 10px 14px;
-      margin-bottom: 16px;
+      border-radius: 8px;
+      padding: 6px 10px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
       flex-wrap: wrap;
+      min-height: 0;
     }
     .ref-link-compact label {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       color: var(--gray-text);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
       font-weight: 700;
       flex-shrink: 0;
+      margin: 0;
     }
     .ref-link-compact input {
-      flex: 1 1 200px;
+      flex: 1 1 180px;
       min-width: 0;
-      padding: 8px 10px;
-      border: 1.5px solid #E2E8F0;
-      border-radius: 6px;
+      padding: 5px 8px;
+      border: 1px solid #E2E8F0;
+      border-radius: 5px;
       font-family: monospace;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
+      line-height: 1.2;
       color: var(--gray-text);
       background: var(--gray-light);
+      height: 28px;
     }
-    .ref-link-compact .btn { flex-shrink: 0; padding: 8px 14px; font-size: 0.78rem; }
+    .ref-link-compact .btn {
+      flex-shrink: 0;
+      padding: 5px 10px;
+      font-size: 0.72rem;
+      line-height: 1.2;
+      min-height: 28px;
+    }
 
     /* Stats compact */
     .ref-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
@@ -239,6 +249,7 @@
     }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
 
+    /* Modale retrait */
     .wd-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,31,68,0.7); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
     .wd-modal-overlay.active { display: flex; }
     .wd-modal { background: white; border-radius: 16px; padding: 28px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; }
@@ -285,10 +296,10 @@
       .ref-code-compact .ref-code-value { font-size: 0.95rem; letter-spacing: 1.5px; }
       .ref-code-compact .btn { width: 100%; }
 
-      .ref-link-compact { flex-direction: column; align-items: stretch; padding: 10px 12px; }
-      .ref-link-compact label { text-align: center; }
-      .ref-link-compact input { font-size: 0.7rem; }
-      .ref-link-compact .btn { width: 100%; }
+      .ref-link-compact { flex-direction: column; align-items: stretch; padding: 6px 8px; gap: 4px; }
+      .ref-link-compact label { text-align: center; font-size: 0.62rem; margin-bottom: 2px; }
+      .ref-link-compact input { font-size: 0.65rem; padding: 4px 6px; height: 26px; }
+      .ref-link-compact .btn { width: 100%; padding: 5px 10px; font-size: 0.72rem; min-height: 28px; }
 
       .ref-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
       .ref-stat { padding: 12px 6px; }
@@ -392,7 +403,6 @@
         <h3>🎁 Mon programme de parrainage</h3>
         <p class="ref-subtitle">Invite tes amis, ils gagnent des jours gratuits et tu gagnes 20% de commission.</p>
 
-        <!-- CODE PARRAINAGE COMPACT -->
         <div class="ref-code-compact">
           <div>
             <span class="ref-code-label">Mon code</span>
@@ -401,14 +411,12 @@
           <button class="btn btn-primary" id="copy-code-btn">📋 Copier</button>
         </div>
 
-        <!-- LIEN COMPACT -->
         <div class="ref-link-compact">
           <label>Lien</label>
           <input type="text" id="ref-link-display" readonly value="Chargement..." />
           <button class="btn btn-outline" id="copy-link-btn">📋 Copier</button>
         </div>
 
-        <!-- STATS -->
         <div class="ref-stats-grid">
           <div class="ref-stat">
             <div class="stat-value" id="stat-referred-count">0</div>
@@ -428,7 +436,6 @@
           </div>
         </div>
 
-        <!-- SOLDE ET RETRAIT -->
         <div class="withdraw-box" id="withdraw-box">
           <div class="withdraw-header">
             <div>
@@ -505,7 +512,6 @@
   </div>
 </main>
 
-<!-- MODALE RETRAIT -->
 <div class="wd-modal-overlay" id="withdraw-modal">
   <div class="wd-modal">
     <h2>💸 Demander un retrait</h2>
