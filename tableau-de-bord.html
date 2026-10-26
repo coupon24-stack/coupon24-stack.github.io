@@ -64,7 +64,6 @@
     .subscription-card p { color: var(--gray-text); font-size: 0.88rem; margin-bottom: 14px; }
     #subscription-status { font-weight: 600; color: var(--navy); }
 
-    /* ============ SECTION PARRAINAGE (AFFINÉE) ============ */
     .referral-card {
       background: linear-gradient(135deg, #FFF9E6, #FFF4E5);
       border: 1px solid #FFD98A;
@@ -99,7 +98,6 @@
       line-height: 1.4;
     }
 
-    /* Code parrainage compact */
     .ref-code-compact {
       background: white;
       border: 1px dashed #FFD98A;
@@ -129,7 +127,6 @@
     }
     .ref-code-compact .btn { flex-shrink: 0; padding: 6px 12px; font-size: 0.75rem; }
 
-    /* Lien de partage ULTRA COMPACT — 30px */
     .ref-link-compact {
       background: white;
       border: 1px solid #E2E8F0;
@@ -184,7 +181,6 @@
       margin: 0;
     }
 
-    /* Stats compact */
     .ref-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
     .ref-stat { background: white; border-radius: 10px; padding: 12px 6px; text-align: center; box-shadow: 0 2px 8px rgba(10,31,68,0.04); min-width: 0; }
     .ref-stat .stat-value { font-family: 'Poppins'; font-size: 1.1rem; font-weight: 800; color: #B45309; line-height: 1; margin-bottom: 3px; word-break: break-word; }
@@ -192,7 +188,6 @@
     .ref-stat.paid .stat-value { color: var(--green); }
     .ref-stat.total .stat-value { color: var(--blue); }
 
-    /* Withdraw compact */
     .withdraw-box {
       background: white;
       border-radius: 10px;
@@ -262,7 +257,6 @@
     }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
 
-    /* Modale retrait */
     .wd-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,31,68,0.7); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
     .wd-modal-overlay.active { display: flex; }
     .wd-modal { background: white; border-radius: 16px; padding: 28px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; }
@@ -390,6 +384,7 @@
     </a>
     <div class="nav-right">
       <a href="/coupons.html" class="btn btn-outline">Coupons</a>
+      <a href="/resultats-historique.html" class="btn btn-outline">📊</a>
       <button id="logout-btn" class="btn btn-danger">Déconnexion</button>
     </div>
   </div>
@@ -512,6 +507,13 @@
               <p>Voir les pronostics</p>
             </div>
           </a>
+          <a href="/resultats-historique.html" class="action-card">
+            <div class="action-icon">📊</div>
+            <div>
+              <h4>Résultats récents</h4>
+              <p>Historique des coupons</p>
+            </div>
+          </a>
           <a href="/abonnements.html" class="action-card">
             <div class="action-icon">💳</div>
             <div>
@@ -527,7 +529,7 @@
             </div>
           </a>
           <a href="/historique-paiements.html" class="action-card">
-            <div class="action-icon">📊</div>
+            <div class="action-icon">💰</div>
             <div>
               <h4>Mes paiements</h4>
               <p>Historique et commissions</p>
