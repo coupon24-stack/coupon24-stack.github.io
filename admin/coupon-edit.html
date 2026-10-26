@@ -29,7 +29,6 @@
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
-    .form-grid.full { grid-template-columns: 1fr; }
     .form-field { display: flex; flex-direction: column; }
     .form-field label {
       font-size: 0.82rem;
@@ -58,17 +57,13 @@
     .form-field textarea { resize: vertical; min-height: 70px; }
     .form-field input:focus,
     .form-field select:focus,
-    .form-field textarea:focus {
-      outline: none;
-      border-color: var(--blue);
-    }
+    .form-field textarea:focus { outline: none; border-color: var(--blue); }
     .form-field .hint {
       font-size: 0.75rem;
       color: var(--gray-text);
       margin-top: 4px;
     }
 
-    /* Champ code bookmaker */
     .form-field input#betting_code {
       text-transform: uppercase;
       font-family: 'Courier New', monospace;
@@ -78,7 +73,91 @@
       text-align: center;
     }
 
-    /* Radios catégorie */
+    /* ============ IMAGE UPLOAD ============ */
+    .image-upload-box {
+      background: var(--gray-light);
+      border: 2px dashed #E2E8F0;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .image-upload-box:hover {
+      border-color: var(--blue);
+      background: var(--sky);
+    }
+    .image-upload-box.has-image {
+      padding: 0;
+      overflow: hidden;
+      background: white;
+    }
+    .image-preview {
+      width: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      display: block;
+      border-radius: 10px;
+    }
+    .upload-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+    .upload-text {
+      font-size: 0.92rem;
+      color: var(--gray-text);
+      margin-bottom: 6px;
+    }
+    .upload-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      font-family: 'Inter';
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: var(--blue-gradient);
+      color: white;
+      box-shadow: 0 4px 14px rgba(30,79,216,0.35);
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .upload-btn:hover { transform: translateY(-2px); }
+    .upload-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .image-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .image-actions .btn { padding: 8px 16px; font-size: 0.82rem; }
+
+    .upload-progress {
+      margin-top: 12px;
+      height: 6px;
+      background: #E2E8F0;
+      border-radius: 3px;
+      overflow: hidden;
+      display: none;
+    }
+    .upload-progress.active { display: block; }
+    .upload-progress-bar {
+      height: 100%;
+      background: var(--blue-gradient);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    /* Radios */
     .radio-group {
       display: flex;
       gap: 12px;
@@ -98,12 +177,9 @@
     }
     .radio-group label:hover { border-color: var(--blue); }
     .radio-group input[type="radio"] { margin: 0; }
-    .radio-group input[type="radio"]:checked + span {
-      font-weight: 700;
-      color: var(--blue);
-    }
+    .radio-group input[type="radio"]:checked + span { font-weight: 700; color: var(--blue); }
 
-    /* SÉLECTIONS */
+    /* Sélections */
     .selection-card {
       background: var(--gray-light);
       border-radius: 12px;
@@ -162,7 +238,6 @@
       border-color: var(--blue);
     }
 
-    /* RÉCAP TOTAL */
     .recap-box {
       background: linear-gradient(135deg, #F7F9FC, #E8F0FE);
       border-radius: 12px;
@@ -187,7 +262,6 @@
       line-height: 1;
     }
 
-    /* ACTIONS */
     .actions-bar {
       display: flex;
       gap: 12px;
@@ -223,6 +297,8 @@
       <a href="/admin/coupons.html" class="active">Coupons</a>
       <a href="/admin/utilisateurs.html">Utilisateurs</a>
       <a href="/admin/resultats.html">Résultats</a>
+      <a href="/admin/commissions.html">Commissions</a>
+      <a href="/admin/retraits.html">Retraits</a>
     </div>
     <div class="admin-nav-actions">
       <a href="/admin/coupons.html" class="btn btn-outline btn-sm">← Retour</a>
@@ -290,10 +366,34 @@
           </select>
         </div>
 
+        <!-- IMAGE DE COUVERTURE -->
         <div class="form-field" style="grid-column: 1 / -1;">
-          <label for="cover_image">Image de couverture (URL optionnelle)</label>
-          <input type="url" id="cover_image" placeholder="https://images.unsplash.com/..." />
-          <div class="hint">Colle l'URL d'une image depuis Unsplash, Pexels, etc.</div>
+          <label>Image de couverture (optionnelle)</label>
+
+          <div class="image-upload-box" id="image-box">
+            <div id="image-placeholder">
+              <div class="upload-icon">📸</div>
+              <div class="upload-text">Choisis une photo depuis ta galerie</div>
+              <div style="font-size:0.75rem;color:var(--gray-text);margin-bottom:12px;">Format : JPG, PNG, WEBP · Max 5 Mo</div>
+              <button type="button" class="upload-btn" id="pick-image-btn">📁 Choisir une image</button>
+            </div>
+            <div id="image-preview-wrapper" style="display:none;">
+              <img id="image-preview" class="image-preview" src="" alt="Aperçu" />
+              <div style="padding:16px;">
+                <div class="image-actions">
+                  <button type="button" class="btn btn-outline" id="change-image-btn">🔄 Changer</button>
+                  <button type="button" class="btn btn-danger" id="remove-image-btn">🗑️ Supprimer</button>
+                </div>
+              </div>
+            </div>
+            <div class="upload-progress" id="upload-progress">
+              <div class="upload-progress-bar" id="upload-progress-bar"></div>
+            </div>
+          </div>
+
+          <input type="file" id="image-file" accept="image/jpeg,image/png,image/webp,image/gif" />
+          <input type="hidden" id="cover_image" />
+          <div class="hint">L'image est uploadée sur Supabase et l'URL est générée automatiquement.</div>
         </div>
 
         <div class="form-field" style="grid-column: 1 / -1;">
