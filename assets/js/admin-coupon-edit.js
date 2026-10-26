@@ -336,4 +336,147 @@ async function saveCoupon(status) {
       title,
       description: description || null,
       publication_date,
-      matches
+      matches_date,
+      category,
+      type,
+      cover_image,
+      betting_code,
+      status,
+    };
+
+    let couponId = editingId;
+
+    if (editingId) {
+      const { error } = await supabaseClient
+        .from('coupons')
+        .update(couponData)
+        .eq('id', editingId);
+      if (error) throw error;
+    } else {
+      couponData.created_by = user.id;
+      const { data: created, error } = await supabaseClient
+        .from('coupons')
+        .insert(couponData)
+        .select('id')
+        .single();
+      if (error) throw error;
+      couponId = created.id;
+      editingId = couponId;
+    }
+
+    const { error: delErr } = await supabaseClient
+      .from('selections')
+      .delete()
+      .eq('coupon_id', couponId);
+    if (delErr) throw delErr;
+
+    if (selections.length > 0) {
+      const newSels = selections.map((s, i) => ({
+        coupon_id: couponId,
+        match_order: i + 1,
+        competition: s.competition || '',
+        home_team: s.home_team,
+        away_team: s.away_team,
+        match_date: s.match_date,
+        market: s.market || 'Autre',
+        prediction: s.prediction,
+        odds: s.odds || null,
+        result: 'en_attente',
+      }));
+      const { error: insErr } = await supabaseClient.from('selections').insert(newSels);
+      if (insErr) throw insErr;
+    }
+
+    try {
+      await supabaseClient.from('admin_actions').insert({
+        admin_id: user.id,
+        action: editingId === couponId && status !== 'brouillon' ? 'publish_coupon' : 'save_coupon',
+        target_type: 'coupon',
+        target_id: couponId,
+        details: { status, title, betting_code, has_image: !!cover_image },
+      });
+    } catch (e) { console.warn('[audit]', e); }
+
+    showToast(
+      status === 'brouillon' ? 'Coupon enregistré en brouillon' : 'Coupon publié avec succès',
+      'success'
+    );
+
+    setTimeout(() => {
+      window.location.href = '/admin/coupons.html';
+    }, 1200);
+
+  } catch (error) {
+    console.error('[saveCoupon]', error);
+    showAlert('Erreur enregistrement : ' + error.message, 'error');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } finally {
+    if (btnPublish) btnPublish.disabled = false;
+    if (btnDraft) btnDraft.disabled = false;
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+(async function init() {
+  const ctx = await requireAdmin();
+  if (!ctx) return;
+
+  const loading = document.getElementById('loading');
+  const form = document.getElementById('coupon-form');
+
+  const params = new URLSearchParams(window.location.search);
+  editingId = params.get('id');
+
+  if (editingId) {
+    document.getElementById('page-title').textContent = 'Éditer le coupon';
+    document.getElementById('page-subtitle').textContent = 'Modifie les informations du coupon et ses sélections.';
+  }
+
+  document.getElementById('publication_date').value = todayISO();
+  document.getElementById('matches_date').value = tomorrowISO();
+
+  document.getElementById('betting_code')?.addEventListener('input', (e) => {
+    e.target.value = e.target.value.toUpperCase();
+  });
+
+  // Init upload
+  initImageUpload();
+
+  if (editingId) {
+    await loadCouponForEdit(editingId);
+  } else {
+    selections = [{
+      competition: '',
+      home_team: '',
+      away_team: '',
+      match_date: null,
+      market: 'Résultat du match',
+      prediction: '',
+      odds: null,
+    }];
+    renderSelections();
+  }
+
+  document.getElementById('add-selection-btn')?.addEventListener('click', () => {
+    selections.push({
+      competition: '',
+      home_team: '',
+      away_team: '',
+      match_date: null,
+      market: 'Résultat du match',
+      prediction: '',
+      odds: null,
+    });
+    renderSelections();
+  });
+
+  document.getElementById('save-draft-btn')?.addEventListener('click', () => saveCoupon('brouillon'));
+  document.getElementById('publish-btn')?.addEventListener('click', () => saveCoupon('disponible'));
+
+  form?.addEventListener('submit', (e) => e.preventDefault());
+
+  if (loading) loading.style.display = 'none';
+  if (form) form.style.display = 'block';
+})();
