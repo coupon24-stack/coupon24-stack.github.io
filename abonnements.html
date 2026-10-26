@@ -23,8 +23,6 @@
     .btn-outline:hover { border-color:var(--blue); color:var(--blue); }
     .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
     .btn-primary:hover { transform:translateY(-2px); }
-    .btn-whatsapp { background:var(--whatsapp); color:white; }
-    .btn-whatsapp:hover { transform:translateY(-2px); }
 
     .page-header { background:var(--navy); color:white; padding:60px 0 90px; text-align:center; }
     .page-header h1 { font-size:clamp(1.8rem,4vw,2.6rem); margin-bottom:10px; letter-spacing:-0.5px; }
@@ -159,7 +157,7 @@
       <div class="pricing-period">Accès premium pendant 12 mois</div>
       <ul class="pricing-features">
         <li>Tous les avantages de la formule 30 jours</li>
-        <li>Économie de 15 000 FCFA vs 12 mensuels</li>
+        <li>Économie de 15 000 FCFA vs 12 mois mensuels</li>
         <li>Accès prioritaire aux nouveaux coupons</li>
       </ul>
       <button class="btn btn-outline" data-plan="annuel" data-days="365" data-price="45000" data-label="Annuel">Choisir cette formule</button>
@@ -226,12 +224,12 @@
 
 <script>
   // ============================================================
-  // ⚠️ REMPLACE CES 3 LIENS PAR TES LIENS MONEY FUSION ⚠️
+  // LIENS MONEY FUSION — INTÉGRÉS
   // ============================================================
   const PAYMENT_LINKS = {
-    '7j':     'https://REMPLACE_MOI_LIEN_7J',
-    '30j':    'https://REMPLACE_MOI_LIEN_30J',
-    'annuel': 'https://REMPLACE_MOI_LIEN_ANNUEL'
+    '7j':     'https://my.moneyfusion.net/6ad0e7f424dcd93755d993a5',
+    '30j':    'https://my.moneyfusion.net/6ad4f0972fadcb9e23f3b0e6',
+    'annuel': 'https://my.moneyfusion.net/6adf27e2dbe57e5fa720f3c1'
   };
 
   let currentPlan = null;
@@ -292,8 +290,8 @@
       }
 
       const link = PAYMENT_LINKS[plan];
-      if (!link || link.includes('REMPLACE_MOI')) {
-        alert('⚠️ Les liens de paiement ne sont pas encore configurés.\n\n(Message admin : remplace les liens "REMPLACE_MOI_..." dans le fichier abonnements.html)');
+      if (!link) {
+        alert('⚠️ Lien de paiement non configuré pour cette formule.');
         return;
       }
 
@@ -312,7 +310,9 @@
     if (!currentPlan) return;
     const link = PAYMENT_LINKS[currentPlan.plan];
     if (!link) return;
+
     window.location.href = link;
+
     setTimeout(() => {
       document.getElementById('payment-modal').classList.remove('active');
     }, 1000);
