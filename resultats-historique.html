@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Historique des résultats — COUPON24</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --navy:#0A1F44; --blue:#1E4FD8; --blue-gradient:linear-gradient(135deg,#0A1F44 0%,#1E4FD8 100%); --sky:#E8F0FE; --gray-text:#4A5568; --gray-light:#F7F9FC; --green:#27AE60; --gold:#F5A623; --red:#E53E3E; --radius:16px; --radius-pill:999px; --shadow:0 4px 20px rgba(10,31,68,0.06); }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { max-width:100vw; overflow-x:hidden; }
+    body { font-family:'Inter',sans-serif; background:var(--gray-light); color:var(--navy); line-height:1.6; -webkit-font-smoothing:antialiased; }
+    a { text-decoration:none; color:inherit; }
+    .container { max-width:1000px; margin:0 auto; padding:0 24px; width:100%; }
+    h1,h2,h3 { font-family:'Poppins',sans-serif; line-height:1.2; }
+
+    .navbar { background:white; border-bottom:1px solid rgba(10,31,68,0.06); position:sticky; top:0; z-index:100; }
+    .navbar .container { max-width:1200px; display:flex; align-items:center; justify-content:space-between; height:72px; gap:12px; }
+    .logo { display:flex; align-items:center; gap:10px; font-family:'Poppins'; font-weight:800; font-size:1.5rem; flex-shrink:0; }
+    .logo-ball { width:32px; height:32px; background:var(--blue-gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1rem; }
+    .nav-right { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 22px; border-radius:var(--radius-pill); font-family:'Inter'; font-size:0.9rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; white-space:nowrap; }
+    .btn-outline { background:transparent; color:var(--navy); border:1.5px solid rgba(10,31,68,0.15); }
+    .btn-outline:hover { border-color:var(--blue); color:var(--blue); }
+    .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
+
+    .page-header { background:var(--navy); color:white; padding:48px 0 36px; }
+    .page-header h1 { font-size:clamp(1.6rem,3.5vw,2.2rem); margin-bottom:8px; }
+    .page-header p { color:rgba(255,255,255,0.75); font-size:0.92rem; max-width:600px; }
+
+    main { padding:24px 0 60px; }
+
+    .period-tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+    .period-tab { padding:8px 16px; border-radius:var(--radius-pill); background:white; border:1.5px solid #E2E8F0; font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.2s; }
+    .period-tab:hover { border-color:var(--blue); color:var(--blue); }
+    .period-tab.active { background:var(--blue-gradient); color:white; border-color:transparent; }
+
+    .summary-card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 24px; margin-bottom:20px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .sum-item { text-align:center; }
+    .sum-item .sum-value { font-family:'Poppins'; font-size:1.5rem; font-weight:800; line-height:1; margin-bottom:4px; }
+    .sum-item .sum-label { font-size:0.72rem; color:var(--gray-text); text-transform:uppercase; letter-spacing:0.5px; font-weight:600; }
+    .sum-item.won .sum-value { color:var(--green); }
+    .sum-item.lost .sum-value { color:var(--red); }
+    .sum-item.pending .sum-value { color:var(--gold); }
+    .sum-item.total .sum-value { color:var(--blue); }
+
+    .coupon-result-card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:16px; overflow:hidden; }
+    .crc-header { padding:18px 20px; border-bottom:1px solid rgba(10,31,68,0.08); display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; }
+    .crc-title-block { flex:1; min-width:200px; }
+    .crc-title { font-family:'Poppins'; font-size:1.05rem; font-weight:700; margin-bottom:6px; line-height:1.3; }
+    .crc-meta { display:flex; gap:8px; flex-wrap:wrap; font-size:0.78rem; color:var(--gray-text); align-items:center; }
+    .crc-badge { padding:3px 10px; border-radius:var(--radius-pill); font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; }
+    .badge-gratuit { background:#E6F9EF; color:#1E7E45; }
+    .badge-premium { background:#FFF4E5; color:#B45309; }
+    .badge-won { background:#E6F9EF; color:#1E7E45; }
+    .badge-lost { background:#FED7D7; color:#9B2C2C; }
+    .badge-pending { background:#FFF4E5; color:#B45309; }
+    .badge-partial { background:#E8F0FE; color:var(--blue); }
+
+    .crc-result-status { text-align:right; flex-shrink:0; }
+    .crc-result-label { font-size:0.7rem; color:var(--gray-text); text-transform:uppercase; letter-spacing:0.4px; font-weight:700; margin-bottom:4px; }
+    .crc-result-value { font-family:'Poppins'; font-size:1.5rem; font-weight:800; line-height:1; }
+    .crc-result-value.won { color:var(--green); }
+    .crc-result-value.lost { color:var(--red); }
+    .crc-result-value.pending { color:var(--gold); }
+    .crc-result-value.partial { color:var(--blue); }
+
+    .crc-progress { display:flex; height:6px; background:#E2E8F0; overflow:hidden; }
+    .crc-progress-bar { height:100%; transition:all 0.3s; }
+    .progress-won { background:var(--green); }
+    .progress-lost { background:var(--red); }
+    .progress-pending { background:var(--gold); }
+    .progress-cancelled { background:#A0AEC0; }
+
+    .crc-body { padding:16px 20px; }
+    .crc-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); gap:10px; margin-bottom:14px; }
+    .crc-stat { text-align:center; padding:10px; background:var(--gray-light); border-radius:8px; }
+    .crc-stat .cs-value { font-family:'Poppins'; font-size:1.15rem; font-weight:800; line-height:1; margin-bottom:3px; }
+    .crc-stat .cs-label { font-size:0.65rem; color:var(--gray-text); text-transform:uppercase; letter-spacing:0.3px; font-weight:600; }
+    .crc-stat.won .cs-value { color:var(--green); }
+    .crc-stat.lost .cs-value { color:var(--red); }
+    .crc-stat.pending .cs-value { color:var(--gold); }
+    .crc-stat.cancelled .cs-value { color:#4A5568; }
+
+    .crc-toggle { width:100%; padding:10px; background:transparent; border:1.5px solid rgba(10,31,68,0.1); border-radius:8px; font-family:'Inter'; font-size:0.82rem; font-weight:600; color:var(--navy); cursor:pointer; transition:all 0.2s; }
+    .crc-toggle:hover { border-color:var(--blue); color:var(--blue); background:var(--sky); }
+
+    .crc-matches { margin-top:14px; display:none; }
+    .crc-matches.show { display:block; }
+    .crc-match { padding:12px 14px; background:var(--gray-light); border-radius:8px; margin-bottom:8px; border-left:4px solid #E2E8F0; }
+    .crc-match.gagnee { border-left-color:var(--green); background:#F0FDF4; }
+    .crc-match.perdue { border-left-color:var(--red); background:#FEF2F2; }
+    .crc-match.en_attente { border-left-color:var(--gold); background:#FFFBEB; }
+    .crc-match.annulee { border-left-color:#A0AEC0; background:#F7FAFC; }
+    .crc-match-teams { font-weight:600; font-size:0.88rem; margin-bottom:4px; color:var(--navy); }
+    .crc-match-info { display:flex; gap:12px; flex-wrap:wrap; font-size:0.75rem; color:var(--gray-text); align-items:center; }
+    .crc-match-result { margin-left:auto; padding:2px 10px; border-radius:6px; font-size:0.7rem; font-weight:700; text-transform:uppercase; }
+    .crc-match-result.gagnee { background:#E6F9EF; color:#1E7E45; }
+    .crc-match-result.perdue { background:#FED7D7; color:#9B2C2C; }
+    .crc-match-result.en_attente { background:#FFF4E5; color:#B45309; }
+    .crc-match-result.annulee { background:#E2E8F0; color:#4A5568; }
+
+    .locked-notice { background:var(--sky); border-radius:10px; padding:14px 18px; display:flex; gap:12px; align-items:center; margin-bottom:12px; }
+    .locked-notice .icon { font-size:1.5rem; flex-shrink:0; }
+    .locked-notice .text { flex:1; font-size:0.85rem; }
+    .locked-notice .text strong { color:var(--navy); }
+    .locked-notice .btn { padding:8px 16px; font-size:0.8rem; }
+
+    .empty-state { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:60px 20px; text-align:center; color:var(--gray-text); }
+    .empty-state .icon { font-size:3rem; margin-bottom:16px; }
+    .empty-state h3 { font-size:1.1rem; color:var(--navy); margin-bottom:8px; }
+    .empty-state p { font-size:0.9rem; margin-bottom:20px; }
+
+    .loader { display:flex; justify-content:center; padding:60px 0; }
+    .spinner { width:44px; height:44px; border:3px solid var(--sky); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    @media (max-width:640px) {
+      body { overflow-x:hidden; }
+      .container { padding:0 16px; }
+      main { padding:16px 0 40px; }
+      .navbar .container { height:60px; padding:8px 16px; gap:8px; }
+      .logo { font-size:1.2rem; gap:6px; }
+      .logo-ball { width:28px; height:28px; font-size:0.9rem; }
+      .nav-right .btn { padding:8px 14px; font-size:0.8rem; }
+      .nav-right .btn-outline { display:none; }
+
+      .page-header { padding:32px 0 24px; }
+      .summary-card { grid-template-columns:repeat(2,1fr); padding:16px; gap:12px; }
+      .sum-item .sum-value { font-size:1.2rem; }
+
+      .crc-header { padding:14px 16px; flex-direction:column; }
+      .crc-result-status { text-align:left; width:100%; display:flex; justify-content:space-between; align-items:center; }
+      .crc-result-label { margin-bottom:0; }
+      .crc-result-value { font-size:1.2rem; }
+      .crc-body { padding:14px 16px; }
+      .crc-stats { grid-template-columns:repeat(2,1fr); gap:8px; }
+      .crc-stat { padding:8px; }
+      .crc-stat .cs-value { font-size:1rem; }
+
+      .locked-notice { flex-direction:column; text-align:center; }
+    }
+    @supports (padding: max(0px)) {
+      .navbar .container { padding-left:max(16px, env(safe-area-inset-left)); padding-right:max(16px, env(safe-area-inset-right)); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="/index.html" class="logo">
+      <span class="logo-ball">⚽</span>
+      <span>COUPON<span style="color:var(--blue);">24</span></span>
+    </a>
+    <div class="nav-right">
+      <a href="/coupons.html" class="btn btn-outline">Coupons</a>
+      <a href="/tableau-de-bord.html" class="btn btn-primary">Mon espace</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>📊 Historique des résultats</h1>
+    <p>Consulte les performances de nos coupons sur les derniers jours.</p>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <div class="period-tabs">
+      <button class="period-tab active" data-days="2">2 derniers jours</button>
+      <button class="period-tab" data-days="7">7 derniers jours</button>
+      <button class="period-tab" data-days="30">30 derniers jours</button>
+    </div>
+
+    <div id="loading" class="loader"><div class="spinner"></div></div>
+
+    <div id="content" style="display:none;">
+      <div id="summary" class="summary-card"></div>
+      <div id="coupons-list"></div>
+    </div>
+
+    <div id="empty" class="empty-state" style="display:none;">
+      <div class="icon">📭</div>
+      <h3>Aucun coupon sur cette période</h3>
+      <p>Il n'y a pas encore eu de coupons publiés ces derniers jours.</p>
+      <a href="/coupons.html" class="btn btn-primary">Voir les coupons du jour</a>
+    </div>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/auth-guard.js"></script>
+<script>
+let currentDays = 2;
+let allCoupons = [];
+
+async function loadResults(days) {
+  const loading = document.getElementById('loading');
+  const content = document.getElementById('content');
+  const empty = document.getElementById('empty');
+  const list = document.getElementById('coupons-list');
+  const summary = document.getElementById('summary');
+
+  loading.style.display = 'flex';
+  content.style.display = 'none';
+  empty.style.display = 'none';
+  list.innerHTML = '';
+  summary.innerHTML = '';
+
+  try {
+    const { data, error } = await supabaseClient.rpc('get_recent_coupon_results', { p_days: days });
+    if (error) throw error;
+
+    allCoupons = data || [];
+    loading.style.display = 'none';
+
+    if (allCoupons.length === 0) {
+      empty.style.display = 'block';
+      return;
+    }
+
+    // Calculer les stats globales
+    const totalMatches = allCoupons.reduce((s, c) => s + (c.matches_total || 0), 0);
+    const totalWon = allCoupons.reduce((s, c) => s + (c.matches_won || 0), 0);
+    const totalLost = allCoupons.reduce((s, c) => s + (c.matches_lost || 0), 0);
+    const totalPending = allCoupons.reduce((s, c) => s + (c.matches_pending || 0), 0);
+
+    summary.innerHTML = `
+      <div class="sum-item total">
+        <div class="sum-value">${allCoupons.length}</div>
+        <div class="sum-label">Coupons</div>
+      </div>
+      <div class="sum-item won">
+        <div class="sum-value">${totalWon}</div>
+        <div class="sum-label">Gagnés</div>
+      </div>
+      <div class="sum-item lost">
+        <div class="sum-value">${totalLost}</div>
+        <div class="sum-label">Perdus</div>
+      </div>
+      <div class="sum-item pending">
+        <div class="sum-value">${totalPending}</div>
+        <div class="sum-label">En attente</div>
+      </div>
+    `;
+
+    list.innerHTML = allCoupons.map(renderCouponCard).join('');
+
+    // Attacher les listeners pour les boutons "Voir les matchs"
+    document.querySelectorAll('button[data-toggle]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const couponId = btn.dataset.toggle;
+        const container = document.getElementById('matches-' + couponId);
+        const isOpen = container.classList.contains('show');
+
+        if (isOpen) {
+          container.classList.remove('show');
+          btn.textContent = '👁️ Voir les matchs';
+        } else {
+          // Charger les matchs si pas déjà fait
+          if (container.innerHTML.trim() === '') {
+            btn.textContent = 'Chargement...';
+            btn.disabled = true;
+            try {
+              const { data: matches, error } = await supabaseClient.rpc('get_coupon_matches_for_result', { p_coupon_id: couponId });
+              if (error) throw error;
+              container.innerHTML = renderMatches(matches || []);
+            } catch (err) {
+              container.innerHTML = `<div class="crc-match" style="color:#9B2C2C;">Erreur : ${escapeHtml(err.message)}</div>`;
+            } finally {
+              btn.disabled = false;
+            }
+          }
+          container.classList.add('show');
+          btn.textContent = '🙈 Masquer les matchs';
+        }
+      });
+    });
+
+    content.style.display = 'block';
+  } catch (err) {
+    console.error('[results] erreur:', err);
+    loading.style.display = 'none';
+    empty.style.display = 'block';
+  }
+}
+
+function renderCouponCard(c) {
+  const dateStr = formatDate(c.created_at);
+  const badgeClass = c.category === 'gratuit' ? 'badge-gratuit' : 'badge-premium';
+  const badgeLabel = c.category === 'gratuit' ? 'Gratuit' : 'Premium';
+
+  const total = c.matches_total || 0;
+  const won = c.matches_won || 0;
+  const lost = c.matches_lost || 0;
+  const pending = c.matches_pending || 0;
+  const cancelled = c.matches_cancelled || 0;
+
+  // Calculer le statut global
+  let statusLabel, statusClass, statusValueClass;
+  if (pending === total) {
+    statusLabel = 'En attente';
+    statusClass = 'badge-pending';
+    statusValueClass = 'pending';
+  } else if (won === total) {
+    statusLabel = 'Gagné';
+    statusClass = 'badge-won';
+    statusValueClass = 'won';
+  } else if (lost > 0) {
+    statusLabel = 'Perdu';
+    statusClass = 'badge-lost';
+    statusValueClass = 'lost';
+  } else if (pending === 0) {
+    statusLabel = 'Terminé';
+    statusClass = 'badge-partial';
+    statusValueClass = 'partial';
+  } else {
+    statusLabel = 'En cours';
+    statusClass = 'badge-partial';
+    statusValueClass = 'partial';
+  }
+
+  const successRate = (won + lost) > 0 ? Math.round((won / (won + lost)) * 100) : 0;
+
+  // Barre de progression
+  const wonPct = total > 0 ? (won / total) * 100 : 0;
+  const lostPct = total > 0 ? (lost / total) * 100 : 0;
+  const pendingPct = total > 0 ? (pending / total) * 100 : 0;
+  const cancelledPct = total > 0 ? (cancelled / total) * 100 : 0;
+
+  const lockNotice = c.is_locked ? `
+    <div class="locked-notice">
+      <div class="icon">🔒</div>
+      <div class="text"><strong>Coupon premium</strong> — Abonne-toi pour voir les détails des matchs.</div>
+      <a href="/abonnements.html" class="btn btn-primary">S'abonner</a>
+    </div>
+  ` : '';
+
+  return `
+    <div class="coupon-result-card">
+      <div class="crc-header">
+        <div class="crc-title-block">
+          <div class="crc-title">${escapeHtml(c.title)}</div>
+          <div class="crc-meta">
+            <span class="crc-badge ${badgeClass}">${badgeLabel}</span>
+            <span>📅 ${dateStr}</span>
+            <span class="crc-badge ${statusClass}">${statusLabel}</span>
+          </div>
+        </div>
+        <div class="crc-result-status">
+          <div class="crc-result-label">Réussite</div>
+          <div class="crc-result-value ${statusValueClass}">${successRate}%</div>
+        </div>
+      </div>
+      <div class="crc-progress">
+        ${wonPct > 0 ? `<div class="crc-progress-bar progress-won" style="width:${wonPct}%"></div>` : ''}
+        ${lostPct > 0 ? `<div class="crc-progress-bar progress-lost" style="width:${lostPct}%"></div>` : ''}
+        ${pendingPct > 0 ? `<div class="crc-progress-bar progress-pending" style="width:${pendingPct}%"></div>` : ''}
+        ${cancelledPct > 0 ? `<div class="crc-progress-bar progress-cancelled" style="width:${cancelledPct}%"></div>` : ''}
+      </div>
+      <div class="crc-body">
+        <div class="crc-stats">
+          <div class="crc-stat">
+            <div class="cs-value">${total}</div>
+            <div class="cs-label">Matchs</div>
+          </div>
+          <div class="crc-stat won">
+            <div class="cs-value">${won}</div>
+            <div class="cs-label">Gagnés</div>
+          </div>
+          <div class="crc-stat lost">
+            <div class="cs-value">${lost}</div>
+            <div class="cs-label">Perdus</div>
+          </div>
+          <div class="crc-stat pending">
+            <div class="cs-value">${pending}</div>
+            <div class="cs-label">En attente</div>
+          </div>
+          ${cancelled > 0 ? `<div class="crc-stat cancelled"><div class="cs-value">${cancelled}</div><div class="cs-label">Annulés</div></div>` : ''}
+        </div>
+        ${lockNotice}
+        ${!c.is_locked ? `
+          <button class="crc-toggle" data-toggle="${c.coupon_id}">👁️ Voir les matchs</button>
+          <div class="crc-matches" id="matches-${c.coupon_id}"></div>
+        ` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function renderMatches(matches) {
+  if (!matches || matches.length === 0) {
+    return '<div class="crc-match" style="color:var(--gray-text);text-align:center;">Aucun match renseigné.</div>';
+  }
+  return matches.map(m => {
+    const resultLabel = {
+      en_attente: '⏳ En attente',
+      gagnee: '✅ Gagnée',
+      perdue: '❌ Perdue',
+      annulee: '⊘ Annulée'
+    }[m.result] || m.result;
+
+    return `
+      <div class="crc-match ${m.result}">
+        <div class="crc-match-teams">${escapeHtml(m.home_team)} vs ${escapeHtml(m.away_team)}</div>
+        <div class="crc-match-info">
+          <span>${escapeHtml(m.competition)}</span>
+          <span>·</span>
+          <span>${escapeHtml(m.market)}</span>
+          <span>·</span>
+          <span><strong>${escapeHtml(m.prediction)}</strong></span>
+          ${m.odds ? `<span>· Cote ${m.odds}</span>` : ''}
+          <span class="crc-match-result ${m.result}">${resultLabel}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function formatDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]);
+}
+
+// Onglets de période
+document.querySelectorAll('.period-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.period-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const days = parseInt(tab.dataset.days);
+    currentDays = days;
+    loadResults(days);
+  });
+});
+
+// Chargement initial
+loadResults(2);
+</script>
+</body>
+</html>
