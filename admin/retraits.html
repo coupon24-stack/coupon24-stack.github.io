@@ -9,7 +9,7 @@
   <style>
     .modal-overlay { display:none; position:fixed; inset:0; background:rgba(10,31,68,0.7); z-index:1000; align-items:center; justify-content:center; padding:20px; }
     .modal-overlay.active { display:flex; }
-    .modal { background:white; border-radius:var(--radius); padding:28px; max-width:520px; width:100%; max-height:90vh; overflow-y:auto; }
+    .modal { background:white; border-radius:var(--radius); padding:28px; max-width:560px; width:100%; max-height:90vh; overflow-y:auto; }
     .modal h2 { font-size:1.25rem; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(10,31,68,0.08); }
     .modal .form-field { margin-bottom:16px; }
     .modal .form-field label { display:block; font-size:0.82rem; font-weight:600; margin-bottom:6px; }
@@ -20,10 +20,24 @@
     .modal-info { background:var(--sky); border-left:4px solid var(--blue); border-radius:10px; padding:14px 18px; margin-bottom:16px; font-size:0.88rem; }
     .modal-info .label { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.5px; font-weight:700; opacity:0.7; margin-bottom:4px; }
     .modal-info .value { font-family:'Poppins'; font-weight:700; font-size:1.1rem; }
-    .wd-method-badge { display:inline-block; padding:4px 12px; border-radius:var(--radius-pill); font-size:0.75rem; font-weight:700; background:var(--sky); color:var(--blue); }
+    .modal-info.gold { background:#FFF4E5; border-left-color:#F5A623; }
+    .modal-info.gold .label { color:#B45309; }
+    .modal-info.gold .value { color:#B45309; }
+
+    /* Bouton "Valider" (nouvelle étape) */
+    .btn-validate { background: linear-gradient(135deg, #1E4FD8 0%, #4A8CFF 100%); color: white; }
+    .btn-validate:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(30,79,216,0.35); }
+
+    /* Bouton "Marquer payé" */
+    .btn-pay { background: linear-gradient(135deg, #27AE60 0%, #2ECC71 100%); color: white; }
+    .btn-pay:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(39,174,96,0.35); }
+
+    .user-actions { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+
     @media (max-width:640px) {
       .modal-actions { flex-direction:column-reverse; }
       .modal-actions .btn { width:100%; }
+      .user-actions { justify-content: flex-start; }
     }
   </style>
 </head>
@@ -54,7 +68,7 @@
 <main class="container">
   <div class="admin-header">
     <h1>Demandes de retrait</h1>
-    <p>Gère les demandes de retrait des parrains.</p>
+    <p>Gère les demandes : valide, puis marque comme payée après versement.</p>
   </div>
 
   <div id="page-alert" class="alert"></div>
@@ -69,7 +83,7 @@
       <select id="filter-status">
         <option value="">Tous les statuts</option>
         <option value="pending">⏳ En attente</option>
-        <option value="approved">🔄 Approuvée</option>
+        <option value="approved">🔄 En cours de versement</option>
         <option value="paid">✅ Payée</option>
         <option value="rejected">❌ Rejetée</option>
       </select>
@@ -84,7 +98,7 @@
           <th>Numéro</th>
           <th>Date</th>
           <th>Statut</th>
-          <th style="text-align:right;">Action</th>
+          <th style="text-align:right;">Actions</th>
         </tr>
       </thead>
       <tbody id="withdrawals-body">
@@ -100,31 +114,37 @@
   </div>
 </main>
 
+<!-- MODALE DE TRAITEMENT -->
 <div class="modal-overlay" id="wd-modal">
   <div class="modal">
-    <h2>Traiter la demande</h2>
+    <h2 id="modal-title">Traiter la demande</h2>
+
     <div class="modal-info">
       <div class="label">Utilisateur</div>
       <div class="value" id="wd-user">—</div>
       <div style="margin-top:8px;font-size:0.85rem;" id="wd-contact">—</div>
     </div>
-    <div class="modal-info" style="background:#FFF4E5;border-left-color:#F5A623;">
-      <div class="label" style="color:#B45309;">Montant à verser</div>
-      <div class="value" style="color:#B45309;" id="wd-amount">—</div>
+
+    <div class="modal-info gold">
+      <div class="label">Montant à verser</div>
+      <div class="value" id="wd-amount">—</div>
       <div style="margin-top:8px;font-size:0.85rem;" id="wd-method-info">—</div>
     </div>
+
     <div class="form-field">
-      <label>Nouveau statut</label>
-      <select id="wd-new-status">
-        <option value="approved">🔄 Approuvée (en cours de versement)</option>
-        <option value="paid">✅ Payée (versement effectué)</option>
-        <option value="rejected">❌ Rejetée</option>
+      <label>Action à effectuer</label>
+      <select id="wd-action">
+        <option value="approved">🔄 Valider (je vais effectuer le versement)</option>
+        <option value="paid">✅ Marquer comme payée (versement effectué)</option>
+        <option value="rejected">❌ Rejeter la demande</option>
       </select>
     </div>
+
     <div class="form-field">
-      <label>Note / référence du versement</label>
+      <label>Note / référence du versement (optionnel)</label>
       <textarea id="wd-note" placeholder="Ex: Wave - réf. WF12345 - versé le 26/10/2026"></textarea>
     </div>
+
     <div class="modal-actions">
       <button class="btn btn-outline" id="wd-cancel">Annuler</button>
       <button class="btn btn-primary" id="wd-confirm">Confirmer</button>
