@@ -1,11 +1,11 @@
 // frontend/assets/js/admin-retraits.js
-// Gestion des demandes de retrait (admin).
+// Gestion des demandes de retrait — workflow en 2 étapes (valider → payer).
 
 let allWithdrawals = [];
 let currentWd = null;
 
 const METHOD_LABELS = { wave: 'Wave', orange_money: 'Orange Money', mtn_momo: 'MTN MoMo', moov_money: 'Moov Money' };
-const STATUS_LABELS = { pending: '⏳ En attente', approved: '🔄 Approuvée', paid: '✅ Payée', rejected: '❌ Rejetée' };
+const STATUS_LABELS = { pending: '⏳ En attente', approved: '🔄 En cours', paid: '✅ Payée', rejected: '❌ Rejetée' };
 const STATUS_BADGES = { pending: 'badge-en_cours', approved: 'badge-en_cours', paid: 'badge-active', rejected: 'badge-none' };
 
 async function loadWithdrawals() {
@@ -64,27 +64,46 @@ function renderWithdrawals() {
   }
   if (empty) empty.style.display = 'none';
 
-  tbody.innerHTML = filtered.map(w => `
-    <tr>
-      <td data-label="Utilisateur">
-        <strong>${escapeHtml(w.user_name) || '—'}</strong>
-        <div style="font-size:0.78rem;color:var(--gray-text);">${escapeHtml(w.user_email)}</div>
-      </td>
-      <td data-label="Montant"><strong style="color:var(--green);font-family:Poppins;">${formatFCFA(w.amount)}</strong></td>
-      <td data-label="Moyen"><span class="wd-method-badge">${METHOD_LABELS[w.payment_method] || w.payment_method}</span></td>
-      <td data-label="Numéro">${escapeHtml(w.payment_phone)}</td>
-      <td data-label="Date">${formatDateFR(w.requested_at)}</td>
-      <td data-label="Statut"><span class="badge ${STATUS_BADGES[w.status]}">${STATUS_LABELS[w.status]}</span></td>
-      <td data-label="Action" style="text-align:right;">
-        ${w.status === 'pending' || w.status === 'approved'
-          ? `<button class="btn btn-primary btn-sm" data-process="${w.id}">Traiter</button>`
-          : '<span style="color:var(--gray-text);font-size:0.85rem;">—</span>'}
-      </td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = filtered.map(w => {
+    // Boutons selon le statut
+    let actions = '';
+    if (w.status === 'pending') {
+      actions = `
+        <button class="btn btn-primary btn-sm btn-validate" data-process="${w.id}">✅ Valider</button>
+        <button class="btn btn-danger btn-sm" data-reject="${w.id}">❌ Rejeter</button>
+      `;
+    } else if (w.status === 'approved') {
+      actions = `
+        <button class="btn btn-pay btn-sm" data-process="${w.id}">💰 Marquer payé</button>
+      `;
+    } else {
+      actions = '<span style="color:var(--gray-text);font-size:0.85rem;">—</span>';
+    }
 
+    return `
+      <tr>
+        <td data-label="Utilisateur">
+          <strong>${escapeHtml(w.user_name) || '—'}</strong>
+          <div style="font-size:0.78rem;color:var(--gray-text);">${escapeHtml(w.user_email)}</div>
+        </td>
+        <td data-label="Montant"><strong style="color:var(--green);font-family:Poppins;">${formatFCFA(w.amount)}</strong></td>
+        <td data-label="Moyen"><span class="badge badge-none">${METHOD_LABELS[w.payment_method] || w.payment_method}</span></td>
+        <td data-label="Numéro">${escapeHtml(w.payment_phone)}</td>
+        <td data-label="Date">${formatDateFR(w.requested_at)}</td>
+        <td data-label="Statut"><span class="badge ${STATUS_BADGES[w.status]}">${STATUS_LABELS[w.status]}</span></td>
+        <td data-label="Action" style="text-align:right;">
+          <div class="user-actions">${actions}</div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  // Listeners
   tbody.querySelectorAll('button[data-process]').forEach(btn => {
     btn.addEventListener('click', () => openProcessModal(btn.dataset.process));
+  });
+  tbody.querySelectorAll('button[data-reject]').forEach(btn => {
+    btn.addEventListener('click', () => quickReject(btn.dataset.reject));
   });
 }
 
@@ -92,12 +111,33 @@ function openProcessModal(id) {
   const w = allWithdrawals.find(x => x.id === id);
   if (!w) return;
   currentWd = w;
+
+  // Adapter le titre et l'action selon le statut actuel
+  const modalTitle = document.getElementById('modal-title');
+  const actionSelect = document.getElementById('wd-action');
+
+  if (w.status === 'pending') {
+    modalTitle.textContent = '✅ Valider la demande';
+    actionSelect.value = 'approved';
+    // Cacher l'option "approved" (déjà sélectionnée) et "rejected" (utiliser le bouton rejeter)
+    actionSelect.innerHTML = `
+      <option value="approved">🔄 Valider (je vais effectuer le versement)</option>
+      <option value="paid">✅ Marquer directement comme payée</option>
+    `;
+  } else if (w.status === 'approved') {
+    modalTitle.textContent = '💰 Marquer comme payée';
+    actionSelect.value = 'paid';
+    actionSelect.innerHTML = `
+      <option value="paid">✅ Payée (versement effectué)</option>
+    `;
+  }
+
   document.getElementById('wd-user').textContent = w.user_name || 'Utilisateur';
   document.getElementById('wd-contact').innerHTML = `${escapeHtml(w.user_email)}<br />${escapeHtml(w.user_phone || '—')}`;
   document.getElementById('wd-amount').textContent = formatFCFA(w.amount);
   document.getElementById('wd-method-info').innerHTML = `Vers <strong>${METHOD_LABELS[w.payment_method]}</strong> au <strong>${escapeHtml(w.payment_phone)}</strong>`;
-  document.getElementById('wd-new-status').value = 'paid';
   document.getElementById('wd-note').value = '';
+
   document.getElementById('wd-modal').classList.add('active');
 }
 
@@ -108,13 +148,17 @@ function closeProcessModal() {
 
 async function confirmProcess() {
   if (!currentWd) return;
-  const newStatus = document.getElementById('wd-new-status').value;
+  const action = document.getElementById('wd-action').value;
   const note = document.getElementById('wd-note').value.trim();
 
-  if (newStatus === 'paid') {
-    const ok = confirm(`Confirmer que tu as effectivement versé ${formatFCFA(currentWd.amount)} à ${currentWd.user_name} ?\n\n⚠️ Assure-toi d'avoir fait le versement sur ${METHOD_LABELS[currentWd.payment_method]} AVANT de confirmer.`);
-    if (!ok) return;
+  let confirmMsg = '';
+  if (action === 'approved') {
+    confirmMsg = `Valider la demande de ${formatFCFA(currentWd.amount)} à ${currentWd.user_name} ?\n\nL'utilisateur verra "En cours de versement". Tu pourras ensuite marquer comme payée après avoir fait le versement.`;
+  } else if (action === 'paid') {
+    confirmMsg = `Confirmer que tu as effectivement versé ${formatFCFA(currentWd.amount)} à ${currentWd.user_name} via ${METHOD_LABELS[currentWd.payment_method]} ?\n\n⚠️ Les commissions associées seront automatiquement marquées comme payées.`;
   }
+
+  if (confirmMsg && !confirm(confirmMsg)) return;
 
   const btn = document.getElementById('wd-confirm');
   btn.disabled = true;
@@ -123,11 +167,17 @@ async function confirmProcess() {
   try {
     const { error } = await supabaseClient.rpc('admin_process_withdrawal', {
       p_withdrawal_id: currentWd.id,
-      p_new_status: newStatus,
+      p_new_status: action,
       p_note: note || null
     });
     if (error) throw error;
-    showToast('✅ Demande traitée', 'success', 4000);
+
+    let successMsg = '';
+    if (action === 'approved') successMsg = '✅ Demande validée. Effectue le versement puis marque comme payée.';
+    else if (action === 'paid') successMsg = '💰 Versement enregistré. Commissions soldées.';
+    else successMsg = '❌ Demande rejetée.';
+
+    showToast(successMsg, 'success', 5000);
     closeProcessModal();
     loadWithdrawals();
   } catch (err) {
@@ -136,6 +186,35 @@ async function confirmProcess() {
   } finally {
     btn.disabled = false;
     btn.textContent = 'Confirmer';
+  }
+}
+
+async function quickReject(id) {
+  const w = allWithdrawals.find(x => x.id === id);
+  if (!w) return;
+
+  const reason = prompt(
+    `Rejeter la demande de ${formatFCFA(w.amount)} à ${w.user_name} ?\n\nMotif du rejet (obligatoire) :`,
+    ''
+  );
+  if (reason === null) return; // Annulé
+  if (!reason.trim()) {
+    showToast('Motif obligatoire pour rejeter', 'error');
+    return;
+  }
+
+  try {
+    const { error } = await supabaseClient.rpc('admin_process_withdrawal', {
+      p_withdrawal_id: id,
+      p_new_status: 'rejected',
+      p_note: reason.trim()
+    });
+    if (error) throw error;
+    showToast('❌ Demande rejetée', 'success');
+    loadWithdrawals();
+  } catch (err) {
+    console.error('[reject]', err);
+    showToast('Erreur : ' + (err.message || 'inconnue'), 'error');
   }
 }
 
