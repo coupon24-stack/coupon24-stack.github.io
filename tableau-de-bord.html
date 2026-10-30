@@ -48,8 +48,6 @@
     .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
     .btn-primary { background: var(--blue-gradient); color: white; box-shadow: 0 4px 12px rgba(30,79,216,0.25); }
     .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(30,79,216,0.35); }
-    .btn-ghost { background: transparent; color: var(--gray-text); padding: 8px 10px; }
-    .btn-ghost:hover { color: var(--red); }
 
     main { padding: 24px 0 60px; }
     .page-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; font-family: 'Poppins'; color: var(--navy); }
@@ -141,7 +139,6 @@
     .toast-copy { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gray-dark); color: white; padding: 10px 20px; border-radius: var(--radius-pill); font-weight: 600; font-size: 0.85rem; box-shadow: var(--shadow-md); transition: transform 0.3s ease; z-index: 9999; }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
 
-    /* Barre de debug (visible uniquement en cas d'erreur) */
     .debug-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #991B1B; color: white; font-family: monospace; font-size: 11px; padding: 8px 12px; z-index: 99999; display: none; max-height: 120px; overflow-y: auto; }
     .debug-bar.show { display: block; }
 
@@ -171,7 +168,6 @@
     </a>
     <div class="nav-right">
       <a href="/coupons.html" class="btn btn-outline">Coupons</a>
-      <button id="logout-btn" class="btn btn-ghost">Déconnexion</button>
     </div>
   </div>
 </nav>
@@ -334,4 +330,44 @@
         <option value="orange_money">Orange Money</option>
         <option value="mtn_momo">MTN MoMo</option>
         <option value="moov_money">Moov Money</option>
- 
+      </select>
+    </div>
+    <div class="wd-field">
+      <label>Numéro de téléphone</label>
+      <input type="tel" id="wd-phone" placeholder="+2250700000000" />
+    </div>
+    <div class="wd-actions">
+      <button class="btn btn-outline" id="wd-cancel">Annuler</button>
+      <button class="btn btn-primary" id="wd-confirm">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-copy" id="toast-copy">✅ Copié !</div>
+
+<!-- Barre de diagnostic (visible uniquement en cas d'erreur JS) -->
+<div class="debug-bar" id="debug-bar"></div>
+
+<script>
+  // ============================================================
+  // DIAGNOSTIC VISIBLE — capture les erreurs JS
+  // ============================================================
+  const debugBar = document.getElementById('debug-bar');
+  function showDebug(msg) {
+    debugBar.classList.add('show');
+    debugBar.innerHTML += '<div>❌ ' + msg + '</div>';
+  }
+  window.addEventListener('error', (e) => {
+    showDebug(e.message + ' (' + (e.filename || '').split('/').pop() + ':' + e.lineno + ')');
+  });
+  window.addEventListener('unhandledrejection', (e) => {
+    showDebug('Promise: ' + (e.reason?.message || e.reason));
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/auth-guard.js"></script>
+<script src="/assets/js/dashboard.js"></script>
+</body>
+</html>
