@@ -1,20 +1,73 @@
 // frontend/assets/js/dashboard.js
-// Version compatible avec le tableau de bord "fintech pro".
+// Version avec diagnostic étape par étape.
 
 let currentWithdrawalStats = null;
 
-// ============================================================
-// AFFICHAGE DES ERREURS
-// ============================================================
-function showError(msg) {
-  const el = document.getElementById('dashboard-error');
-  if (el) {
-    el.textContent = msg;
-    el.style.display = 'block';
+// Barre de debug
+function dbg(msg) {
+  console.log('[DBG]', msg);
+  const bar = document.getElementById('debug-bar');
+  if (bar) {
+    bar.classList.add('show');
+    bar.innerHTML += '<div>→ ' + msg + '</div>';
   }
-  const loading = document.getElementById('dashboard-loading');
-  if (loading) loading.style.display = 'none';
-  console.error('[dashboard]', msg);
+}
+
+function dbgErr(msg) {
+  console.error('[ERR]', msg);
+  const bar = document.getElementById('debug-bar');
+  if (bar) {
+    bar.classList.add('show');
+    bar.innerHTML += '<div style="color:#FFD7D7;">❌ ' + msg + '</div>';
+  }
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+  else dbg('⚠️ Element #' + id + ' introuvable');
+}
+
+function getInitials(name) {
+  if (!name) return '?';
+  const parts = String(name).trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function formatFCFA(amount) {
+  const num = parseFloat(amount) || 0;
+  return num.toLocaleString('fr-FR', { maximumFractionDigits: 0 }) + ' F';
+}
+
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (e) {}
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch (e) { return false; }
+}
+
+let toastTimeout;
+function showToast(message) {
+  const toast = document.getElementById('toast-copy');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
 // ============================================================
@@ -26,22 +79,27 @@ async function loadDashboardRoutine() {
   const errorEl = document.getElementById('dashboard-error');
 
   try {
-    // 1. Vérifier que supabaseClient est chargé
-    if (typeof supabaseClient === 'undefined') {
-      throw new Error('supabaseClient non chargé. Vérifie /assets/js/supabase-client.js');
-    }
+    dbg('1. Démarrage');
 
-    // 2. Récupérer la session
+    // Vérif supabaseClient
+    if (typeof supabaseClient === 'undefined') {
+      throw new Error('supabaseClient non défini');
+    }
+    dbg('2. supabaseClient OK');
+
+    // Session
     const { data: { session }, error: sessionErr } = await supabaseClient.auth.getSession();
-    if (sessionErr) throw new Error('Session error: ' + sessionErr.message);
+    if (sessionErr) throw new Error('Session: ' + sessionErr.message);
     if (!session) {
+      dbg('3. Pas de session → redirection');
       window.location.replace('/connexion.html');
       return;
     }
+    dbg('3. Session OK: ' + session.user.email);
 
     const user = session.user;
 
-    // 3. Récupérer le profil
+    // Profil
     let profile = null;
     try {
       const { data, error } = await supabaseClient
@@ -49,23 +107,25 @@ async function loadDashboardRoutine() {
         .select('id, full_name, phone, role, created_at, referral_code')
         .eq('id', user.id)
         .maybeSingle();
-      if (!error) profile = data;
+      if (error) dbg('4. Erreur profil: ' + error.message);
+      else { profile = data; dbg('4. Profil chargé: ' + (profile ? profile.full_name : 'null')); }
     } catch (e) {
-      console.warn('[dashboard] profil:', e);
+      dbg('4. Exception profil: ' + e.message);
     }
 
-    // 4. Remplir le profil
+    // Afficher profil
     const fullName = (profile && profile.full_name) || 'Utilisateur';
     setText('user-fullname', fullName);
     setText('user-email', user.email || '—');
     setText('user-initials', getInitials(fullName));
+    dbg('5. Profil affiché');
 
     if (profile && profile.role === 'admin') {
       const adminLink = document.getElementById('admin-link');
       if (adminLink) adminLink.style.display = 'flex';
     }
 
-    // 5. Récupérer l'abonnement
+    // Abonnement
     let subStatus = 'Aucun abonnement';
     let subDetails = 'Souscris pour accéder aux coupons premium';
     let subClass = '';
@@ -76,50 +136,49 @@ async function loadDashboardRoutine() {
         .eq('user_id', user.id)
         .order('expires_at', { ascending: false })
         .limit(1);
-
       if (subs && subs.length > 0) {
         const sub = subs[0];
-        const expiresAt = new Date(sub.expires_at);
+        const exp = new Date(sub.expires_at);
         const now = new Date();
-        if (sub.status === 'active' && expiresAt > now) {
-          const daysLeft = Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24));
+        if (sub.status === 'active' && exp > now) {
+          const daysLeft = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
           subStatus = '✅ Abonnement actif';
-          subDetails = `Expire le ${expiresAt.toLocaleDateString('fr-FR')} · ${daysLeft} jour${daysLeft > 1 ? 's' : ''} restant${daysLeft > 1 ? 's' : ''}`;
+          subDetails = `Expire le ${exp.toLocaleDateString('fr-FR')} · ${daysLeft}j restant${daysLeft > 1 ? 's' : ''}`;
           subClass = 'active';
         } else {
           subStatus = '⏱️ Abonnement expiré';
-          subDetails = `Expiré le ${expiresAt.toLocaleDateString('fr-FR')}`;
+          subDetails = `Expiré le ${exp.toLocaleDateString('fr-FR')}`;
           subClass = 'expired';
         }
       }
     } catch (e) {
-      console.warn('[dashboard] subs:', e);
+      dbg('6. Exception abonnement: ' + e.message);
     }
-
-    const subStatusEl = document.getElementById('subscription-status');
-    if (subStatusEl) {
-      subStatusEl.textContent = subStatus;
-      subStatusEl.className = 'sub-status ' + subClass;
+    const subEl = document.getElementById('subscription-status');
+    if (subEl) {
+      subEl.textContent = subStatus;
+      subEl.className = 'sub-status ' + subClass;
     }
     setText('subscription-details', subDetails);
+    dbg('6. Abonnement affiché');
 
-    // 6. Code et lien de parrainage
-    const referralCode = (profile && profile.referral_code) || '';
-    if (referralCode) {
-      setText('ref-code-display', referralCode);
+    // Parrainage
+    const code = (profile && profile.referral_code) || '';
+    if (code) {
+      setText('ref-code-display', code);
       const linkInput = document.getElementById('ref-link-display');
-      if (linkInput) {
-        linkInput.value = `${window.location.origin}/inscription.html?ref=${encodeURIComponent(referralCode)}`;
-      }
+      if (linkInput) linkInput.value = `${window.location.origin}/inscription.html?ref=${encodeURIComponent(code)}`;
+      dbg('7. Code parrainage: ' + code);
     } else {
-      setText('ref-code-display', 'Non disponible');
+      setText('ref-code-display', 'Indisponible');
+      dbg('7. ⚠️ Pas de code parrainage');
     }
 
     // Boutons copier
     const copyCodeBtn = document.getElementById('copy-code-btn');
-    if (copyCodeBtn && referralCode) {
+    if (copyCodeBtn && code) {
       copyCodeBtn.addEventListener('click', async () => {
-        if (await copyText(referralCode)) showToast('✅ Code copié !');
+        if (await copyText(code)) showToast('✅ Code copié !');
       });
     }
     const copyLinkBtn = document.getElementById('copy-link-btn');
@@ -129,11 +188,13 @@ async function loadDashboardRoutine() {
         if (input && await copyText(input.value)) showToast('✅ Lien copié !');
       });
     }
+    dbg('8. Boutons copier attachés');
 
-    // 7. Stats de parrainage (avec fallback si fonction manque)
+    // Stats parrainage
     try {
       const { data: stats, error } = await supabaseClient.rpc('get_my_referral_stats');
-      if (!error && stats) {
+      if (error) dbg('9. Erreur stats: ' + error.message);
+      else if (stats) {
         setText('stat-referred-count', stats.referred_count || 0);
         setText('stat-pending', formatFCFA(stats.pending_amount));
         setText('stat-paid', formatFCFA(stats.paid_amount));
@@ -141,47 +202,57 @@ async function loadDashboardRoutine() {
         setText('stat-paid-2', formatFCFA(stats.paid_amount));
         setText('stat-pending-2', formatFCFA(stats.pending_amount));
         setText('filleuls-count', stats.referred_count || 0);
+        dbg('9. Stats OK');
       }
     } catch (e) {
-      console.warn('[dashboard] stats:', e);
+      dbg('9. Exception stats: ' + e.message);
     }
 
-    // 8. Stats de retrait (avec fallback)
+    // Stats retrait
     try {
       const { data: stats, error } = await supabaseClient.rpc('get_my_withdrawal_stats');
-      if (!error && stats) {
+      if (error) dbg('10. Erreur withdrawal stats: ' + error.message);
+      else if (stats) {
         currentWithdrawalStats = stats;
-        const available = stats.available_balance || 0;
-        const pending = stats.pending_withdrawals || 0;
-        setText('available-balance', formatFCFA(available));
-        if (pending > 0) {
+        setText('available-balance', formatFCFA(stats.available_balance || 0));
+        if ((stats.pending_withdrawals || 0) > 0) {
           const pendEl = document.getElementById('pending-withdraw-info');
           const pendText = document.getElementById('pending-withdraw-text');
           if (pendEl) pendEl.style.display = 'block';
-          if (pendText) pendText.textContent = formatFCFA(pending);
+          if (pendText) pendText.textContent = formatFCFA(stats.pending_withdrawals);
         }
+        dbg('10. Withdrawal stats OK');
       }
     } catch (e) {
-      console.warn('[dashboard] withdrawal stats:', e);
+      dbg('10. Exception withdrawal stats: ' + e.message);
     }
 
-    // 9. Pré-remplir le téléphone pour le retrait
+    // Téléphone pour retrait
     if (profile && profile.phone) {
       const wdPhone = document.getElementById('wd-phone');
       if (wdPhone) wdPhone.value = profile.phone;
     }
 
-    // 10. Afficher le contenu
+    dbg('11. Affichage final...');
+
+    // AFFICHER
     if (loadingEl) loadingEl.style.display = 'none';
     if (errorEl) errorEl.style.display = 'none';
     if (contentEl) {
-      contentEl.classList.remove('hidden');
       contentEl.style.display = 'block';
+      dbg('12. ✅ Contenu affiché !');
+    } else {
+      dbgErr('❌ #dashboard-content introuvable');
     }
 
   } catch (error) {
     console.error('[dashboard] erreur fatale:', error);
-    showError('Erreur : ' + (error.message || 'Impossible de charger le tableau de bord.'));
+    dbgErr('FATAL: ' + (error.message || error));
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (errorEl) {
+      errorEl.textContent = 'Erreur : ' + (error.message || 'inconnue');
+      errorEl.style.display = 'block';
+    }
   }
 }
 
@@ -227,12 +298,11 @@ async function confirmWithdrawal() {
       p_payment_phone: phone
     });
     if (error) throw error;
-    showToast('✅ Demande envoyée ! Versement sous 48h.');
+    showToast('✅ Demande envoyée !');
     closeWithdrawModal();
     await loadDashboardRoutine();
   } catch (err) {
-    console.error('[withdrawal]', err);
-    showToast('Erreur : ' + (err.message || 'impossible'));
+    showToast('Erreur : ' + (err.message || 'inconnue'));
   } finally {
     btn.disabled = false;
     btn.textContent = 'Confirmer';
@@ -240,59 +310,10 @@ async function confirmWithdrawal() {
 }
 
 // ============================================================
-// HELPERS
-// ============================================================
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
-
-function getInitials(name) {
-  if (!name) return '?';
-  const parts = String(name).trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-}
-
-function formatFCFA(amount) {
-  const num = parseFloat(amount) || 0;
-  return num.toLocaleString('fr-FR', { maximumFractionDigits: 0 }) + ' F';
-}
-
-async function copyText(text) {
-  try {
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(text);
-      return true;
-    }
-  } catch (e) { console.warn('[clipboard]', e); }
-  try {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    const ok = document.execCommand('copy');
-    document.body.removeChild(ta);
-    return ok;
-  } catch (e) { return false; }
-}
-
-let toastTimeout;
-function showToast(message) {
-  const toast = document.getElementById('toast-copy');
-  if (!toast) return;
-  toast.textContent = message;
-  toast.classList.add('show');
-  clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(() => toast.classList.remove('show'), 2500);
-}
-
-// ============================================================
 // INIT
 // ============================================================
 (async function init() {
+  dbg('0. Init');
   await loadDashboardRoutine();
 
   const wdReqBtn = document.getElementById('request-withdraw-btn');
