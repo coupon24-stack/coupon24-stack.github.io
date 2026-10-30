@@ -134,7 +134,9 @@
     .spinner { width: 32px; height: 32px; border: 3px solid var(--gray-light); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .alert-error { background: var(--red-bg); color: var(--red); border: 1px solid #FECACA; padding: 12px; border-radius: 8px; display: none; font-size: 0.85rem; margin-bottom: 16px; }
-    .hidden { display: none !important; }
+
+    /* CORRECTION : retiré le !important qui bloquait l'affichage */
+    .hidden { display: none; }
 
     .toast-copy { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gray-dark); color: white; padding: 10px 20px; border-radius: var(--radius-pill); font-weight: 600; font-size: 0.85rem; box-shadow: var(--shadow-md); transition: transform 0.3s ease; z-index: 9999; }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
@@ -180,7 +182,8 @@
     <div id="dashboard-loading" class="loader"><div class="spinner"></div></div>
     <div id="dashboard-error" class="alert-error"></div>
 
-    <div id="dashboard-content" class="hidden">
+    <!-- CORRECTION : style inline au lieu de la classe hidden -->
+    <div id="dashboard-content" style="display:none;">
 
       <div class="hero-solde">
         <div class="hero-label">Solde disponible</div>
@@ -334,40 +337,4 @@
     </div>
     <div class="wd-field">
       <label>Numéro de téléphone</label>
-      <input type="tel" id="wd-phone" placeholder="+2250700000000" />
-    </div>
-    <div class="wd-actions">
-      <button class="btn btn-outline" id="wd-cancel">Annuler</button>
-      <button class="btn btn-primary" id="wd-confirm">Confirmer</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast-copy" id="toast-copy">✅ Copié !</div>
-
-<!-- Barre de diagnostic (visible uniquement en cas d'erreur JS) -->
-<div class="debug-bar" id="debug-bar"></div>
-
-<script>
-  // ============================================================
-  // DIAGNOSTIC VISIBLE — capture les erreurs JS
-  // ============================================================
-  const debugBar = document.getElementById('debug-bar');
-  function showDebug(msg) {
-    debugBar.classList.add('show');
-    debugBar.innerHTML += '<div>❌ ' + msg + '</div>';
-  }
-  window.addEventListener('error', (e) => {
-    showDebug(e.message + ' (' + (e.filename || '').split('/').pop() + ':' + e.lineno + ')');
-  });
-  window.addEventListener('unhandledrejection', (e) => {
-    showDebug('Promise: ' + (e.reason?.message || e.reason));
-  });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/assets/js/supabase-client.js"></script>
-<script src="/assets/js/auth-guard.js"></script>
-<script src="/assets/js/dashboard.js"></script>
-</body>
-</html>
+      <input type="tel" id="wd-phone" pl
