@@ -1,31 +1,74 @@
 // frontend/assets/js/dashboard.js
-// Charge et affiche les données du profil + le programme de parrainage + les retraits.
+// Version compatible avec le tableau de bord "fintech pro".
 
 let currentWithdrawalStats = null;
 
+// ============================================================
+// AFFICHAGE DES ERREURS
+// ============================================================
+function showError(msg) {
+  const el = document.getElementById('dashboard-error');
+  if (el) {
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+  const loading = document.getElementById('dashboard-loading');
+  if (loading) loading.style.display = 'none';
+  console.error('[dashboard]', msg);
+}
+
+// ============================================================
+// CHARGEMENT PRINCIPAL
+// ============================================================
 async function loadDashboardRoutine() {
   const loadingEl = document.getElementById('dashboard-loading');
   const contentEl = document.getElementById('dashboard-content');
   const errorEl = document.getElementById('dashboard-error');
 
   try {
-    if (typeof supabaseClient === 'undefined') throw new Error("supabaseClient non chargé.");
+    // 1. Vérifier que supabaseClient est chargé
+    if (typeof supabaseClient === 'undefined') {
+      throw new Error('supabaseClient non chargé. Vérifie /assets/js/supabase-client.js');
+    }
 
+    // 2. Récupérer la session
     const { data: { session }, error: sessionErr } = await supabaseClient.auth.getSession();
-    if (sessionErr || !session) { window.location.replace('/connexion.html'); return; }
+    if (sessionErr) throw new Error('Session error: ' + sessionErr.message);
+    if (!session) {
+      window.location.replace('/connexion.html');
+      return;
+    }
 
     const user = session.user;
 
-    const { data: profile, error: profileError } = await supabaseClient
-      .from('profiles')
-      .select('id, full_name, phone, role, created_at, referral_code')
-      .eq('id', user.id)
-      .maybeSingle();
+    // 3. Récupérer le profil
+    let profile = null;
+    try {
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('id, full_name, phone, role, created_at, referral_code')
+        .eq('id', user.id)
+        .maybeSingle();
+      if (!error) profile = data;
+    } catch (e) {
+      console.warn('[dashboard] profil:', e);
+    }
 
-    if (profileError) console.error('[dashboard] profil:', profileError);
+    // 4. Remplir le profil
+    const fullName = (profile && profile.full_name) || 'Utilisateur';
+    setText('user-fullname', fullName);
+    setText('user-email', user.email || '—');
+    setText('user-initials', getInitials(fullName));
 
-    let subStatus = 'Aucun abonnement actif';
-    let subDetails = 'Souscris à un abonnement pour accéder aux coupons premium.';
+    if (profile && profile.role === 'admin') {
+      const adminLink = document.getElementById('admin-link');
+      if (adminLink) adminLink.style.display = 'flex';
+    }
+
+    // 5. Récupérer l'abonnement
+    let subStatus = 'Aucun abonnement';
+    let subDetails = 'Souscris pour accéder aux coupons premium';
+    let subClass = '';
     try {
       const { data: subs } = await supabaseClient
         .from('subscriptions')
@@ -33,6 +76,7 @@ async function loadDashboardRoutine() {
         .eq('user_id', user.id)
         .order('expires_at', { ascending: false })
         .limit(1);
+
       if (subs && subs.length > 0) {
         const sub = subs[0];
         const expiresAt = new Date(sub.expires_at);
@@ -41,162 +85,126 @@ async function loadDashboardRoutine() {
           const daysLeft = Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24));
           subStatus = '✅ Abonnement actif';
           subDetails = `Expire le ${expiresAt.toLocaleDateString('fr-FR')} · ${daysLeft} jour${daysLeft > 1 ? 's' : ''} restant${daysLeft > 1 ? 's' : ''}`;
+          subClass = 'active';
         } else {
           subStatus = '⏱️ Abonnement expiré';
-          subDetails = `Expiré le ${expiresAt.toLocaleDateString('fr-FR')}. Renouvelle pour retrouver l'accès.`;
+          subDetails = `Expiré le ${expiresAt.toLocaleDateString('fr-FR')}`;
+          subClass = 'expired';
         }
       }
-    } catch (e) { console.warn('[dashboard] subscriptions:', e); }
+    } catch (e) {
+      console.warn('[dashboard] subs:', e);
+    }
 
-    const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-    const fullName = (profile && profile.full_name) || 'Utilisateur';
-    setText('user-fullname', fullName);
-    setText('user-email', user.email || '—');
-    setText('user-phone', (profile && profile.phone) || 'Non renseigné');
-    setText('user-role', profile && profile.role === 'admin' ? 'Administrateur' : 'Membre');
-    setText('user-initials', getInitials(fullName));
-    setText('subscription-status', subStatus);
+    const subStatusEl = document.getElementById('subscription-status');
+    if (subStatusEl) {
+      subStatusEl.textContent = subStatus;
+      subStatusEl.className = 'sub-status ' + subClass;
+    }
     setText('subscription-details', subDetails);
 
-    if (profile && profile.role === 'admin') {
-      const adminLink = document.getElementById('admin-link');
-      if (adminLink) adminLink.style.display = 'flex';
-    }
-
-    // PARRAINAGE
+    // 6. Code et lien de parrainage
     const referralCode = (profile && profile.referral_code) || '';
-    const refDisplay = document.getElementById('ref-code-display');
-    const refLinkInput = document.getElementById('ref-link-display');
-    if (refDisplay && referralCode) refDisplay.textContent = referralCode;
-    if (refLinkInput && referralCode) {
-      refLinkInput.value = `${window.location.origin}/inscription.html?ref=${encodeURIComponent(referralCode)}`;
+    if (referralCode) {
+      setText('ref-code-display', referralCode);
+      const linkInput = document.getElementById('ref-link-display');
+      if (linkInput) {
+        linkInput.value = `${window.location.origin}/inscription.html?ref=${encodeURIComponent(referralCode)}`;
+      }
+    } else {
+      setText('ref-code-display', 'Non disponible');
     }
 
+    // Boutons copier
     const copyCodeBtn = document.getElementById('copy-code-btn');
-    if (copyCodeBtn) {
+    if (copyCodeBtn && referralCode) {
       copyCodeBtn.addEventListener('click', async () => {
-        if (!referralCode) return;
         if (await copyText(referralCode)) showToast('✅ Code copié !');
       });
     }
     const copyLinkBtn = document.getElementById('copy-link-btn');
-    if (copyLinkBtn && refLinkInput) {
+    if (copyLinkBtn) {
       copyLinkBtn.addEventListener('click', async () => {
-        if (await copyText(refLinkInput.value)) showToast('✅ Lien copié !');
+        const input = document.getElementById('ref-link-display');
+        if (input && await copyText(input.value)) showToast('✅ Lien copié !');
       });
     }
 
+    // 7. Stats de parrainage (avec fallback si fonction manque)
     try {
-      const { data: stats, error: statsErr } = await supabaseClient.rpc('get_my_referral_stats');
-      if (!statsErr && stats) {
+      const { data: stats, error } = await supabaseClient.rpc('get_my_referral_stats');
+      if (!error && stats) {
         setText('stat-referred-count', stats.referred_count || 0);
         setText('stat-pending', formatFCFA(stats.pending_amount));
         setText('stat-paid', formatFCFA(stats.paid_amount));
         setText('stat-total', formatFCFA(stats.total_amount));
+        setText('stat-paid-2', formatFCFA(stats.paid_amount));
+        setText('stat-pending-2', formatFCFA(stats.pending_amount));
+        setText('filleuls-count', stats.referred_count || 0);
       }
-    } catch (e) { console.warn('[dashboard] stats:', e); }
+    } catch (e) {
+      console.warn('[dashboard] stats:', e);
+    }
 
+    // 8. Stats de retrait (avec fallback)
     try {
-      const { data: filleuls } = await supabaseClient.rpc('get_my_referrals');
-      const container = document.getElementById('filleuls-container');
-      const countEl = document.getElementById('filleuls-count');
-      if (countEl) countEl.textContent = (filleuls || []).length;
-      if (container) {
-        if (!filleuls || filleuls.length === 0) {
-          container.innerHTML = `<div class="empty-filleuls">Tu n'as encore parrainé personne.<br />Partage ton code ou ton lien pour commencer à gagner !</div>`;
-        } else {
-          container.innerHTML = `
-            <div class="filleuls-table-wrapper">
-              <table class="filleuls-table">
-                <thead>
-                  <tr><th>Nom</th><th>Inscription</th><th>Statut</th><th style="text-align:right;">Commission</th></tr>
-                </thead>
-                <tbody>
-                  ${filleuls.map(f => `
-                    <tr>
-                      <td data-label="Nom"><strong>${escapeHtml(f.full_name)}</strong></td>
-                      <td data-label="Inscription">${formatDateFR(f.created_at)}</td>
-                      <td data-label="Statut"><span class="${f.has_active_sub ? 'badge-active' : 'badge-inactive'}">${f.has_active_sub ? 'Actif' : 'Sans abo'}</span></td>
-                      <td data-label="Commission" style="text-align:right;font-weight:700;color:var(--green);">${formatFCFA(f.total_commission)}</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>`;
+      const { data: stats, error } = await supabaseClient.rpc('get_my_withdrawal_stats');
+      if (!error && stats) {
+        currentWithdrawalStats = stats;
+        const available = stats.available_balance || 0;
+        const pending = stats.pending_withdrawals || 0;
+        setText('available-balance', formatFCFA(available));
+        if (pending > 0) {
+          const pendEl = document.getElementById('pending-withdraw-info');
+          const pendText = document.getElementById('pending-withdraw-text');
+          if (pendEl) pendEl.style.display = 'block';
+          if (pendText) pendText.textContent = formatFCFA(pending);
         }
       }
-    } catch (e) { console.warn('[dashboard] filleuls:', e); }
+    } catch (e) {
+      console.warn('[dashboard] withdrawal stats:', e);
+    }
 
-    // RETRAITS
-    await loadWithdrawalStats();
+    // 9. Pré-remplir le téléphone pour le retrait
+    if (profile && profile.phone) {
+      const wdPhone = document.getElementById('wd-phone');
+      if (wdPhone) wdPhone.value = profile.phone;
+    }
 
+    // 10. Afficher le contenu
     if (loadingEl) loadingEl.style.display = 'none';
-    if (contentEl) contentEl.style.display = 'block';
+    if (errorEl) errorEl.style.display = 'none';
+    if (contentEl) {
+      contentEl.classList.remove('hidden');
+      contentEl.style.display = 'block';
+    }
 
   } catch (error) {
     console.error('[dashboard] erreur fatale:', error);
-    if (loadingEl) loadingEl.style.display = 'none';
-    if (errorEl) {
-      errorEl.textContent = 'Erreur : ' + (error.message || 'impossible de charger.');
-      errorEl.style.display = 'block';
-    }
+    showError('Erreur : ' + (error.message || 'Impossible de charger le tableau de bord.'));
   }
 }
 
 // ============================================================
-// RETRAIT
+// MODALE RETRAIT
 // ============================================================
-async function loadWithdrawalStats() {
-  try {
-    const { data: stats, error } = await supabaseClient.rpc('get_my_withdrawal_stats');
-    if (error) throw error;
-    currentWithdrawalStats = stats;
-
-    const available = stats?.available_balance || 0;
-    const pending = stats?.pending_withdrawals || 0;
-
-    const balEl = document.getElementById('available-balance');
-    if (balEl) balEl.textContent = formatFCFA(available);
-
-    const pendEl = document.getElementById('pending-withdraw-info');
-    const pendText = document.getElementById('pending-withdraw-text');
-    if (pending > 0 && pendEl && pendText) {
-      pendEl.style.display = 'block';
-      pendText.textContent = `Retrait en attente : ${formatFCFA(pending)}`;
-    } else if (pendEl) {
-      pendEl.style.display = 'none';
-    }
-
-    // Pré-remplir téléphone
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    if (session) {
-      const { data: profile } = await supabaseClient
-        .from('profiles')
-        .select('phone')
-        .eq('id', session.user.id)
-        .maybeSingle();
-      const wdPhone = document.getElementById('wd-phone');
-      if (wdPhone && profile?.phone && !wdPhone.value) wdPhone.value = profile.phone;
-    }
-  } catch (e) { console.warn('[withdrawal stats]', e); }
-}
-
 function openWithdrawModal() {
   const modal = document.getElementById('withdraw-modal');
   if (!modal) return;
   const available = currentWithdrawalStats?.available_balance || 0;
-  const wdAvailable = document.getElementById('wd-available');
-  if (wdAvailable) wdAvailable.textContent = formatFCFA(available);
+  setText('wd-available', formatFCFA(available));
   if (available < 500) {
-    showToast('Solde insuffisant. Minimum de retrait : 500 FCFA');
+    showToast('Solde insuffisant. Minimum 500 FCFA');
     return;
   }
-  document.getElementById('wd-amount').value = '';
+  const amountInput = document.getElementById('wd-amount');
+  if (amountInput) amountInput.value = '';
   modal.classList.add('active');
 }
 
 function closeWithdrawModal() {
-  document.getElementById('withdraw-modal')?.classList.remove('active');
+  const modal = document.getElementById('withdraw-modal');
+  if (modal) modal.classList.remove('active');
 }
 
 async function confirmWithdrawal() {
@@ -204,8 +212,8 @@ async function confirmWithdrawal() {
   const method = document.getElementById('wd-method').value;
   const phone = document.getElementById('wd-phone').value.trim();
 
-  if (!amount || amount < 500) return showToast('Montant minimum : 500 FCFA');
-  if (!phone || phone.length < 8) return showToast('Numéro de téléphone invalide');
+  if (!amount || amount < 500) return showToast('Minimum 500 FCFA');
+  if (!phone || phone.length < 8) return showToast('Numéro invalide');
   if (amount > (currentWithdrawalStats?.available_balance || 0)) return showToast('Solde insuffisant');
 
   const btn = document.getElementById('wd-confirm');
@@ -221,19 +229,24 @@ async function confirmWithdrawal() {
     if (error) throw error;
     showToast('✅ Demande envoyée ! Versement sous 48h.');
     closeWithdrawModal();
-    await loadWithdrawalStats();
+    await loadDashboardRoutine();
   } catch (err) {
     console.error('[withdrawal]', err);
     showToast('Erreur : ' + (err.message || 'impossible'));
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Confirmer la demande';
+    btn.textContent = 'Confirmer';
   }
 }
 
 // ============================================================
 // HELPERS
 // ============================================================
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
 function getInitials(name) {
   if (!name) return '?';
   const parts = String(name).trim().split(/\s+/);
@@ -244,17 +257,6 @@ function getInitials(name) {
 function formatFCFA(amount) {
   const num = parseFloat(amount) || 0;
   return num.toLocaleString('fr-FR', { maximumFractionDigits: 0 }) + ' F';
-}
-
-function formatDateFR(iso) {
-  if (!iso) return '—';
-  const d = new Date(iso.length === 10 ? iso + 'T00:00:00' : iso);
-  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
-}
-
-function escapeHtml(str) {
-  if (str === null || str === undefined) return '';
-  return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]);
 }
 
 async function copyText(text) {
@@ -293,24 +295,14 @@ function showToast(message) {
 (async function init() {
   await loadDashboardRoutine();
 
-  const _wdReqBtn = document.getElementById('request-withdraw-btn');
-  if (_wdReqBtn) _wdReqBtn.addEventListener('click', openWithdrawModal);
-  const _wdCancelBtn = document.getElementById('wd-cancel');
-  if (_wdCancelBtn) _wdCancelBtn.addEventListener('click', closeWithdrawModal);
-  const _wdConfirmBtn = document.getElementById('wd-confirm');
-  if (_wdConfirmBtn) _wdConfirmBtn.addEventListener('click', confirmWithdrawal);
-  const _wdModal = document.getElementById('withdraw-modal');
-  if (_wdModal) _wdModal.addEventListener('click', (e) => {
+  const wdReqBtn = document.getElementById('request-withdraw-btn');
+  if (wdReqBtn) wdReqBtn.addEventListener('click', openWithdrawModal);
+  const wdCancelBtn = document.getElementById('wd-cancel');
+  if (wdCancelBtn) wdCancelBtn.addEventListener('click', closeWithdrawModal);
+  const wdConfirmBtn = document.getElementById('wd-confirm');
+  if (wdConfirmBtn) wdConfirmBtn.addEventListener('click', confirmWithdrawal);
+  const wdModal = document.getElementById('withdraw-modal');
+  if (wdModal) wdModal.addEventListener('click', (e) => {
     if (e.target.id === 'withdraw-modal') closeWithdrawModal();
   });
-
-  // Déconnexion
-  const logoutBtn = document.getElementById('logout-btn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      await supabaseClient.auth.signOut();
-      window.location.href = '/index.html';
-    });
-  }
 })();
