@@ -8,13 +8,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* ============================================================
-       DESIGN SYSTEM — STYLE FINTECH PRO
-       ============================================================ */
     :root {
       --navy: #0A1F44;
       --blue: #1E4FD8;
-      --blue-bright: #1E4FD8;
       --blue-gradient: linear-gradient(135deg, #1339CB 0%, #2A5FEF 100%);
       --bg: #F5F7FA;
       --white: #FFFFFF;
@@ -42,7 +38,6 @@
     a { text-decoration:none; color:inherit; }
     .container { max-width: 720px; margin: 0 auto; padding: 0 20px; width: 100%; }
 
-    /* ============ NAVBAR ============ */
     .navbar { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
     .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 12px; max-width: 900px; }
     .logo { display:flex; align-items:center; gap:8px; font-family:'Poppins'; font-weight:700; font-size:1.3rem; color: var(--navy); flex-shrink: 0; }
@@ -56,185 +51,54 @@
     .btn-ghost { background: transparent; color: var(--gray-text); padding: 8px 10px; }
     .btn-ghost:hover { color: var(--red); }
 
-    /* ============ MAIN ============ */
     main { padding: 24px 0 60px; }
     .page-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; font-family: 'Poppins'; color: var(--navy); }
     .page-subtitle { color: var(--gray-text); font-size: 0.88rem; margin-bottom: 20px; }
 
-    /* ============ HERO SOLDE ============ */
-    .hero-solde {
-      background: var(--blue-gradient);
-      border-radius: var(--radius-lg);
-      padding: 24px 28px;
-      margin-bottom: 16px;
-      color: white;
-      box-shadow: var(--shadow-blue);
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-solde::before {
-      content: '';
-      position: absolute;
-      top: -80px;
-      right: -60px;
-      width: 220px;
-      height: 220px;
-      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
-      border-radius: 50%;
-    }
+    .hero-solde { background: var(--blue-gradient); border-radius: var(--radius-lg); padding: 24px 28px; margin-bottom: 16px; color: white; box-shadow: var(--shadow-blue); position: relative; overflow: hidden; }
+    .hero-solde::before { content: ''; position: absolute; top: -80px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); border-radius: 50%; }
     .hero-label { font-size: 0.85rem; opacity: 0.85; margin-bottom: 6px; font-weight: 500; }
     .hero-value { font-family: 'Poppins'; font-size: 2.5rem; font-weight: 700; line-height: 1; margin-bottom: 16px; }
     .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
-    .hero-btn {
-      background: rgba(255,255,255,0.15);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.25);
-      padding: 8px 16px;
-      border-radius: var(--radius-pill);
-      font-size: 0.82rem;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-      transition: all 0.2s;
-      font-family: 'Inter';
-    }
+    .hero-btn { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.25); padding: 8px 16px; border-radius: var(--radius-pill); font-size: 0.82rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; backdrop-filter: blur(10px); transition: all 0.2s; font-family: 'Inter'; }
     .hero-btn:hover { background: rgba(255,255,255,0.25); }
 
-    /* ============ CARTES STATS ============ */
     .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-    .stat-card {
-      background: white;
-      border-radius: var(--radius-sm);
-      padding: 16px 12px;
-      text-align: center;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-    }
+    .stat-card { background: white; border-radius: var(--radius-sm); padding: 16px 12px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
     .stat-label { font-size: 0.7rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
     .stat-value { font-family: 'Poppins'; font-size: 1.1rem; font-weight: 700; color: var(--gray-dark); }
 
-    /* ============ ACTIONS GRID ============ */
     .actions-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-    .action-btn {
-      background: white;
-      border-radius: var(--radius-sm);
-      padding: 18px 8px 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none;
-      color: inherit;
-    }
+    .action-btn { background: white; border-radius: var(--radius-sm); padding: 18px 8px 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); cursor: pointer; transition: all 0.2s; text-decoration: none; color: inherit; }
     .action-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--blue); }
     .action-btn .icon { font-size: 1.4rem; color: var(--blue); }
     .action-btn .label { font-size: 0.85rem; font-weight: 600; color: var(--gray-dark); }
 
-    /* ============ CARTE CENTRE ============ */
-    .center-card {
-      background: var(--blue-gradient);
-      border-radius: var(--radius-md);
-      padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      color: white;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow-blue);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+    .center-card { background: var(--blue-gradient); border-radius: var(--radius-md); padding: 16px 18px; display: flex; align-items: center; gap: 14px; color: white; margin-bottom: 16px; box-shadow: var(--shadow-blue); cursor: pointer; transition: all 0.2s; }
     .center-card:hover { transform: translateY(-2px); }
-    .center-card .center-icon {
-      width: 44px;
-      height: 44px;
-      background: rgba(245, 166, 35, 0.9);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
+    .center-card .center-icon { width: 44px; height: 44px; background: rgba(245, 166, 35, 0.9); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
     .center-card .center-text { flex: 1; }
     .center-card .center-title { font-family: 'Poppins'; font-weight: 600; font-size: 1rem; margin-bottom: 2px; }
     .center-card .center-desc { font-size: 0.78rem; opacity: 0.85; }
     .center-card .center-arrow { font-size: 1.2rem; opacity: 0.7; }
 
-    /* ============ LISTE DES LIENS ============ */
     .link-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-    .link-item {
-      background: white;
-      border-radius: var(--radius-sm);
-      padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none;
-      color: inherit;
-    }
+    .link-item { background: white; border-radius: var(--radius-sm); padding: 16px 18px; display: flex; align-items: center; gap: 14px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); cursor: pointer; transition: all 0.2s; text-decoration: none; color: inherit; }
     .link-item:hover { border-color: var(--blue); transform: translateX(2px); }
     .link-item .link-icon { font-size: 1.3rem; color: var(--blue); flex-shrink: 0; }
     .link-item .link-text { flex: 1; font-size: 0.92rem; font-weight: 500; color: var(--gray-dark); }
     .link-item .link-arrow { color: var(--gray-text); font-size: 1rem; }
 
-    /* ============ SECTION PARRAINAGE (épurée) ============ */
     .section-title { font-family: 'Poppins'; font-size: 1.05rem; font-weight: 600; color: var(--navy); margin-bottom: 10px; margin-top: 24px; }
 
-    .referral-simple {
-      background: white;
-      border-radius: var(--radius-md);
-      padding: 20px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 16px;
-    }
-    .ref-code-line {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 14px;
-      background: var(--gold-bg);
-      border-radius: var(--radius-sm);
-      margin-bottom: 10px;
-    }
+    .referral-simple { background: white; border-radius: var(--radius-md); padding: 20px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 16px; }
+    .ref-code-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; background: var(--gold-bg); border-radius: var(--radius-sm); margin-bottom: 10px; }
     .ref-code-line .label { font-size: 0.72rem; color: #B45309; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
     .ref-code-line .value { font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 700; color: var(--gray-dark); letter-spacing: 2px; margin-top: 2px; }
     .ref-code-line .btn { padding: 6px 12px; font-size: 0.78rem; }
-
-    .ref-link-line {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--gray-light);
-      border-radius: 8px;
-      padding: 6px 10px;
-      margin-bottom: 12px;
-    }
-    .ref-link-line input {
-      flex: 1;
-      min-width: 0;
-      border: none;
-      background: transparent;
-      font-family: monospace;
-      font-size: 0.75rem;
-      color: var(--gray-text);
-      outline: none;
-    }
+    .ref-link-line { display: flex; align-items: center; gap: 8px; background: var(--gray-light); border-radius: 8px; padding: 6px 10px; margin-bottom: 12px; }
+    .ref-link-line input { flex: 1; min-width: 0; border: none; background: transparent; font-family: monospace; font-size: 0.75rem; color: var(--gray-text); outline: none; }
     .ref-link-line .btn { padding: 5px 10px; font-size: 0.7rem; }
-
     .ref-mini-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .ref-mini-stat { text-align: center; padding: 8px 4px; }
     .ref-mini-stat .v { font-family: 'Poppins'; font-size: 1rem; font-weight: 700; color: var(--gray-dark); line-height: 1.1; margin-bottom: 2px; }
@@ -242,41 +106,13 @@
     .ref-mini-stat.green .v { color: var(--green); }
     .ref-mini-stat.blue .v { color: var(--blue); }
 
-    /* ============ PROFIL (compact) ============ */
-    .profile-compact {
-      background: white;
-      border-radius: var(--radius-md);
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 16px;
-    }
-    .avatar-sm {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: var(--blue-gradient); color: white;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Poppins'; font-weight: 700; font-size: 1rem;
-      flex-shrink: 0;
-    }
+    .profile-compact { background: white; border-radius: var(--radius-md); padding: 16px 20px; display: flex; align-items: center; gap: 14px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 16px; }
+    .avatar-sm { width: 48px; height: 48px; border-radius: 50%; background: var(--blue-gradient); color: white; display: flex; align-items: center; justify-content: center; font-family: 'Poppins'; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
     .profile-compact .p-info { flex: 1; min-width: 0; }
     .profile-compact .p-name { font-weight: 600; font-size: 0.95rem; color: var(--gray-dark); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .profile-compact .p-email { font-size: 0.78rem; color: var(--gray-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* ============ ABONNEMENT ============ */
-    .sub-card {
-      background: white;
-      border-radius: var(--radius-md);
-      padding: 16px 20px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .sub-card { background: white; border-radius: var(--radius-md); padding: 16px 20px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 16px; display: flex; align-items: center; gap: 14px; }
     .sub-card .sub-info { flex: 1; min-width: 0; }
     .sub-card .sub-label { font-size: 0.7rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 2px; }
     .sub-card .sub-status { font-weight: 600; font-size: 0.92rem; color: var(--gray-dark); }
@@ -284,7 +120,6 @@
     .sub-card .sub-status.expired { color: var(--red); }
     .sub-card .btn { padding: 8px 14px; font-size: 0.8rem; }
 
-    /* ============ MODALE RETRAIT ============ */
     .wd-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,31,68,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
     .wd-modal-overlay.active { display: flex; }
     .wd-modal { background: white; border-radius: var(--radius-lg); padding: 24px; max-width: 440px; width: 100%; max-height: 90vh; overflow-y: auto; }
@@ -297,26 +132,19 @@
     .wd-modal .wd-actions { display: flex; gap: 8px; margin-top: 18px; }
     .wd-modal .wd-actions .btn { flex: 1; padding: 11px; }
 
-    /* ============ UTILITAIRES ============ */
     .loader { display: flex; justify-content: center; padding: 60px 0; }
     .spinner { width: 32px; height: 32px; border: 3px solid var(--gray-light); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .alert-error { background: var(--red-bg); color: var(--red); border: 1px solid #FECACA; padding: 12px; border-radius: 8px; display: none; font-size: 0.85rem; }
+    .alert-error { background: var(--red-bg); color: var(--red); border: 1px solid #FECACA; padding: 12px; border-radius: 8px; display: none; font-size: 0.85rem; margin-bottom: 16px; }
     .hidden { display: none !important; }
 
-    .toast-copy {
-      position: fixed; bottom: 24px; left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: var(--gray-dark); color: white;
-      padding: 10px 20px; border-radius: var(--radius-pill);
-      font-weight: 600; font-size: 0.85rem;
-      box-shadow: var(--shadow-md);
-      transition: transform 0.3s ease;
-      z-index: 9999;
-    }
+    .toast-copy { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gray-dark); color: white; padding: 10px 20px; border-radius: var(--radius-pill); font-weight: 600; font-size: 0.85rem; box-shadow: var(--shadow-md); transition: transform 0.3s ease; z-index: 9999; }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
 
-    /* ============ RESPONSIVE ============ */
+    /* Barre de debug (visible uniquement en cas d'erreur) */
+    .debug-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #991B1B; color: white; font-family: monospace; font-size: 11px; padding: 8px 12px; z-index: 99999; display: none; max-height: 120px; overflow-y: auto; }
+    .debug-bar.show { display: block; }
+
     @media (max-width: 480px) {
       .container { padding: 0 16px; }
       .page-title { font-size: 1.2rem; }
@@ -358,7 +186,6 @@
 
     <div id="dashboard-content" class="hidden">
 
-      <!-- HERO SOLDE -->
       <div class="hero-solde">
         <div class="hero-label">Solde disponible</div>
         <div class="hero-value" id="available-balance">0 F</div>
@@ -370,7 +197,6 @@
         </div>
       </div>
 
-      <!-- STATS ROW -->
       <div class="stats-row">
         <div class="stat-card">
           <div class="stat-label">Filleuls</div>
@@ -386,7 +212,6 @@
         </div>
       </div>
 
-      <!-- ACTIONS ROW -->
       <div class="actions-row">
         <a href="/coupons.html" class="action-btn">
           <div class="icon">⚽</div>
@@ -402,7 +227,6 @@
         </a>
       </div>
 
-      <!-- CENTRE DES MISSIONS (renommé pour parrainage) -->
       <a href="#referral-section" class="center-card">
         <div class="center-icon">🎁</div>
         <div class="center-text">
@@ -412,7 +236,6 @@
         <div class="center-arrow">›</div>
       </a>
 
-      <!-- PROFIL COMPACT -->
       <div class="profile-compact">
         <div class="avatar-sm" id="user-initials">?</div>
         <div class="p-info">
@@ -421,7 +244,6 @@
         </div>
       </div>
 
-      <!-- ABONNEMENT -->
       <div class="sub-card">
         <div class="sub-info">
           <div class="sub-label">Mon abonnement</div>
@@ -431,7 +253,6 @@
         <a href="/abonnements.html" class="btn btn-primary">Gérer</a>
       </div>
 
-      <!-- SECTION PARRAINAGE -->
       <div id="referral-section">
         <div class="section-title">🎁 Mon parrainage</div>
 
@@ -470,7 +291,6 @@
         </div>
       </div>
 
-      <!-- AUTRES LIENS -->
       <div class="link-list" style="margin-top:24px;">
         <a href="/profil.html" class="link-item">
           <div class="link-icon">👤</div>
@@ -498,7 +318,6 @@
   </div>
 </main>
 
-<!-- MODALE RETRAIT -->
 <div class="wd-modal-overlay" id="withdraw-modal">
   <div class="wd-modal">
     <h2>Demander un retrait</h2>
@@ -515,24 +334,4 @@
         <option value="orange_money">Orange Money</option>
         <option value="mtn_momo">MTN MoMo</option>
         <option value="moov_money">Moov Money</option>
-      </select>
-    </div>
-    <div class="wd-field">
-      <label>Numéro de téléphone</label>
-      <input type="tel" id="wd-phone" placeholder="+2250700000000" />
-    </div>
-    <div class="wd-actions">
-      <button class="btn btn-outline" id="wd-cancel">Annuler</button>
-      <button class="btn btn-primary" id="wd-confirm">Confirmer</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast-copy" id="toast-copy">✅ Copié !</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/assets/js/supabase-client.js"></script>
-<script src="/assets/js/auth-guard.js"></script>
-<script src="/assets/js/dashboard.js"></script>
-</body>
-</html>
+ 
