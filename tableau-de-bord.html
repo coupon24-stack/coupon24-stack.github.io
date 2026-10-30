@@ -6,371 +6,330 @@
   <title>Mon espace — COUPON24</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
   <style>
+    /* ============================================================
+       DESIGN SYSTEM — STYLE FINTECH PRO
+       ============================================================ */
     :root {
       --navy: #0A1F44;
       --blue: #1E4FD8;
-      --blue-gradient: linear-gradient(135deg, #0A1F44 0%, #1E4FD8 100%);
-      --sky: #E8F0FE;
-      --gray-text: #4A5568;
-      --gray-light: #F7F9FC;
-      --green: #27AE60;
+      --blue-bright: #1E4FD8;
+      --blue-gradient: linear-gradient(135deg, #1339CB 0%, #2A5FEF 100%);
+      --bg: #F5F7FA;
+      --white: #FFFFFF;
+      --gray-text: #64748B;
+      --gray-dark: #1E293B;
+      --gray-light: #F1F5F9;
+      --border: #E2E8F0;
+      --green: #10B981;
+      --green-bg: #ECFDF5;
       --gold: #F5A623;
-      --red: #E53E3E;
-      --radius: 16px;
+      --gold-bg: #FFF9E6;
+      --red: #EF4444;
+      --red-bg: #FEF2F2;
+      --radius-sm: 12px;
+      --radius-md: 16px;
+      --radius-lg: 20px;
       --radius-pill: 999px;
-      --shadow: 0 4px 20px rgba(10,31,68,0.06);
-      --shadow-hover: 0 8px 30px rgba(10,31,68,0.12);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-blue: 0 10px 30px rgba(30,79,216,0.25);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     html, body { max-width: 100vw; overflow-x: hidden; }
-    body { font-family:'Inter',sans-serif; background: var(--gray-light); color: var(--navy); line-height:1.6; -webkit-font-smoothing:antialiased; }
+    body { font-family:'Inter',sans-serif; background: var(--bg); color: var(--gray-dark); line-height:1.5; -webkit-font-smoothing:antialiased; }
     a { text-decoration:none; color:inherit; }
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; }
-    h1, h2, h3 { font-family:'Poppins',sans-serif; line-height:1.2; }
+    .container { max-width: 720px; margin: 0 auto; padding: 0 20px; width: 100%; }
 
-    .navbar { background: white; border-bottom: 1px solid rgba(10,31,68,0.06); position: sticky; top: 0; z-index: 100; }
-    .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 12px; }
-    .logo { display:flex; align-items:center; gap:10px; font-family:'Poppins'; font-weight:800; font-size:1.5rem; flex-shrink: 0; }
-    .logo-ball { width:32px; height:32px; background:var(--blue-gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1rem; flex-shrink: 0; }
-    .nav-right { display:flex; align-items:center; gap:12px; flex-shrink: 0; }
-    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 22px; border-radius:var(--radius-pill); font-family:'Inter'; font-size:0.9rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; white-space: nowrap; }
-    .btn-outline { background:transparent; color:var(--navy); border:1.5px solid rgba(10,31,68,0.15); }
-    .btn-outline:hover { border-color:var(--blue); color:var(--blue); }
-    .btn-primary { background:var(--blue-gradient); color:white; box-shadow:0 4px 14px rgba(30,79,216,0.35); }
-    .btn-primary:hover { transform:translateY(-2px); }
-    .btn-danger { background:#FED7D7; color:#9B2C2C; }
-    .btn-danger:hover { background:#FEB2B2; }
-    .btn-sm { padding: 8px 16px; font-size: 0.82rem; }
+    /* ============ NAVBAR ============ */
+    .navbar { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 12px; max-width: 900px; }
+    .logo { display:flex; align-items:center; gap:8px; font-family:'Poppins'; font-weight:700; font-size:1.3rem; color: var(--navy); flex-shrink: 0; }
+    .logo-ball { width:28px; height:28px; background:var(--blue-gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.85rem; flex-shrink: 0; }
+    .nav-right { display:flex; align-items:center; gap:8px; flex-shrink: 0; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:9px 18px; border-radius:var(--radius-pill); font-family:'Inter'; font-size:0.85rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; white-space: nowrap; }
+    .btn-outline { background: transparent; color: var(--gray-dark); border: 1.5px solid var(--border); }
+    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-primary { background: var(--blue-gradient); color: white; box-shadow: 0 4px 12px rgba(30,79,216,0.25); }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(30,79,216,0.35); }
+    .btn-ghost { background: transparent; color: var(--gray-text); padding: 8px 10px; }
+    .btn-ghost:hover { color: var(--red); }
 
-    main { padding: 40px 0 80px; }
-    .page-title { font-size: 1.9rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
-    .page-subtitle { color: var(--gray-text); margin-bottom: 32px; }
+    /* ============ MAIN ============ */
+    main { padding: 24px 0 60px; }
+    .page-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; font-family: 'Poppins'; color: var(--navy); }
+    .page-subtitle { color: var(--gray-text); font-size: 0.88rem; margin-bottom: 20px; }
 
-    .card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding: 28px; margin-bottom: 20px; }
-    .profile-header { display: flex; align-items: center; gap: 18px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(10,31,68,0.08); flex-wrap: wrap; }
-    .avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--blue-gradient); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Poppins'; font-weight: 800; font-size: 1.3rem; flex-shrink: 0; }
-    .profile-header h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; word-break: break-word; }
-    .role-badge { display: inline-block; padding: 3px 12px; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; background: var(--sky); color: var(--blue); }
-
-    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
-    .info-item { min-width: 0; }
-    .info-item .info-label { font-size: 0.72rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
-    .info-item .info-value { font-size: 0.95rem; font-weight: 500; color: var(--navy); word-break: break-word; overflow-wrap: break-word; }
-
-    .subscription-card { background: linear-gradient(135deg, #F7F9FC, #E8F0FE); border-left: 4px solid var(--blue); }
-    .subscription-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
-    .subscription-card p { color: var(--gray-text); font-size: 0.88rem; margin-bottom: 14px; }
-    #subscription-status { font-weight: 600; color: var(--navy); }
-
-    .referral-card {
-      background: linear-gradient(135deg, #FFF9E6, #FFF4E5);
-      border: 1px solid #FFD98A;
-      border-radius: 12px;
-      padding: 16px 18px;
+    /* ============ HERO SOLDE ============ */
+    .hero-solde {
+      background: var(--blue-gradient);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
       margin-bottom: 16px;
+      color: white;
+      box-shadow: var(--shadow-blue);
       position: relative;
       overflow: hidden;
     }
-    .referral-card::before {
-      content: '🎁';
+    .hero-solde::before {
+      content: '';
       position: absolute;
-      top: -20px;
-      right: -10px;
-      font-size: 8rem;
-      opacity: 0.06;
-      pointer-events: none;
+      top: -80px;
+      right: -60px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+      border-radius: 50%;
     }
-    .referral-card h3 {
-      font-size: 1rem;
-      color: #B45309;
-      margin-bottom: 2px;
-      display: flex;
+    .hero-label { font-size: 0.85rem; opacity: 0.85; margin-bottom: 6px; font-weight: 500; }
+    .hero-value { font-family: 'Poppins'; font-size: 2.5rem; font-weight: 700; line-height: 1; margin-bottom: 16px; }
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
+    .hero-btn {
+      background: rgba(255,255,255,0.15);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: inline-flex;
       align-items: center;
       gap: 6px;
-      flex-wrap: wrap;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s;
+      font-family: 'Inter';
     }
-    .referral-card .ref-subtitle {
-      color: #92400E;
-      font-size: 0.78rem;
-      margin-bottom: 12px;
-      line-height: 1.4;
-    }
+    .hero-btn:hover { background: rgba(255,255,255,0.25); }
 
-    .ref-code-compact {
+    /* ============ CARTES STATS ============ */
+    .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .stat-card {
       background: white;
-      border: 1px dashed #FFD98A;
-      border-radius: 8px;
-      padding: 10px 14px;
-      margin-bottom: 8px;
+      border-radius: var(--radius-sm);
+      padding: 16px 12px;
+      text-align: center;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-label { font-size: 0.7rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
+    .stat-value { font-family: 'Poppins'; font-size: 1.1rem; font-weight: 700; color: var(--gray-dark); }
+
+    /* ============ ACTIONS GRID ============ */
+    .actions-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .action-btn {
+      background: white;
+      border-radius: var(--radius-sm);
+      padding: 18px 8px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .action-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--blue); }
+    .action-btn .icon { font-size: 1.4rem; color: var(--blue); }
+    .action-btn .label { font-size: 0.85rem; font-weight: 600; color: var(--gray-dark); }
+
+    /* ============ CARTE CENTRE ============ */
+    .center-card {
+      background: var(--blue-gradient);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: white;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-blue);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .center-card:hover { transform: translateY(-2px); }
+    .center-card .center-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(245, 166, 35, 0.9);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .center-card .center-text { flex: 1; }
+    .center-card .center-title { font-family: 'Poppins'; font-weight: 600; font-size: 1rem; margin-bottom: 2px; }
+    .center-card .center-desc { font-size: 0.78rem; opacity: 0.85; }
+    .center-card .center-arrow { font-size: 1.2rem; opacity: 0.7; }
+
+    /* ============ LISTE DES LIENS ============ */
+    .link-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .link-item {
+      background: white;
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .link-item:hover { border-color: var(--blue); transform: translateX(2px); }
+    .link-item .link-icon { font-size: 1.3rem; color: var(--blue); flex-shrink: 0; }
+    .link-item .link-text { flex: 1; font-size: 0.92rem; font-weight: 500; color: var(--gray-dark); }
+    .link-item .link-arrow { color: var(--gray-text); font-size: 1rem; }
+
+    /* ============ SECTION PARRAINAGE (épurée) ============ */
+    .section-title { font-family: 'Poppins'; font-size: 1.05rem; font-weight: 600; color: var(--navy); margin-bottom: 10px; margin-top: 24px; }
+
+    .referral-simple {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 16px;
+    }
+    .ref-code-line {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      flex-wrap: wrap;
-    }
-    .ref-code-compact > div:first-child { min-width: 0; flex: 1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .ref-code-compact .ref-code-label {
-      font-size: 0.65rem;
-      color: #B45309;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      font-weight: 700;
-    }
-    .ref-code-compact .ref-code-value {
-      font-family: 'Courier New', monospace;
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: var(--navy);
-      letter-spacing: 2px;
-    }
-    .ref-code-compact .btn { flex-shrink: 0; padding: 6px 12px; font-size: 0.75rem; }
-
-    .ref-link-compact {
-      background: white;
-      border: 1px solid #E2E8F0;
-      border-radius: 6px;
-      padding: 2px 4px 2px 8px;
+      padding: 12px 14px;
+      background: var(--gold-bg);
+      border-radius: var(--radius-sm);
       margin-bottom: 10px;
+    }
+    .ref-code-line .label { font-size: 0.72rem; color: #B45309; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+    .ref-code-line .value { font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 700; color: var(--gray-dark); letter-spacing: 2px; margin-top: 2px; }
+    .ref-code-line .btn { padding: 6px 12px; font-size: 0.78rem; }
+
+    .ref-link-line {
       display: flex;
       align-items: center;
-      gap: 4px;
-      flex-wrap: nowrap;
-      height: 30px;
-      overflow: hidden;
+      gap: 8px;
+      background: var(--gray-light);
+      border-radius: 8px;
+      padding: 6px 10px;
+      margin-bottom: 12px;
     }
-    .ref-link-compact label {
-      font-size: 0.6rem;
-      color: var(--gray-text);
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-      font-weight: 700;
-      flex-shrink: 0;
-      margin: 0;
-      padding-right: 4px;
-      border-right: 1px solid #E2E8F0;
-      line-height: 1;
-    }
-    .ref-link-compact input {
-      flex: 1 1 auto;
+    .ref-link-line input {
+      flex: 1;
       min-width: 0;
-      padding: 0 6px;
       border: none;
-      border-radius: 0;
-      font-family: monospace;
-      font-size: 0.68rem;
-      line-height: 1;
-      color: var(--gray-text);
       background: transparent;
-      height: 100%;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: var(--gray-text);
       outline: none;
     }
-    .ref-link-compact input:focus {
-      background: var(--gray-light);
-      border-radius: 3px;
-    }
-    .ref-link-compact .btn {
-      flex-shrink: 0;
-      padding: 0 10px;
-      font-size: 0.68rem;
-      line-height: 1;
-      height: 24px;
-      min-height: 24px;
-      border-radius: 4px;
-      margin: 0;
-    }
+    .ref-link-line .btn { padding: 5px 10px; font-size: 0.7rem; }
 
-    .ref-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
-    .ref-stat { background: white; border-radius: 10px; padding: 12px 6px; text-align: center; box-shadow: 0 2px 8px rgba(10,31,68,0.04); min-width: 0; }
-    .ref-stat .stat-value { font-family: 'Poppins'; font-size: 1.1rem; font-weight: 800; color: #B45309; line-height: 1; margin-bottom: 3px; word-break: break-word; }
-    .ref-stat .stat-label { font-size: 0.62rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
-    .ref-stat.paid .stat-value { color: var(--green); }
-    .ref-stat.total .stat-value { color: var(--blue); }
+    .ref-mini-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .ref-mini-stat { text-align: center; padding: 8px 4px; }
+    .ref-mini-stat .v { font-family: 'Poppins'; font-size: 1rem; font-weight: 700; color: var(--gray-dark); line-height: 1.1; margin-bottom: 2px; }
+    .ref-mini-stat .l { font-size: 0.62rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.3px; }
+    .ref-mini-stat.green .v { color: var(--green); }
+    .ref-mini-stat.blue .v { color: var(--blue); }
 
-    .withdraw-box {
+    /* ============ PROFIL (compact) ============ */
+    .profile-compact {
       background: white;
-      border-radius: 10px;
-      padding: 12px 16px;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 8px rgba(10,31,68,0.04);
-    }
-    .withdraw-header {
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 6px;
+      gap: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 16px;
     }
-    .withdraw-label { font-size: 0.65rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 700; margin-bottom: 2px; }
-    .withdraw-balance { font-family: 'Poppins'; font-size: 1.3rem; font-weight: 800; color: var(--green); line-height: 1; }
-    .withdraw-note { font-size: 0.7rem; color: var(--gray-text); }
-    .withdraw-pending { margin-top: 8px; padding: 6px 10px; background: #FFF4E5; border-radius: 6px; font-size: 0.75rem; color: #B45309; font-weight: 500; }
-    .withdraw-box .btn { padding: 6px 14px; font-size: 0.78rem; }
+    .avatar-sm {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--blue-gradient); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Poppins'; font-weight: 700; font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .profile-compact .p-info { flex: 1; min-width: 0; }
+    .profile-compact .p-name { font-weight: 600; font-size: 0.95rem; color: var(--gray-dark); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .profile-compact .p-email { font-size: 0.78rem; color: var(--gray-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .ref-benefits { background: white; border-radius: 10px; padding: 12px 16px; }
-    .ref-benefits h4 { font-size: 0.8rem; color: var(--navy); margin-bottom: 8px; font-family: 'Poppins'; }
-    .ref-benefits ul { list-style: none; }
-    .ref-benefits li { padding: 3px 0; font-size: 0.78rem; color: var(--gray-text); display: flex; gap: 8px; align-items: flex-start; line-height: 1.4; }
-    .ref-benefits li strong { color: var(--navy); }
+    /* ============ ABONNEMENT ============ */
+    .sub-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .sub-card .sub-info { flex: 1; min-width: 0; }
+    .sub-card .sub-label { font-size: 0.7rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 2px; }
+    .sub-card .sub-status { font-weight: 600; font-size: 0.92rem; color: var(--gray-dark); }
+    .sub-card .sub-status.active { color: var(--green); }
+    .sub-card .sub-status.expired { color: var(--red); }
+    .sub-card .btn { padding: 8px 14px; font-size: 0.8rem; }
 
-    .ref-filleuls { margin-top: 12px; }
-    .ref-filleuls h4 { font-size: 0.85rem; color: var(--navy); margin-bottom: 8px; font-family: 'Poppins'; }
-    .filleuls-table-wrapper { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(10,31,68,0.04); }
-    .filleuls-table { width: 100%; border-collapse: collapse; }
-    .filleuls-table thead th { text-align: left; padding: 8px 10px; background: #FFF9E6; font-size: 0.65rem; text-transform: uppercase; color: #B45309; letter-spacing: 0.4px; font-weight: 700; }
-    .filleuls-table tbody td { padding: 8px 10px; border-bottom: 1px solid rgba(10,31,68,0.06); font-size: 0.78rem; }
-    .filleuls-table tbody tr:last-child td { border-bottom: none; }
-    .filleuls-table .badge-active { background: #E6F9EF; color: #1E7E45; padding: 2px 8px; border-radius: var(--radius-pill); font-size: 0.65rem; font-weight: 700; }
-    .filleuls-table .badge-inactive { background: #E2E8F0; color: #4A5568; padding: 2px 8px; border-radius: var(--radius-pill); font-size: 0.65rem; font-weight: 700; }
-    .empty-filleuls { text-align: center; padding: 16px 12px; color: var(--gray-text); font-size: 0.82rem; }
+    /* ============ MODALE RETRAIT ============ */
+    .wd-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,31,68,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+    .wd-modal-overlay.active { display: flex; }
+    .wd-modal { background: white; border-radius: var(--radius-lg); padding: 24px; max-width: 440px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    .wd-modal h2 { font-family: 'Poppins'; font-size: 1.15rem; margin-bottom: 4px; color: var(--navy); }
+    .wd-modal .wd-sub { color: var(--gray-text); font-size: 0.82rem; margin-bottom: 18px; }
+    .wd-modal .wd-field { margin-bottom: 14px; }
+    .wd-modal .wd-field label { display: block; font-size: 0.78rem; font-weight: 600; margin-bottom: 5px; color: var(--gray-dark); }
+    .wd-modal .wd-field input, .wd-modal .wd-field select { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'Inter'; font-size: 0.9rem; outline: none; }
+    .wd-modal .wd-field input:focus, .wd-modal .wd-field select:focus { border-color: var(--blue); }
+    .wd-modal .wd-actions { display: flex; gap: 8px; margin-top: 18px; }
+    .wd-modal .wd-actions .btn { flex: 1; padding: 11px; }
 
-    .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 8px; }
-    .action-card { display: flex; align-items: center; gap: 12px; padding: 16px 18px; background: white; border-radius: 12px; box-shadow: var(--shadow); transition: all 0.2s; border: 1px solid rgba(10,31,68,0.04); }
-    .action-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
-    .action-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--sky); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-    .action-card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; color: var(--navy); }
-    .action-card p { font-size: 0.78rem; color: var(--gray-text); }
-
+    /* ============ UTILITAIRES ============ */
     .loader { display: flex; justify-content: center; padding: 60px 0; }
-    .spinner { width: 40px; height: 40px; border: 3px solid var(--sky); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    .spinner { width: 32px; height: 32px; border: 3px solid var(--gray-light); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .alert-error { background: #FED7D7; color: #9B2C2C; border: 1px solid #FEB2B2; padding: 16px; border-radius: 12px; display: none; }
+    .alert-error { background: var(--red-bg); color: var(--red); border: 1px solid #FECACA; padding: 12px; border-radius: 8px; display: none; font-size: 0.85rem; }
+    .hidden { display: none !important; }
 
     .toast-copy {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
+      position: fixed; bottom: 24px; left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: var(--green);
-      color: white;
-      padding: 12px 24px;
-      border-radius: var(--radius-pill);
-      font-weight: 600;
-      font-size: 0.9rem;
-      box-shadow: 0 6px 20px rgba(39,174,96,0.4);
+      background: var(--gray-dark); color: white;
+      padding: 10px 20px; border-radius: var(--radius-pill);
+      font-weight: 600; font-size: 0.85rem;
+      box-shadow: var(--shadow-md);
       transition: transform 0.3s ease;
       z-index: 9999;
-      max-width: 90vw;
-      text-align: center;
     }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
 
-    .wd-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,31,68,0.7); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-    .wd-modal-overlay.active { display: flex; }
-    .wd-modal { background: white; border-radius: 16px; padding: 28px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; }
-    .wd-modal h2 { font-size: 1.25rem; margin-bottom: 8px; }
-    .wd-modal .wd-sub { color: var(--gray-text); font-size: 0.88rem; margin-bottom: 20px; }
-    .wd-modal .wd-field { margin-bottom: 16px; }
-    .wd-modal .wd-field label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; }
-    .wd-modal .wd-field input,
-    .wd-modal .wd-field select { width: 100%; padding: 10px 14px; border: 1.5px solid #E2E8F0; border-radius: 10px; font-family: 'Inter'; font-size: 0.92rem; }
-    .wd-modal .wd-field input:focus,
-    .wd-modal .wd-field select:focus { outline: none; border-color: var(--blue); }
-    .wd-modal .wd-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-    .wd-modal .wd-actions .btn { padding: 12px 24px; }
-
-    @media (max-width: 768px) {
-      .ref-stats-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 640px) {
-      body { overflow-x: hidden; }
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 480px) {
       .container { padding: 0 16px; }
-      main { padding: 24px 0 60px; }
-      .page-title { font-size: 1.5rem; }
-      .page-subtitle { margin-bottom: 20px; font-size: 0.9rem; }
-      .navbar .container { height: 60px; padding: 8px 16px; gap: 8px; }
-      .logo { font-size: 1.2rem; gap: 6px; }
-      .logo-ball { width: 28px; height: 28px; font-size: 0.9rem; }
-      .nav-right { gap: 6px; }
-      .nav-right .btn { padding: 8px 14px; font-size: 0.8rem; }
-      .nav-right .btn-outline { display: none; }
-      .card { padding: 18px 16px; border-radius: 12px; }
-      .referral-card { padding: 14px 14px; border-radius: 12px; }
-      .referral-card h3 { font-size: 0.95rem; }
-      .referral-card .ref-subtitle { font-size: 0.72rem; margin-bottom: 10px; }
-      .referral-card::before { display: none; }
-
-      .profile-header { flex-direction: column; text-align: center; gap: 10px; padding-bottom: 18px; margin-bottom: 18px; }
-      .profile-header h2 { font-size: 1.1rem; }
-      .avatar { width: 56px; height: 56px; font-size: 1.1rem; }
-      .info-grid { grid-template-columns: 1fr; gap: 12px; }
-
-      .ref-code-compact { padding: 8px 10px; flex-direction: column; align-items: stretch; gap: 6px; }
-      .ref-code-compact > div:first-child { justify-content: center; }
-      .ref-code-compact .ref-code-value { font-size: 0.9rem; letter-spacing: 1.5px; }
-      .ref-code-compact .btn { width: 100%; }
-
-      .ref-link-compact {
-        flex-direction: row;
-        align-items: center;
-        padding: 2px 4px 2px 8px;
-        gap: 3px;
-        height: 30px;
-      }
-      .ref-link-compact label {
-        font-size: 0.58rem;
-        padding-right: 3px;
-        border-right: 1px solid #E2E8F0;
-      }
-      .ref-link-compact input {
-        font-size: 0.62rem;
-        padding: 0 4px;
-      }
-      .ref-link-compact .btn {
-        padding: 0 8px;
-        font-size: 0.65rem;
-        height: 24px;
-        min-height: 24px;
-      }
-
-      .ref-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
-      .ref-stat { padding: 10px 6px; }
-      .ref-stat .stat-value { font-size: 0.95rem; }
-      .ref-stat .stat-label { font-size: 0.58rem; }
-
-      .withdraw-header { flex-direction: column; align-items: stretch; }
-      .withdraw-header .btn { width: 100%; }
-      .withdraw-balance { font-size: 1.15rem; }
-
-      .ref-benefits { padding: 10px 12px; }
-      .ref-benefits h4 { font-size: 0.75rem; }
-      .ref-benefits li { font-size: 0.72rem; }
-
-      .ref-filleuls h4 { font-size: 0.8rem; }
-      .filleuls-table-wrapper { background: transparent; box-shadow: none; overflow: visible; }
-      .filleuls-table { display: block; background: transparent; }
-      .filleuls-table thead { display: none; }
-      .filleuls-table tbody { display: block; }
-      .filleuls-table tbody tr { display: block; background: white; border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; box-shadow: 0 2px 8px rgba(10,31,68,0.04); }
-      .filleuls-table tbody td { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border: none; text-align: left !important; font-size: 0.75rem; }
-      .filleuls-table tbody td::before { content: attr(data-label); font-weight: 700; color: var(--gray-text); font-size: 0.6rem; text-transform: uppercase; margin-right: 12px; flex-shrink: 0; }
-
-      .actions-grid { grid-template-columns: 1fr; gap: 10px; }
-      .action-card { padding: 12px 14px; }
-
-      .toast-copy { bottom: 16px; font-size: 0.85rem; padding: 10px 20px; }
-      .wd-actions { flex-direction: column-reverse; }
-      .wd-actions .btn { width: 100%; }
-    }
-
-    @media (max-width: 360px) {
-      .container { padding: 0 12px; }
-      .logo { font-size: 1.05rem; }
-      .logo-ball { width: 24px; height: 24px; font-size: 0.8rem; }
-      .ref-code-compact .ref-code-value { font-size: 0.8rem; }
-      .ref-stat .stat-value { font-size: 0.85rem; }
-      .ref-link-compact input { font-size: 0.58rem; }
-      .ref-link-compact .btn { padding: 0 6px; font-size: 0.6rem; }
-    }
-
-    @supports (padding: max(0px)) {
-      .navbar .container {
-        padding-left: max(16px, env(safe-area-inset-left));
-        padding-right: max(16px, env(safe-area-inset-right));
-      }
+      .page-title { font-size: 1.2rem; }
+      .hero-value { font-size: 2rem; }
+      .hero-solde { padding: 20px 22px; }
+      .stats-row, .actions-row { gap: 8px; }
+      .stat-card { padding: 12px 8px; }
+      .stat-value { font-size: 0.95rem; }
+      .action-btn { padding: 14px 6px 10px; }
+      .action-btn .icon { font-size: 1.2rem; }
+      .action-btn .label { font-size: 0.75rem; }
+      .referral-simple { padding: 16px; }
+      .ref-mini-stat .v { font-size: 0.9rem; }
     }
   </style>
 </head>
@@ -380,12 +339,11 @@
   <div class="container">
     <a href="/index.html" class="logo">
       <span class="logo-ball">⚽</span>
-      <span>COUPON<span style="color:var(--blue);">24</span></span>
+      <span>COUPON24</span>
     </a>
     <div class="nav-right">
       <a href="/coupons.html" class="btn btn-outline">Coupons</a>
-      <a href="/resultats-historique.html" class="btn btn-outline">📊</a>
-      <button id="logout-btn" class="btn btn-danger">Déconnexion</button>
+      <button id="logout-btn" class="btn btn-ghost">Déconnexion</button>
     </div>
   </div>
 </nav>
@@ -398,165 +356,157 @@
     <div id="dashboard-loading" class="loader"><div class="spinner"></div></div>
     <div id="dashboard-error" class="alert-error"></div>
 
-    <div id="dashboard-content" style="display:none;">
+    <div id="dashboard-content" class="hidden">
 
-      <div class="card">
-        <div class="profile-header">
-          <div class="avatar" id="user-initials">?</div>
-          <div>
-            <h2 id="user-fullname">Chargement...</h2>
-            <span class="role-badge" id="user-role">Membre</span>
-          </div>
+      <!-- HERO SOLDE -->
+      <div class="hero-solde">
+        <div class="hero-label">Solde disponible</div>
+        <div class="hero-value" id="available-balance">0 F</div>
+        <div class="hero-actions">
+          <button class="hero-btn" id="request-withdraw-btn">↓ Demander un retrait</button>
         </div>
-        <div class="info-grid">
-          <div class="info-item">
-            <div class="info-label">Adresse e-mail</div>
-            <div class="info-value" id="user-email">—</div>
+        <div id="pending-withdraw-info" style="display:none; margin-top:12px; font-size:0.8rem; opacity:0.9;">
+          ⏳ Retrait en attente : <span id="pending-withdraw-text"></span>
+        </div>
+      </div>
+
+      <!-- STATS ROW -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Filleuls</div>
+          <div class="stat-value" id="stat-referred-count">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">À recevoir</div>
+          <div class="stat-value" id="stat-pending">0 F</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Perçu</div>
+          <div class="stat-value" id="stat-paid">0 F</div>
+        </div>
+      </div>
+
+      <!-- ACTIONS ROW -->
+      <div class="actions-row">
+        <a href="/coupons.html" class="action-btn">
+          <div class="icon">⚽</div>
+          <div class="label">Coupons</div>
+        </a>
+        <a href="/abonnements.html" class="action-btn">
+          <div class="icon">💳</div>
+          <div class="label">Abonnement</div>
+        </a>
+        <a href="/resultats-historique.html" class="action-btn">
+          <div class="icon">📊</div>
+          <div class="label">Résultats</div>
+        </a>
+      </div>
+
+      <!-- CENTRE DES MISSIONS (renommé pour parrainage) -->
+      <a href="#referral-section" class="center-card">
+        <div class="center-icon">🎁</div>
+        <div class="center-text">
+          <div class="center-title">Centre de parrainage</div>
+          <div class="center-desc">Gagne 20% de commissions</div>
+        </div>
+        <div class="center-arrow">›</div>
+      </a>
+
+      <!-- PROFIL COMPACT -->
+      <div class="profile-compact">
+        <div class="avatar-sm" id="user-initials">?</div>
+        <div class="p-info">
+          <div class="p-name" id="user-fullname">Chargement...</div>
+          <div class="p-email" id="user-email">—</div>
+        </div>
+      </div>
+
+      <!-- ABONNEMENT -->
+      <div class="sub-card">
+        <div class="sub-info">
+          <div class="sub-label">Mon abonnement</div>
+          <div class="sub-status" id="subscription-status">Chargement...</div>
+          <div style="font-size:0.72rem;color:var(--gray-text);margin-top:2px;" id="subscription-details"></div>
+        </div>
+        <a href="/abonnements.html" class="btn btn-primary">Gérer</a>
+      </div>
+
+      <!-- SECTION PARRAINAGE -->
+      <div id="referral-section">
+        <div class="section-title">🎁 Mon parrainage</div>
+
+        <div class="referral-simple">
+          <div class="ref-code-line">
+            <div>
+              <div class="label">Mon code</div>
+              <div class="value" id="ref-code-display">—</div>
+            </div>
+            <button class="btn btn-primary" id="copy-code-btn">📋 Copier</button>
           </div>
-          <div class="info-item">
-            <div class="info-label">Téléphone</div>
-            <div class="info-value" id="user-phone">—</div>
+
+          <div class="ref-link-line">
+            <input type="text" id="ref-link-display" readonly value="Chargement..." />
+            <button class="btn btn-outline" id="copy-link-btn">📋</button>
+          </div>
+
+          <div class="ref-mini-stats">
+            <div class="ref-mini-stat">
+              <div class="v" id="stat-total">0 F</div>
+              <div class="l">Total</div>
+            </div>
+            <div class="ref-mini-stat green">
+              <div class="v" id="stat-paid-2">0 F</div>
+              <div class="l">Perçu</div>
+            </div>
+            <div class="ref-mini-stat blue">
+              <div class="v" id="stat-pending-2">0 F</div>
+              <div class="l">En attente</div>
+            </div>
+            <div class="ref-mini-stat">
+              <div class="v" id="filleuls-count">0</div>
+              <div class="l">Filleuls</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="card subscription-card">
-        <h3>💳 Mon abonnement</h3>
-        <p>
-          <span id="subscription-status">Chargement...</span><br />
-          <span id="subscription-details"></span>
-        </p>
-        <a href="/abonnements.html" class="btn btn-primary">Voir les formules</a>
-      </div>
-
-      <div class="referral-card" id="referral-section">
-        <h3>🎁 Mon programme de parrainage</h3>
-        <p class="ref-subtitle">Invite tes amis, ils gagnent des jours gratuits et tu gagnes 20% de commission.</p>
-
-        <div class="ref-code-compact">
-          <div>
-            <span class="ref-code-label">Mon code</span>
-            <span class="ref-code-value" id="ref-code-display">—</span>
-          </div>
-          <button class="btn btn-primary" id="copy-code-btn">📋 Copier</button>
-        </div>
-
-        <div class="ref-link-compact">
-          <label>Lien</label>
-          <input type="text" id="ref-link-display" readonly value="Chargement..." />
-          <button class="btn btn-outline" id="copy-link-btn">📋</button>
-        </div>
-
-        <div class="ref-stats-grid">
-          <div class="ref-stat">
-            <div class="stat-value" id="stat-referred-count">0</div>
-            <div class="stat-label">Filleuls</div>
-          </div>
-          <div class="ref-stat">
-            <div class="stat-value" id="stat-pending">0</div>
-            <div class="stat-label">À recevoir</div>
-          </div>
-          <div class="ref-stat paid">
-            <div class="stat-value" id="stat-paid">0</div>
-            <div class="stat-label">Perçu</div>
-          </div>
-          <div class="ref-stat total">
-            <div class="stat-value" id="stat-total">0</div>
-            <div class="stat-label">Total</div>
-          </div>
-        </div>
-
-        <div class="withdraw-box" id="withdraw-box">
-          <div class="withdraw-header">
-            <div>
-              <div class="withdraw-label">💰 Solde disponible</div>
-              <div class="withdraw-balance" id="available-balance">0 F</div>
-            </div>
-            <button class="btn btn-primary" id="request-withdraw-btn">💸 Retrait</button>
-          </div>
-          <div class="withdraw-note">Min. 500 FCFA · Wave, Orange Money, MTN, Moov</div>
-          <div id="pending-withdraw-info" class="withdraw-pending" style="display:none;">
-            ⏳ <span id="pending-withdraw-text"></span>
-          </div>
-        </div>
-
-        <div class="ref-benefits">
-          <h4>💡 Ton filleul gagne au 1er abonnement :</h4>
-          <ul>
-            <li><strong>+3 jours</strong> avec la formule 7 jours</li>
-            <li><strong>+7 jours</strong> avec la formule 30 jours</li>
-            <li><strong>+30 jours</strong> avec la formule annuelle</li>
-          </ul>
-        </div>
-
-        <div class="ref-filleuls">
-          <h4>👥 Mes filleuls (<span id="filleuls-count">0</span>)</h4>
-          <div id="filleuls-container">
-            <div class="empty-filleuls">Chargement…</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3 style="margin-bottom: 14px;">Actions rapides</h3>
-        <div class="actions-grid">
-          <a href="/coupons.html" class="action-card">
-            <div class="action-icon">⚽</div>
-            <div>
-              <h4>Coupons du jour</h4>
-              <p>Voir les pronostics</p>
-            </div>
-          </a>
-          <a href="/resultats-historique.html" class="action-card">
-            <div class="action-icon">📊</div>
-            <div>
-              <h4>Résultats récents</h4>
-              <p>Historique des coupons</p>
-            </div>
-          </a>
-          <a href="/abonnements.html" class="action-card">
-            <div class="action-icon">💳</div>
-            <div>
-              <h4>Abonnements</h4>
-              <p>Souscrire ou renouveler</p>
-            </div>
-          </a>
-          <a href="/profil.html" class="action-card">
-            <div class="action-icon">👤</div>
-            <div>
-              <h4>Mon profil</h4>
-              <p>Modifier mes infos</p>
-            </div>
-          </a>
-          <a href="/historique-paiements.html" class="action-card">
-            <div class="action-icon">💰</div>
-            <div>
-              <h4>Mes paiements</h4>
-              <p>Historique et commissions</p>
-            </div>
-          </a>
-          <a href="/admin/dashboard.html" id="admin-link" class="action-card" style="display:none;">
-            <div class="action-icon">🛡️</div>
-            <div>
-              <h4>Administration</h4>
-              <p>Gérer la plateforme</p>
-            </div>
-          </a>
-        </div>
+      <!-- AUTRES LIENS -->
+      <div class="link-list" style="margin-top:24px;">
+        <a href="/profil.html" class="link-item">
+          <div class="link-icon">👤</div>
+          <div class="link-text">Mon profil</div>
+          <div class="link-arrow">›</div>
+        </a>
+        <a href="/historique-paiements.html" class="link-item">
+          <div class="link-icon">📄</div>
+          <div class="link-text">Historique des transactions</div>
+          <div class="link-arrow">›</div>
+        </a>
+        <a href="/legal/contact.html" class="link-item">
+          <div class="link-icon">🎧</div>
+          <div class="link-text">Service client</div>
+          <div class="link-arrow">›</div>
+        </a>
+        <a href="/admin/dashboard.html" id="admin-link" class="link-item" style="display:none;">
+          <div class="link-icon">🛡️</div>
+          <div class="link-text">Administration</div>
+          <div class="link-arrow">›</div>
+        </a>
       </div>
 
     </div>
   </div>
 </main>
 
+<!-- MODALE RETRAIT -->
 <div class="wd-modal-overlay" id="withdraw-modal">
   <div class="wd-modal">
-    <h2>💸 Demander un retrait</h2>
-    <p class="wd-sub">Remplis le formulaire, notre équipe te versera sous 48h ouvrées.</p>
+    <h2>Demander un retrait</h2>
+    <p class="wd-sub">Notre équipe te versera sous 48h ouvrées.</p>
     <div class="wd-field">
-      <label>Montant à retirer (FCFA)</label>
+      <label>Montant (FCFA)</label>
       <input type="number" id="wd-amount" min="500" step="50" placeholder="Ex: 1000" />
-      <div style="font-size:0.75rem;color:var(--gray-text);margin-top:4px;">Disponible : <strong id="wd-available">0 F</strong> · Minimum 500 FCFA</div>
+      <div style="font-size:0.72rem;color:var(--gray-text);margin-top:4px;">Disponible : <strong id="wd-available">0 F</strong> · Min. 500 FCFA</div>
     </div>
     <div class="wd-field">
       <label>Moyen de paiement</label>
@@ -568,12 +518,12 @@
       </select>
     </div>
     <div class="wd-field">
-      <label>Numéro de téléphone pour le versement</label>
-      <input type="tel" id="wd-phone" placeholder="Ex: +2250700000000" />
+      <label>Numéro de téléphone</label>
+      <input type="tel" id="wd-phone" placeholder="+2250700000000" />
     </div>
     <div class="wd-actions">
       <button class="btn btn-outline" id="wd-cancel">Annuler</button>
-      <button class="btn btn-primary" id="wd-confirm">Confirmer la demande</button>
+      <button class="btn btn-primary" id="wd-confirm">Confirmer</button>
     </div>
   </div>
 </div>
