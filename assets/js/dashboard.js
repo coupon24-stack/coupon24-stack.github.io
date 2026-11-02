@@ -1,31 +1,30 @@
 // frontend/assets/js/dashboard.js
-// Version avec diagnostic étape par étape.
+// Version robuste avec diagnostic et timeout de sécurité.
 
 let currentWithdrawalStats = null;
 
-// Barre de debug
-function dbg(msg) {
-  console.log('[DBG]', msg);
-  const bar = document.getElementById('debug-bar');
-  if (bar) {
-    bar.classList.add('show');
-    bar.innerHTML += '<div>→ ' + msg + '</div>';
+// ============================================================
+// DIAGNOSTIC
+// ============================================================
+function diag(msg, ok) {
+  const d = document.getElementById('diag');
+  if (d) {
+    const line = document.createElement('div');
+    line.textContent = (ok === true ? '✅ ' : ok === false ? '❌ ' : '→ ') + msg;
+    if (ok === false) line.style.color = '#f88';
+    if (ok === true) line.style.color = '#0f0';
+    d.appendChild(line);
   }
+  if (ok === false) console.error('[DASH]', msg);
+  else console.log('[DASH]', msg);
 }
 
-function dbgErr(msg) {
-  console.error('[ERR]', msg);
-  const bar = document.getElementById('debug-bar');
-  if (bar) {
-    bar.classList.add('show');
-    bar.innerHTML += '<div style="color:#FFD7D7;">❌ ' + msg + '</div>';
-  }
-}
-
+// ============================================================
+// HELPERS
+// ============================================================
 function setText(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
-  else dbg('⚠️ Element #' + id + ' introuvable');
 }
 
 function getInitials(name) {
@@ -78,28 +77,37 @@ async function loadDashboardRoutine() {
   const contentEl = document.getElementById('dashboard-content');
   const errorEl = document.getElementById('dashboard-error');
 
-  try {
-    dbg('1. Démarrage');
+  // ⏰ TIMEOUT DE SÉCURITÉ : retire le spinner après 8 sec max
+  const forceHide = setTimeout(() => {
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (contentEl && contentEl.style.display === 'none') {
+      contentEl.style.display = 'block';
+      diag('⚠️ Timeout atteint, affichage forcé', false);
+    }
+  }, 8000);
 
-    // Vérif supabaseClient
+  try {
+    diag('Démarrage', true);
+
+    // 1. Vérif supabaseClient
     if (typeof supabaseClient === 'undefined') {
       throw new Error('supabaseClient non défini');
     }
-    dbg('2. supabaseClient OK');
+    diag('supabaseClient OK', true);
 
-    // Session
+    // 2. Session
     const { data: { session }, error: sessionErr } = await supabaseClient.auth.getSession();
-    if (sessionErr) throw new Error('Session: ' + sessionErr.message);
+    if (sessionErr) throw new Error('Session : ' + sessionErr.message);
     if (!session) {
-      dbg('3. Pas de session → redirection');
+      diag('Pas de session → redirection', true);
       window.location.replace('/connexion.html');
       return;
     }
-    dbg('3. Session OK: ' + session.user.email);
+    diag('Session : ' + session.user.email, true);
 
     const user = session.user;
 
-    // Profil
+    // 3. Profil
     let profile = null;
     try {
       const { data, error } = await supabaseClient
@@ -107,25 +115,30 @@ async function loadDashboardRoutine() {
         .select('id, full_name, phone, role, created_at, referral_code')
         .eq('id', user.id)
         .maybeSingle();
-      if (error) dbg('4. Erreur profil: ' + error.message);
-      else { profile = data; dbg('4. Profil chargé: ' + (profile ? profile.full_name : 'null')); }
+      if (error) {
+        diag('Profil : ' + error.message, false);
+      } else if (data) {
+        profile = data;
+        diag('Profil : ' + (data.full_name || 'sans nom'), true);
+      } else {
+        diag('Profil : introuvable dans la base', false);
+      }
     } catch (e) {
-      dbg('4. Exception profil: ' + e.message);
+      diag('Profil exception : ' + e.message, false);
     }
 
-    // Afficher profil
+    // 4. Affichage profil
     const fullName = (profile && profile.full_name) || 'Utilisateur';
     setText('user-fullname', fullName);
     setText('user-email', user.email || '—');
     setText('user-initials', getInitials(fullName));
-    dbg('5. Profil affiché');
 
     if (profile && profile.role === 'admin') {
       const adminLink = document.getElementById('admin-link');
       if (adminLink) adminLink.style.display = 'flex';
     }
 
-    // Abonnement
+    // 5. Abonnement
     let subStatus = 'Aucun abonnement';
     let subDetails = 'Souscris pour accéder aux coupons premium';
     let subClass = '';
@@ -136,6 +149,7 @@ async function loadDashboardRoutine() {
         .eq('user_id', user.id)
         .order('expires_at', { ascending: false })
         .limit(1);
+
       if (subs && subs.length > 0) {
         const sub = subs[0];
         const exp = new Date(sub.expires_at);
@@ -151,30 +165,33 @@ async function loadDashboardRoutine() {
           subClass = 'expired';
         }
       }
+      diag('Abonnement chargé', true);
     } catch (e) {
-      dbg('6. Exception abonnement: ' + e.message);
+      diag('Abonnement exception : ' + e.message, false);
     }
+
     const subEl = document.getElementById('subscription-status');
     if (subEl) {
       subEl.textContent = subStatus;
       subEl.className = 'sub-status ' + subClass;
     }
     setText('subscription-details', subDetails);
-    dbg('6. Abonnement affiché');
 
-    // Parrainage
+    // 6. Code parrainage
     const code = (profile && profile.referral_code) || '';
     if (code) {
       setText('ref-code-display', code);
       const linkInput = document.getElementById('ref-link-display');
-      if (linkInput) linkInput.value = `${window.location.origin}/inscription.html?ref=${encodeURIComponent(code)}`;
-      dbg('7. Code parrainage: ' + code);
+      if (linkInput) {
+        linkInput.value = `${window.location.origin}/inscription.html?ref=${encodeURIComponent(code)}`;
+      }
+      diag('Code parrainage : ' + code, true);
     } else {
       setText('ref-code-display', 'Indisponible');
-      dbg('7. ⚠️ Pas de code parrainage');
+      diag('Code parrainage : introuvable', false);
     }
 
-    // Boutons copier
+    // 7. Boutons copier
     const copyCodeBtn = document.getElementById('copy-code-btn');
     if (copyCodeBtn && code) {
       copyCodeBtn.addEventListener('click', async () => {
@@ -188,13 +205,14 @@ async function loadDashboardRoutine() {
         if (input && await copyText(input.value)) showToast('✅ Lien copié !');
       });
     }
-    dbg('8. Boutons copier attachés');
+    diag('Boutons attachés', true);
 
-    // Stats parrainage
+    // 8. Stats parrainage
     try {
       const { data: stats, error } = await supabaseClient.rpc('get_my_referral_stats');
-      if (error) dbg('9. Erreur stats: ' + error.message);
-      else if (stats) {
+      if (error) {
+        diag('Stats parrainage : ' + error.message, false);
+      } else if (stats) {
         setText('stat-referred-count', stats.referred_count || 0);
         setText('stat-pending', formatFCFA(stats.pending_amount));
         setText('stat-paid', formatFCFA(stats.paid_amount));
@@ -202,17 +220,18 @@ async function loadDashboardRoutine() {
         setText('stat-paid-2', formatFCFA(stats.paid_amount));
         setText('stat-pending-2', formatFCFA(stats.pending_amount));
         setText('filleuls-count', stats.referred_count || 0);
-        dbg('9. Stats OK');
+        diag('Stats parrainage OK', true);
       }
     } catch (e) {
-      dbg('9. Exception stats: ' + e.message);
+      diag('Stats parrainage exception : ' + e.message, false);
     }
 
-    // Stats retrait
+    // 9. Stats retrait
     try {
       const { data: stats, error } = await supabaseClient.rpc('get_my_withdrawal_stats');
-      if (error) dbg('10. Erreur withdrawal stats: ' + error.message);
-      else if (stats) {
+      if (error) {
+        diag('Stats retrait : ' + error.message, false);
+      } else if (stats) {
         currentWithdrawalStats = stats;
         setText('available-balance', formatFCFA(stats.available_balance || 0));
         if ((stats.pending_withdrawals || 0) > 0) {
@@ -221,38 +240,47 @@ async function loadDashboardRoutine() {
           if (pendEl) pendEl.style.display = 'block';
           if (pendText) pendText.textContent = formatFCFA(stats.pending_withdrawals);
         }
-        dbg('10. Withdrawal stats OK');
+        diag('Stats retrait OK', true);
       }
     } catch (e) {
-      dbg('10. Exception withdrawal stats: ' + e.message);
+      diag('Stats retrait exception : ' + e.message, false);
     }
 
-    // Téléphone pour retrait
+    // 10. Pré-remplir téléphone
     if (profile && profile.phone) {
       const wdPhone = document.getElementById('wd-phone');
       if (wdPhone) wdPhone.value = profile.phone;
     }
 
-    dbg('11. Affichage final...');
-
-    // AFFICHER
+    // 11. AFFICHER LE CONTENU
+    diag('Affichage final...', true);
+    clearTimeout(forceHide);
     if (loadingEl) loadingEl.style.display = 'none';
     if (errorEl) errorEl.style.display = 'none';
     if (contentEl) {
       contentEl.style.display = 'block';
-      dbg('12. ✅ Contenu affiché !');
+      diag('✅ Contenu affiché !', true);
     } else {
-      dbgErr('❌ #dashboard-content introuvable');
+      diag('❌ #dashboard-content introuvable !', false);
     }
+
+    // Masquer la barre de diag après 4 sec
+    setTimeout(() => {
+      const d = document.getElementById('diag');
+      if (d) d.classList.add('hidden');
+    }, 4000);
 
   } catch (error) {
     console.error('[dashboard] erreur fatale:', error);
-    dbgErr('FATAL: ' + (error.message || error));
+    diag('FATAL : ' + (error.message || error), false);
+    clearTimeout(forceHide);
     if (loadingEl) loadingEl.style.display = 'none';
     if (errorEl) {
       errorEl.textContent = 'Erreur : ' + (error.message || 'inconnue');
       errorEl.style.display = 'block';
     }
+    // Toujours afficher le contenu (au moins vide) pour ne pas bloquer
+    if (contentEl) contentEl.style.display = 'block';
   }
 }
 
@@ -279,9 +307,13 @@ function closeWithdrawModal() {
 }
 
 async function confirmWithdrawal() {
-  const amount = parseFloat(document.getElementById('wd-amount').value);
-  const method = document.getElementById('wd-method').value;
-  const phone = document.getElementById('wd-phone').value.trim();
+  const amountEl = document.getElementById('wd-amount');
+  const methodEl = document.getElementById('wd-method');
+  const phoneEl = document.getElementById('wd-phone');
+
+  const amount = parseFloat(amountEl.value);
+  const method = methodEl.value;
+  const phone = phoneEl.value.trim();
 
   if (!amount || amount < 500) return showToast('Minimum 500 FCFA');
   if (!phone || phone.length < 8) return showToast('Numéro invalide');
@@ -298,11 +330,12 @@ async function confirmWithdrawal() {
       p_payment_phone: phone
     });
     if (error) throw error;
-    showToast('✅ Demande envoyée !');
+    showToast('✅ Demande envoyée ! Versement sous 48h.');
     closeWithdrawModal();
     await loadDashboardRoutine();
   } catch (err) {
-    showToast('Erreur : ' + (err.message || 'inconnue'));
+    console.error('[withdrawal]', err);
+    showToast('Erreur : ' + (err.message || 'impossible'));
   } finally {
     btn.disabled = false;
     btn.textContent = 'Confirmer';
@@ -313,8 +346,13 @@ async function confirmWithdrawal() {
 // INIT
 // ============================================================
 (async function init() {
-  dbg('0. Init');
-  await loadDashboardRoutine();
+  diag('Init dashboard.js', true);
+
+  try {
+    await loadDashboardRoutine();
+  } catch (e) {
+    diag('Init exception : ' + e.message, false);
+  }
 
   const wdReqBtn = document.getElementById('request-withdraw-btn');
   if (wdReqBtn) wdReqBtn.addEventListener('click', openWithdrawModal);
