@@ -1,0 +1,26 @@
+{
+  "name": "COUPON24 - Pronostics Football",
+  "short_name": "COUPON24",
+  "description": "Tes coupons de football, chaque jour ! Pronostics gratuits et premium.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A1F44",
+  "theme_color": "#0A1F44",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "/assets/images/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
