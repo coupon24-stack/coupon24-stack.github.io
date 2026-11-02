@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>COUPON24 — Tes coupons de football, chaque jour !</title>
-  <meta name="description" content="Découvre tes coupons football du jour. Pronostics gratuits et premium, analyses de matchs et abonnements adaptés." />
+  <meta name="description" content="Découvre tes coupons football du jour. Pronostics gratuits et premium." />
 
   <link rel="icon" type="image/png" href="/assets/images/logo-512.png" />
   <link rel="manifest" href="/manifest.json" />
@@ -101,21 +101,6 @@
     .advantage-icon { width:64px; height:64px; margin:0 auto 20px; border-radius:18px; background:var(--sky); display:flex; align-items:center; justify-content:center; font-size:1.7rem; }
     .advantage-card h3 { font-size:1.1rem; font-weight:700; color:var(--navy); margin-bottom:10px; }
     .advantage-card p { font-size:0.92rem; color:var(--gray-text); line-height:1.6; }
-
-    .pricing-card { background:var(--white); border-radius:var(--radius); padding:40px 32px; text-align:center; box-shadow:var(--shadow); transition:all 0.25s ease; border:1.5px solid rgba(10,31,68,0.08); display:flex; flex-direction:column; position:relative; }
-    .pricing-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-hover); }
-    .pricing-card.featured { border-color:var(--blue); background:var(--navy); color:white; }
-    .pricing-card.featured .pricing-price, .pricing-card.featured .pricing-duration, .pricing-card.featured .pricing-features li { color:white; }
-    .pricing-card.featured .pricing-features li::before { color:#8AB4FF; }
-    .popular-badge { position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:var(--gold); color:var(--navy); padding:6px 20px; border-radius:var(--radius-pill); font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; white-space:nowrap; }
-    .pricing-duration { font-size:0.95rem; font-weight:600; color:var(--gray-text); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
-    .pricing-price { font-family:'Poppins',sans-serif; font-size:2.8rem; font-weight:800; color:var(--navy); line-height:1; margin-bottom:4px; }
-    .pricing-price .currency { font-size:1.1rem; font-weight:600; vertical-align:super; margin-left:2px; }
-    .pricing-period { font-size:0.85rem; color:var(--gray-text); margin-bottom:28px; }
-    .pricing-features { text-align:left; margin-bottom:32px; flex:1; }
-    .pricing-features li { padding:8px 0; font-size:0.92rem; color:var(--gray-text); display:flex; align-items:flex-start; gap:10px; }
-    .pricing-features li::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; }
-    .pricing-card .btn { width:100%; }
 
     footer { background:var(--navy); color:rgba(255,255,255,0.8); padding:64px 0 32px; }
     .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:48px; margin-bottom:48px; }
@@ -215,13 +200,12 @@
     <h1>Découvre tes coupons<br /><span class="highlight">football du jour</span></h1>
     <p>Accède à nos sélections quotidiennes de pronostics football et retrouve tous tes coupons au même endroit.</p>
     <div class="hero-buttons">
-      <a href="#" id="btn-decouvrir" class="btn btn-primary btn-large">Découvrir les coupons</a>
+      <a href="#" id="btn-hero-coupons" class="btn btn-primary btn-large">Découvrir les coupons</a>
       <a href="/abonnements.html" class="btn btn-white btn-large">Voir les abonnements</a>
     </div>
   </div>
 </header>
 
-<!-- SECTION COUPONS DU JOUR -->
 <section id="coupons-du-jour" style="background: var(--gray-light);">
   <div class="container">
     <div class="section-header">
@@ -242,7 +226,7 @@
             <div class="coupon-stat"><div class="value">2.45</div><div class="label">Cote totale</div></div>
           </div>
           <span class="coupon-status status-disponible">● Disponible</span>
-          <a href="#" class="btn btn-primary btn-coupon">Voir le coupon</a>
+          <a href="#" class="btn btn-primary btn-card-coupon">Voir le coupon</a>
         </div>
       </article>
       <article class="coupon-card">
@@ -257,7 +241,7 @@
             <div class="coupon-stat"><div class="value">1.85</div><div class="label">Cote totale</div></div>
           </div>
           <span class="coupon-status status-disponible">● Disponible</span>
-          <a href="#" class="btn btn-primary btn-coupon">Voir le coupon</a>
+          <a href="#" class="btn btn-primary btn-card-coupon">Voir le coupon</a>
         </div>
       </article>
       <article class="coupon-card" style="opacity: 0.92;">
@@ -273,13 +257,152 @@
             <div class="coupon-stat"><div class="value">🔒</div><div class="label">Cote totale</div></div>
           </div>
           <span class="coupon-status status-bientot">🔒 Réservé aux abonnés</span>
-          <a href="#" class="btn btn-primary btn-coupon">S'abonner pour voir</a>
+          <a href="#" class="btn btn-primary btn-card-coupon">S'abonner pour voir</a>
         </div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- SECTION AVANTAGES -->
 <section id="avantages">
-  <
+  <div class="container">
+    <div class="section-header">
+      <h2>Pourquoi COUPON24 ?</h2>
+      <p>Une plateforme pensée pour les amateurs de football et de pronostics.</p>
+      <div class="underline"></div>
+    </div>
+    <div class="grid-4">
+      <div class="advantage-card"><div class="advantage-icon">📅</div><h3>Coupons quotidiens</h3><p>Des sélections de pronostics publiées chaque jour par notre équipe.</p></div>
+      <div class="advantage-card"><div class="advantage-icon">⚡</div><h3>Simple et rapide</h3><p>Interface intuitive, chargement rapide, accès immédiat à tes coupons.</p></div>
+      <div class="advantage-card"><div class="advantage-icon">🔓</div><h3>Premium par abonnement</h3><p>Accède aux coupons premium via un abonnement adapté à ton budget.</p></div>
+      <div class="advantage-card"><div class="advantage-icon">👤</div><h3>Espace personnel</h3><p>Retrouve tous tes accès, ton abonnement et ton historique au même endroit.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="comment-ca-marche" style="background: var(--gray-light);">
+  <div class="container">
+    <div class="section-header">
+      <h2>Comment ça marche ?</h2>
+      <p>Trois étapes simples pour accéder à tes coupons.</p>
+      <div class="underline"></div>
+    </div>
+    <div class="grid-3">
+      <div class="advantage-card"><div class="advantage-icon" style="background: var(--navy); color: white; font-family: 'Poppins'; font-weight: 800;">1</div><h3>Crée ton compte</h3><p>Inscris-toi gratuitement en quelques secondes avec ton email et ton numéro de téléphone.</p></div>
+      <div class="advantage-card"><div class="advantage-icon" style="background: var(--navy); color: white; font-family: 'Poppins'; font-weight: 800;">2</div><h3>Choisis ton abonnement</h3><p>Sélectionne la formule qui te convient et paie en toute sécurité via mobile money.</p></div>
+            <div class="advantage-card"><div class="advantage-icon" style="background: var(--navy); color: white; font-family: 'Poppins'; font-weight: 800;">3</div><h3>Accède aux coupons</h3><p>Consulte les coupons gratuits et premium directement depuis ton espace personnel.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-warning">
+      <span style="font-size: 1.3rem;">⚠️</span>
+      <p><strong>Avertissement :</strong> Les paris sportifs comportent des risques de perte financière. Les coupons publiés sur COUPON24 sont des pronostics et ne garantissent aucun gain.</p>
+    </div>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/index.html" class="logo">
+          <img src="/assets/images/logo-512.png" alt="COUPON24" />
+          <span style="color: white;">COUPON<span style="color: #4A8CFF;">24</span></span>
+        </a>
+        <p>COUPON24 est une plateforme de publication de pronostics football. Découvre des coupons gratuits et premium, chaque jour.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul><li><a href="/index.html">Accueil</a></li><li><a href="/coupons.html">Coupons du jour</a></li><li><a href="/abonnements.html">Abonnements</a></li><li><a href="#comment-ca-marche">Comment ça marche ?</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Légal</h4>
+        <ul><li><a href="/legal/cgu.html">Conditions générales</a></li><li><a href="/legal/confidentialite.html">Politique de confidentialité</a></li><li><a href="/legal/remboursement.html">Politique de remboursement</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul><li><a href="/legal/contact.html">Contact et assistance</a></li><li><a href="/legal/contact.html">Signaler un problème</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 COUPON24. Tous droits réservés.</span>
+      <span>Fait pour la Côte d'Ivoire et l'Afrique 🌍</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    // ============================================================
+    // 1. GESTION DE L'AUTHENTIFICATION (Navbar + Redirections)
+    // ============================================================
+    const guestNav = document.getElementById('nav-guest');
+    const authNav = document.getElementById('nav-auth');
+    const mobileGuest = document.getElementById('mobile-guest');
+    const mobileAuth = document.getElementById('mobile-auth');
+    const heroBtn = document.getElementById('btn-hero-coupons');
+    const cardBtns = document.querySelectorAll('.btn-card-coupon');
+    
+    let isAuthenticated = false;
+    
+    try {
+      if (typeof supabaseClient !== 'undefined') {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        isAuthenticated = !!session;
+        
+        // Affichage Navbar
+        if (isAuthenticated) {
+          if (guestNav) guestNav.style.display = 'none';
+          if (authNav) authNav.style.display = 'flex';
+          if (mobileGuest) mobileGuest.style.display = 'none';
+          if (mobileAuth) mobileAuth.style.display = 'block';
+        } else {
+          if (guestNav) guestNav.style.display = 'flex';
+          if (authNav) authNav.style.display = 'none';
+          if (mobileGuest) mobileGuest.style.display = 'block';
+          if (mobileAuth) mobileAuth.style.display = 'none';
+        }
+        
+        // Redirection des boutons "Coupons"
+        const targetUrl = isAuthenticated ? '/coupons.html' : '/inscription.html';
+        
+        if (heroBtn) heroBtn.href = targetUrl;
+        cardBtns.forEach(btn => btn.href = targetUrl);
+      }
+    } catch (e) { console.warn(e); }
+
+    // ============================================================
+    // 2. MENU HAMBURGER
+    // ============================================================
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (hamburger && mobileMenu) {
+      hamburger.addEventListener('click', () => {
+        const isOpen = mobileMenu.classList.contains('open');
+        mobileMenu.classList.toggle('open', !isOpen);
+        hamburger.classList.toggle('active', !isOpen);
+        hamburger.setAttribute('aria-expanded', String(!isOpen));
+      });
+
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.remove('open');
+          hamburger.classList.remove('active');
+          hamburger.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+  });
+
+  // ============================================================
+  // 3. SERVICE WORKER (PWA)
+  // ============================================================
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>
