@@ -115,7 +115,8 @@
     .toast-copy { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gray-dark); color: white; padding: 10px 20px; border-radius: var(--radius-pill); font-weight: 600; font-size: 0.85rem; box-shadow: var(--shadow-md); transition: transform 0.3s ease; z-index: 9999; }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
 
-    #diag { position: fixed; bottom: 0; left: 0; right: 0; background: #0A1F44; color: #0f0; font-family: monospace; font-size: 11px; padding: 8px 12px; z-index: 99999; max-height: 30vh; overflow-y: auto; line-height: 1.5; }
+    /* Barre de diagnostic — masquée en production */
+    #diag { display: none; }
 
     @media (max-width: 480px) {
       .container { padding: 0 16px; }
@@ -149,8 +150,6 @@
     <h1 class="page-title">Mon espace</h1>
     <p class="page-subtitle">Bienvenue sur ton tableau de bord COUPON24.</p>
 
-    <!-- PAS DE WRAPPER CACHÉ — tout est visible par défaut -->
-    
     <div class="hero-solde">
       <div class="hero-label">Solde disponible</div>
       <div class="hero-value" id="available-balance">0 F</div>
@@ -310,11 +309,12 @@
 
 <div class="toast-copy" id="toast-copy">✅ Copié !</div>
 
-<div id="diag"></div>
+<!-- Barre de diagnostic masquée (garde les logs console) -->
+<div id="diag" style="display:none;"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/assets/js/supabase-client.js"></script>
 <script src="/assets/js/auth-guard.js"></script>
 <script src="/assets/js/dashboard.js"></script>
 </body>
-            </html>
+          </html>
