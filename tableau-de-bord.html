@@ -35,7 +35,6 @@
     .btn-outline { background: transparent; color: var(--gray-dark); border: 1.5px solid var(--border); }
     .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
     .btn-primary { background: var(--blue-gradient); color: white; box-shadow: 0 4px 12px rgba(30,79,216,0.25); }
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(30,79,216,0.35); }
 
     main { padding: 24px 0 60px; }
     .page-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; font-family: 'Poppins'; color: var(--navy); }
@@ -47,7 +46,6 @@
     .hero-value { font-family: 'Poppins'; font-size: 2.5rem; font-weight: 700; line-height: 1; margin-bottom: 16px; }
     .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
     .hero-btn { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.25); padding: 8px 16px; border-radius: var(--radius-pill); font-size: 0.82rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; backdrop-filter: blur(10px); transition: all 0.2s; font-family: 'Inter'; }
-    .hero-btn:hover { background: rgba(255,255,255,0.25); }
 
     .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
     .stat-card { background: white; border-radius: var(--radius-sm); padding: 16px 12px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
@@ -56,12 +54,10 @@
 
     .actions-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
     .action-btn { background: white; border-radius: var(--radius-sm); padding: 18px 8px 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); cursor: pointer; transition: all 0.2s; text-decoration: none; color: inherit; }
-    .action-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--blue); }
     .action-btn .icon { font-size: 1.4rem; color: var(--blue); }
     .action-btn .label { font-size: 0.85rem; font-weight: 600; color: var(--gray-dark); }
 
-    .center-card { background: var(--blue-gradient); border-radius: var(--radius-md); padding: 16px 18px; display: flex; align-items: center; gap: 14px; color: white; margin-bottom: 16px; box-shadow: var(--shadow-blue); cursor: pointer; transition: all 0.2s; }
-    .center-card:hover { transform: translateY(-2px); }
+    .center-card { background: var(--blue-gradient); border-radius: var(--radius-md); padding: 16px 18px; display: flex; align-items: center; gap: 14px; color: white; margin-bottom: 16px; box-shadow: var(--shadow-blue); cursor: pointer; text-decoration: none; }
     .center-card .center-icon { width: 44px; height: 44px; background: rgba(245, 166, 35, 0.9); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
     .center-card .center-text { flex: 1; }
     .center-card .center-title { font-family: 'Poppins'; font-weight: 600; font-size: 1rem; margin-bottom: 2px; }
@@ -69,8 +65,7 @@
     .center-card .center-arrow { font-size: 1.2rem; opacity: 0.7; }
 
     .link-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-    .link-item { background: white; border-radius: var(--radius-sm); padding: 16px 18px; display: flex; align-items: center; gap: 14px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); cursor: pointer; transition: all 0.2s; text-decoration: none; color: inherit; }
-    .link-item:hover { border-color: var(--blue); transform: translateX(2px); }
+    .link-item { background: white; border-radius: var(--radius-sm); padding: 16px 18px; display: flex; align-items: center; gap: 14px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); cursor: pointer; text-decoration: none; color: inherit; }
     .link-item .link-icon { font-size: 1.3rem; color: var(--blue); flex-shrink: 0; }
     .link-item .link-text { flex: 1; font-size: 0.92rem; font-weight: 500; color: var(--gray-dark); }
     .link-item .link-arrow { color: var(--gray-text); font-size: 1rem; }
@@ -106,7 +101,7 @@
     .sub-card .sub-status.expired { color: var(--red); }
     .sub-card .btn { padding: 8px 14px; font-size: 0.8rem; }
 
-    .wd-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,31,68,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+    .wd-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,31,68,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
     .wd-modal-overlay.active { display: flex; }
     .wd-modal { background: white; border-radius: var(--radius-lg); padding: 24px; max-width: 440px; width: 100%; max-height: 90vh; overflow-y: auto; }
     .wd-modal h2 { font-family: 'Poppins'; font-size: 1.15rem; margin-bottom: 4px; color: var(--navy); }
@@ -114,42 +109,28 @@
     .wd-modal .wd-field { margin-bottom: 14px; }
     .wd-modal .wd-field label { display: block; font-size: 0.78rem; font-weight: 600; margin-bottom: 5px; color: var(--gray-dark); }
     .wd-modal .wd-field input, .wd-modal .wd-field select { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'Inter'; font-size: 0.9rem; outline: none; }
-    .wd-modal .wd-field input:focus, .wd-modal .wd-field select:focus { border-color: var(--blue); }
     .wd-modal .wd-actions { display: flex; gap: 8px; margin-top: 18px; }
     .wd-modal .wd-actions .btn { flex: 1; padding: 11px; }
-
-    .loader { display: flex; justify-content: center; padding: 60px 0; }
-    .spinner { width: 32px; height: 32px; border: 3px solid var(--gray-light); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .alert-error { background: var(--red-bg); color: var(--red); border: 1px solid #FECACA; padding: 12px; border-radius: 8px; display: none; font-size: 0.85rem; margin-bottom: 16px; }
 
     .toast-copy { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gray-dark); color: white; padding: 10px 20px; border-radius: var(--radius-pill); font-weight: 600; font-size: 0.85rem; box-shadow: var(--shadow-md); transition: transform 0.3s ease; z-index: 9999; }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
 
-    /* Barre de diagnostic */
-    #diag { position: fixed; bottom: 0; left: 0; right: 0; background: #0A1F44; color: #0f0; font-family: monospace; font-size: 11px; padding: 8px 12px; z-index: 99999; max-height: 40vh; overflow-y: auto; line-height: 1.5; }
-    #diag.hidden { display: none; }
+    #diag { position: fixed; bottom: 0; left: 0; right: 0; background: #0A1F44; color: #0f0; font-family: monospace; font-size: 11px; padding: 8px 12px; z-index: 99999; max-height: 30vh; overflow-y: auto; line-height: 1.5; }
 
     @media (max-width: 480px) {
       .container { padding: 0 16px; }
       .page-title { font-size: 1.2rem; }
       .hero-value { font-size: 2rem; }
-      .hero-solde { padding: 20px 22px; }
       .stats-row, .actions-row { gap: 8px; }
       .stat-card { padding: 12px 8px; }
       .stat-value { font-size: 0.95rem; }
       .action-btn { padding: 14px 6px 10px; }
       .action-btn .icon { font-size: 1.2rem; }
       .action-btn .label { font-size: 0.75rem; }
-      .referral-simple { padding: 16px; }
-      .ref-mini-stat .v { font-size: 0.9rem; }
     }
   </style>
 </head>
 <body>
-
-<!-- Barre de diagnostic EN PREMIER pour être sûre de la voir -->
-<div id="diag"><div>⏳ Chargement...</div></div>
 
 <nav class="navbar">
   <div class="container">
@@ -168,140 +149,133 @@
     <h1 class="page-title">Mon espace</h1>
     <p class="page-subtitle">Bienvenue sur ton tableau de bord COUPON24.</p>
 
-    <div id="dashboard-loading" class="loader"><div class="spinner"></div></div>
-    <div id="dashboard-error" class="alert-error"></div>
-
-    <div id="dashboard-content" style="display:none;">
-
-      <div class="hero-solde">
-        <div class="hero-label">Solde disponible</div>
-        <div class="hero-value" id="available-balance">0 F</div>
-        <div class="hero-actions">
-          <button class="hero-btn" id="request-withdraw-btn">↓ Demander un retrait</button>
-        </div>
-        <div id="pending-withdraw-info" style="display:none; margin-top:12px; font-size:0.8rem; opacity:0.9;">
-          ⏳ Retrait en attente : <span id="pending-withdraw-text"></span>
-        </div>
+    <!-- PAS DE WRAPPER CACHÉ — tout est visible par défaut -->
+    
+    <div class="hero-solde">
+      <div class="hero-label">Solde disponible</div>
+      <div class="hero-value" id="available-balance">0 F</div>
+      <div class="hero-actions">
+        <button class="hero-btn" id="request-withdraw-btn">↓ Demander un retrait</button>
       </div>
-
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-label">Filleuls</div>
-          <div class="stat-value" id="stat-referred-count">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">À recevoir</div>
-          <div class="stat-value" id="stat-pending">0 F</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Perçu</div>
-          <div class="stat-value" id="stat-paid">0 F</div>
-        </div>
-      </div>
-
-      <div class="actions-row">
-        <a href="/coupons.html" class="action-btn">
-          <div class="icon">⚽</div>
-          <div class="label">Coupons</div>
-        </a>
-        <a href="/abonnements.html" class="action-btn">
-          <div class="icon">💳</div>
-          <div class="label">Abonnement</div>
-        </a>
-        <a href="/resultats-historique.html" class="action-btn">
-          <div class="icon">📊</div>
-          <div class="label">Résultats</div>
-        </a>
-      </div>
-
-      <a href="#referral-section" class="center-card">
-        <div class="center-icon">🎁</div>
-        <div class="center-text">
-          <div class="center-title">Centre de parrainage</div>
-          <div class="center-desc">Gagne 20% de commissions</div>
-        </div>
-        <div class="center-arrow">›</div>
-      </a>
-
-      <div class="profile-compact">
-        <div class="avatar-sm" id="user-initials">?</div>
-        <div class="p-info">
-          <div class="p-name" id="user-fullname">Chargement...</div>
-          <div class="p-email" id="user-email">—</div>
-        </div>
-      </div>
-
-      <div class="sub-card">
-        <div class="sub-info">
-          <div class="sub-label">Mon abonnement</div>
-          <div class="sub-status" id="subscription-status">Chargement...</div>
-          <div style="font-size:0.72rem;color:var(--gray-text);margin-top:2px;" id="subscription-details"></div>
-        </div>
-        <a href="/abonnements.html" class="btn btn-primary">Gérer</a>
-      </div>
-
-      <div id="referral-section">
-        <div class="section-title">🎁 Mon parrainage</div>
-
-        <div class="referral-simple">
-          <div class="ref-code-line">
-            <div>
-              <div class="label">Mon code</div>
-              <div class="value" id="ref-code-display">—</div>
-            </div>
-            <button class="btn btn-primary" id="copy-code-btn">📋 Copier</button>
-          </div>
-
-          <div class="ref-link-line">
-            <input type="text" id="ref-link-display" readonly value="Chargement..." />
-            <button class="btn btn-outline" id="copy-link-btn">📋</button>
-          </div>
-
-          <div class="ref-mini-stats">
-            <div class="ref-mini-stat">
-              <div class="v" id="stat-total">0 F</div>
-              <div class="l">Total</div>
-            </div>
-            <div class="ref-mini-stat green">
-              <div class="v" id="stat-paid-2">0 F</div>
-              <div class="l">Perçu</div>
-            </div>
-            <div class="ref-mini-stat blue">
-              <div class="v" id="stat-pending-2">0 F</div>
-              <div class="l">En attente</div>
-            </div>
-            <div class="ref-mini-stat">
-              <div class="v" id="filleuls-count">0</div>
-              <div class="l">Filleuls</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="link-list" style="margin-top:24px;">
-        <a href="/profil.html" class="link-item">
-          <div class="link-icon">👤</div>
-          <div class="link-text">Mon profil</div>
-          <div class="link-arrow">›</div>
-        </a>
-        <a href="/historique-paiements.html" class="link-item">
-          <div class="link-icon">📄</div>
-          <div class="link-text">Historique des transactions</div>
-          <div class="link-arrow">›</div>
-        </a>
-        <a href="/legal/contact.html" class="link-item">
-          <div class="link-icon">🎧</div>
-          <div class="link-text">Service client</div>
-          <div class="link-arrow">›</div>
-        </a>
-        <a href="/admin/dashboard.html" id="admin-link" class="link-item" style="display:none;">
-          <div class="link-icon">🛡️</div>
-          <div class="link-text">Administration</div>
-          <div class="link-arrow">›</div>
-        </a>
-      </div>
-
     </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Filleuls</div>
+        <div class="stat-value" id="stat-referred-count">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">À recevoir</div>
+        <div class="stat-value" id="stat-pending">0 F</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Perçu</div>
+        <div class="stat-value" id="stat-paid">0 F</div>
+      </div>
+    </div>
+
+    <div class="actions-row">
+      <a href="/coupons.html" class="action-btn">
+        <div class="icon">⚽</div>
+        <div class="label">Coupons</div>
+      </a>
+      <a href="/abonnements.html" class="action-btn">
+        <div class="icon">💳</div>
+        <div class="label">Abonnement</div>
+      </a>
+      <a href="/resultats-historique.html" class="action-btn">
+        <div class="icon">📊</div>
+        <div class="label">Résultats</div>
+      </a>
+    </div>
+
+    <a href="#referral-section" class="center-card">
+      <div class="center-icon">🎁</div>
+      <div class="center-text">
+        <div class="center-title">Centre de parrainage</div>
+        <div class="center-desc">Gagne 20% de commissions</div>
+      </div>
+      <div class="center-arrow">›</div>
+    </a>
+
+    <div class="profile-compact">
+      <div class="avatar-sm" id="user-initials">?</div>
+      <div class="p-info">
+        <div class="p-name" id="user-fullname">Chargement...</div>
+        <div class="p-email" id="user-email">—</div>
+      </div>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-info">
+        <div class="sub-label">Mon abonnement</div>
+        <div class="sub-status" id="subscription-status">Chargement...</div>
+        <div style="font-size:0.72rem;color:var(--gray-text);margin-top:2px;" id="subscription-details"></div>
+      </div>
+      <a href="/abonnements.html" class="btn btn-primary">Gérer</a>
+    </div>
+
+    <div id="referral-section">
+      <div class="section-title">🎁 Mon parrainage</div>
+
+      <div class="referral-simple">
+        <div class="ref-code-line">
+          <div>
+            <div class="label">Mon code</div>
+            <div class="value" id="ref-code-display">—</div>
+          </div>
+          <button class="btn btn-primary" id="copy-code-btn">📋 Copier</button>
+        </div>
+
+        <div class="ref-link-line">
+          <input type="text" id="ref-link-display" readonly value="Chargement..." />
+          <button class="btn btn-outline" id="copy-link-btn">📋</button>
+        </div>
+
+        <div class="ref-mini-stats">
+          <div class="ref-mini-stat">
+            <div class="v" id="stat-total">0 F</div>
+            <div class="l">Total</div>
+          </div>
+          <div class="ref-mini-stat green">
+            <div class="v" id="stat-paid-2">0 F</div>
+            <div class="l">Perçu</div>
+          </div>
+          <div class="ref-mini-stat blue">
+            <div class="v" id="stat-pending-2">0 F</div>
+            <div class="l">En attente</div>
+          </div>
+          <div class="ref-mini-stat">
+            <div class="v" id="filleuls-count">0</div>
+            <div class="l">Filleuls</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="link-list" style="margin-top:24px;">
+      <a href="/profil.html" class="link-item">
+        <div class="link-icon">👤</div>
+        <div class="link-text">Mon profil</div>
+        <div class="link-arrow">›</div>
+      </a>
+      <a href="/historique-paiements.html" class="link-item">
+        <div class="link-icon">📄</div>
+        <div class="link-text">Historique des transactions</div>
+        <div class="link-arrow">›</div>
+      </a>
+      <a href="/legal/contact.html" class="link-item">
+        <div class="link-icon">🎧</div>
+        <div class="link-text">Service client</div>
+        <div class="link-arrow">›</div>
+      </a>
+      <a href="/admin/dashboard.html" id="admin-link" class="link-item" style="display:none;">
+        <div class="link-icon">🛡️</div>
+        <div class="link-text">Administration</div>
+        <div class="link-arrow">›</div>
+      </a>
+    </div>
+
   </div>
 </main>
 
@@ -328,4 +302,19 @@
       <input type="tel" id="wd-phone" placeholder="+2250700000000" />
     </div>
     <div class="wd-actions">
-      <button class="btn btn-outline" id="wd-cancel">A
+      <button class="btn btn-outline" id="wd-cancel">Annuler</button>
+      <button class="btn btn-primary" id="wd-confirm">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-copy" id="toast-copy">✅ Copié !</div>
+
+<div id="diag"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/auth-guard.js"></script>
+<script src="/assets/js/dashboard.js"></script>
+</body>
+            </html>
