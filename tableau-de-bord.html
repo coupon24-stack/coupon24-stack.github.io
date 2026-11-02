@@ -9,25 +9,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --navy: #0A1F44;
-      --blue: #1E4FD8;
+      --navy: #0A1F44; --blue: #1E4FD8;
       --blue-gradient: linear-gradient(135deg, #1339CB 0%, #2A5FEF 100%);
-      --bg: #F5F7FA;
-      --white: #FFFFFF;
-      --gray-text: #64748B;
-      --gray-dark: #1E293B;
-      --gray-light: #F1F5F9;
-      --border: #E2E8F0;
-      --green: #10B981;
-      --green-bg: #ECFDF5;
-      --gold: #F5A623;
-      --gold-bg: #FFF9E6;
-      --red: #EF4444;
-      --red-bg: #FEF2F2;
-      --radius-sm: 12px;
-      --radius-md: 16px;
-      --radius-lg: 20px;
-      --radius-pill: 999px;
+      --bg: #F5F7FA; --white: #FFFFFF;
+      --gray-text: #64748B; --gray-dark: #1E293B; --gray-light: #F1F5F9;
+      --border: #E2E8F0; --green: #10B981; --gold: #F5A623;
+      --gold-bg: #FFF9E6; --red: #EF4444; --red-bg: #FEF2F2;
+      --radius-sm: 12px; --radius-md: 16px; --radius-lg: 20px; --radius-pill: 999px;
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
       --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
       --shadow-blue: 0 10px 30px rgba(30,79,216,0.25);
@@ -135,14 +123,12 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .alert-error { background: var(--red-bg); color: var(--red); border: 1px solid #FECACA; padding: 12px; border-radius: 8px; display: none; font-size: 0.85rem; margin-bottom: 16px; }
 
-    /* CORRECTION : retiré le !important qui bloquait l'affichage */
-    .hidden { display: none; }
-
     .toast-copy { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gray-dark); color: white; padding: 10px 20px; border-radius: var(--radius-pill); font-weight: 600; font-size: 0.85rem; box-shadow: var(--shadow-md); transition: transform 0.3s ease; z-index: 9999; }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
 
-    .debug-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #991B1B; color: white; font-family: monospace; font-size: 11px; padding: 8px 12px; z-index: 99999; display: none; max-height: 120px; overflow-y: auto; }
-    .debug-bar.show { display: block; }
+    /* Barre de diagnostic */
+    #diag { position: fixed; bottom: 0; left: 0; right: 0; background: #0A1F44; color: #0f0; font-family: monospace; font-size: 11px; padding: 8px 12px; z-index: 99999; max-height: 40vh; overflow-y: auto; line-height: 1.5; }
+    #diag.hidden { display: none; }
 
     @media (max-width: 480px) {
       .container { padding: 0 16px; }
@@ -161,6 +147,9 @@
   </style>
 </head>
 <body>
+
+<!-- Barre de diagnostic EN PREMIER pour être sûre de la voir -->
+<div id="diag"><div>⏳ Chargement...</div></div>
 
 <nav class="navbar">
   <div class="container">
@@ -182,7 +171,6 @@
     <div id="dashboard-loading" class="loader"><div class="spinner"></div></div>
     <div id="dashboard-error" class="alert-error"></div>
 
-    <!-- CORRECTION : style inline au lieu de la classe hidden -->
     <div id="dashboard-content" style="display:none;">
 
       <div class="hero-solde">
@@ -337,4 +325,7 @@
     </div>
     <div class="wd-field">
       <label>Numéro de téléphone</label>
-      <input type="tel" id="wd-phone" pl
+      <input type="tel" id="wd-phone" placeholder="+2250700000000" />
+    </div>
+    <div class="wd-actions">
+      <button class="btn btn-outline" id="wd-cancel">A
