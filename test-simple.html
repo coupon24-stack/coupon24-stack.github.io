@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test simple</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f0f4f8; margin: 0; }
+    .test-box { background: white; padding: 20px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    h2 { margin: 0 0 12px; color: #0A1F44; font-size: 18px; }
+    .ok { color: #10B981; font-weight: bold; font-size: 18px; }
+    .ko { color: #EF4444; font-weight: bold; font-size: 18px; }
+    .info { color: #64748B; font-size: 13px; margin-top: 6px; }
+    #contenu-test { background: linear-gradient(135deg, #1339CB, #2A5FEF); color: white; padding: 24px; border-radius: 16px; margin-top: 16px; display: none; }
+    #contenu-test.show { display: block !important; }
+    .hidden-test { display: none; }
+    .hidden-test.show { display: block !important; }
+  </style>
+</head>
+<body>
+
+<div class="test-box">
+  <h2>🧪 Test simple</h2>
+  <div id="etat">⏳ Test en cours...</div>
+</div>
+
+<!-- Le contenu à tester - caché par défaut -->
+<div id="contenu-test">
+  <h3>✅ CONTENU AFFICHÉ !</h3>
+  <p>Si tu vois ceci, le JavaScript a bien réussi à afficher le contenu.</p>
+</div>
+
+<div id="contenu-hidden" class="hidden-test" style="background: white; padding: 20px; border-radius: 12px; margin-top: 16px;">
+  <h3>✅ CONTENU 2 AFFICHÉ (hidden-test)</h3>
+</div>
+
+<div class="test-box">
+  <h2>📋 Journal</h2>
+  <div id="log" style="font-family: monospace; font-size: 12px; line-height: 1.8;"></div>
+</div>
+
+<script>
+  const logEl = document.getElementById('log');
+  function log(msg, color) {
+    const line = document.createElement('div');
+    line.textContent = msg;
+    if (color) line.style.color = color;
+    logEl.appendChild(line);
+  }
+  
+  log('1. Script JS chargé');
+  
+  setTimeout(() => {
+    log('2. Test après 100ms');
+    
+    const etatEl = document.getElementById('etat');
+    const contenuEl = document.getElementById('contenu-test');
+    const hiddenEl = document.getElementById('contenu-hidden');
+    
+    let results = [];
+    
+    // Test 1 : forcer l'affichage via style.display
+    try {
+      if (contenuEl) {
+        contenuEl.style.display = 'block';
+        results.push('✅ style.display = block fonctionne');
+        log('3. style.display = block appliqué', '#0f0');
+      } else {
+        results.push('❌ #contenu-test introuvable');
+        log('3. #contenu-test introuvable', '#f88');
+      }
+    } catch (e) {
+      results.push('❌ Exception : ' + e.message);
+      log('3. Exception : ' + e.message, '#f88');
+    }
+    
+    // Test 2 : ajouter une classe
+    try {
+      if (hiddenEl) {
+        hiddenEl.classList.add('show');
+        hiddenEl.style.display = 'block';
+        results.push('✅ classList.add("show") fonctionne');
+        log('4. classList.add("show") appliqué', '#0f0');
+      }
+    } catch (e) {
+      results.push('❌ Exception class : ' + e.message);
+      log('4. Exception class : ' + e.message, '#f88');
+    }
+    
+    // Vérifier l'affichage réel
+    if (contenuEl) {
+      const style = window.getComputedStyle(contenuEl);
+      log('5. Computed display de #contenu-test : ' + style.display, style.display === 'block' ? '#0f0' : '#f88');
+      results.push('Display calculé : ' + style.display);
+    }
+    
+    // Afficher le résultat final
+    etatEl.innerHTML = results.map(r => '<div>' + r + '</div>').join('');
+    
+  }, 100);
+</script>
+
+</body>
+</html>
