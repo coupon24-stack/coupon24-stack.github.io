@@ -6,7 +6,8 @@
   <title>COUPON24 — Tes coupons de football, chaque jour !</title>
   <meta name="description" content="Découvre tes coupons football du jour. Pronostics gratuits et premium, analyses de matchs et abonnements adaptés." />
 
-  <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg" />
+  <!-- FAVICON + PWA (utilise le PNG) -->
+  <link rel="icon" type="image/png" href="/assets/images/logo-512.png" />
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#0A1F44" />
   <link rel="apple-touch-icon" href="/assets/images/logo-512.png" />
@@ -25,7 +26,7 @@
     .container { width:100%; max-width:1200px; margin:0 auto; padding:0 24px; }
 
     .logo { display:flex; align-items:center; gap:10px; font-family:'Poppins',sans-serif; font-weight:800; font-size:1.6rem; color:var(--navy); letter-spacing:-0.5px; flex-shrink:0; }
-    .logo img { width:38px; height:38px; border-radius:10px; flex-shrink:0; }
+    .logo img { width:38px; height:38px; border-radius:10px; flex-shrink:0; object-fit:cover; }
 
     .navbar { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(255,255,255,0.98); border-bottom:1px solid rgba(10,31,68,0.06); transition:0.25s ease; }
     .navbar .container { display:flex; align-items:center; justify-content:space-between; height:72px; gap:12px; }
@@ -120,6 +121,7 @@
     footer { background:var(--navy); color:rgba(255,255,255,0.8); padding:64px 0 32px; }
     .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:48px; margin-bottom:48px; }
     .footer-brand .logo { color:white; margin-bottom:16px; }
+    .footer-brand .logo img { width:38px; height:38px; border-radius:10px; }
     .footer-brand p { font-size:0.9rem; line-height:1.7; max-width:300px; color:rgba(255,255,255,0.65); }
     .footer-col h4 { color:white; font-size:0.95rem; font-weight:600; margin-bottom:18px; }
     .footer-col ul li { margin-bottom:10px; }
@@ -168,7 +170,7 @@
 <nav class="navbar" id="navbar">
   <div class="container">
     <a href="/index.html" class="logo" aria-label="COUPON24 - Accueil">
-      <img src="/assets/images/logo.svg" alt="COUPON24" />
+      <img src="/assets/images/logo-512.png" alt="COUPON24" />
       <span>COUPON<span style="color: var(--blue);">24</span></span>
     </a>
 
@@ -269,11 +271,4 @@
             <div class="coupon-stat"><div class="value">🔒</div><div class="label">Cote totale</div></div>
           </div>
           <span class="coupon-status status-bientot">🔒 Réservé aux abonnés</span>
-          <a href="/abonnements.html" class="btn btn-primary">S'abonner pour voir</a>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section id="avantages
+          <a href="/abonnements
