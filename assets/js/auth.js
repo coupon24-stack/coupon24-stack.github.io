@@ -31,7 +31,7 @@ function getRedirectUrl(defaultUrl = '/tableau-de-bord.html') {
 }
 
 // ============================================================
-// VÉRIFICATION DU CODE DE PARRAINAGE (PROPRE)
+// VÉRIFICATION DU CODE DE PARRAINAGE (SÉCURISÉE)
 // ============================================================
 async function checkReferralCode(code) {
   if (!code || code.length < 5) return null;
@@ -89,10 +89,10 @@ if (signupForm) {
       }
 
       referralTimeout = setTimeout(async () => {
-        const name = await checkReferralCode(code);
-        if (name) {
+        const isValid = await checkReferralCode(code);
+        if (isValid) {
           referralFeedback.className = 'referral-feedback valid';
-          referralFeedback.textContent = `✅ Parrain : ${name}`;
+          referralFeedback.textContent = `✅ Code valide`;
         } else {
           referralFeedback.className = 'referral-feedback invalid';
           referralFeedback.textContent = `❌ Code invalide`;
@@ -126,8 +126,8 @@ if (signupForm) {
     }
 
     if (referralCode) {
-      const referrerName = await checkReferralCode(referralCode);
-      if (!referrerName) {
+      const isValidReferral = await checkReferralCode(referralCode);
+      if (!isValidReferral) {
         return showAlert('Le code de parrainage est invalide. Vérifie-le ou laisse vide.');
       }
     }
@@ -266,4 +266,4 @@ if (resetForm) {
       setLoading(false);
     }
   });
-        }
+  }
