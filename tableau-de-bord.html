@@ -9,13 +9,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --navy: #0A1F44; --blue: #1E4FD8;
+      --navy: #0A1F44;
+      --blue: #1E4FD8;
       --blue-gradient: linear-gradient(135deg, #1339CB 0%, #2A5FEF 100%);
-      --bg: #F5F7FA; --white: #FFFFFF;
-      --gray-text: #64748B; --gray-dark: #1E293B; --gray-light: #F1F5F9;
-      --border: #E2E8F0; --green: #10B981; --gold: #F5A623;
-      --gold-bg: #FFF9E6; --red: #EF4444; --red-bg: #FEF2F2;
-      --radius-sm: 12px; --radius-md: 16px; --radius-lg: 20px; --radius-pill: 999px;
+      --bg: #F5F7FA;
+      --white: #FFFFFF;
+      --gray-text: #64748B;
+      --gray-dark: #1E293B;
+      --gray-light: #F1F5F9;
+      --border: #E2E8F0;
+      --green: #10B981;
+      --gold: #F5A623;
+      --gold-bg: #FFF9E6;
+      --red: #EF4444;
+      --red-bg: #FEF2F2;
+      --radius-sm: 12px;
+      --radius-md: 16px;
+      --radius-lg: 20px;
+      --radius-pill: 999px;
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
       --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
       --shadow-blue: 0 10px 30px rgba(30,79,216,0.25);
@@ -29,11 +40,12 @@
     .navbar { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
     .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 12px; max-width: 900px; }
     .logo { display:flex; align-items:center; gap:8px; font-family:'Poppins'; font-weight:700; font-size:1.3rem; color: var(--navy); flex-shrink: 0; }
-    .logo-ball { width:28px; height:28px; background:var(--blue-gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.85rem; flex-shrink: 0; }
+    .logo img { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
     .nav-right { display:flex; align-items:center; gap:8px; flex-shrink: 0; }
+    
     .btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:9px 18px; border-radius:var(--radius-pill); font-family:'Inter'; font-size:0.85rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; white-space: nowrap; }
-    .btn-outline { background: transparent; color: var(--gray-dark); border: 1.5px solid var(--border); }
-    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-danger { background: #FEE2E2; color: #991B1B; }
+    .btn-danger:hover { background: #FECACA; transform: translateY(-1px); }
     .btn-primary { background: var(--blue-gradient); color: white; box-shadow: 0 4px 12px rgba(30,79,216,0.25); }
 
     main { padding: 24px 0 60px; }
@@ -115,9 +127,6 @@
     .toast-copy { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gray-dark); color: white; padding: 10px 20px; border-radius: var(--radius-pill); font-weight: 600; font-size: 0.85rem; box-shadow: var(--shadow-md); transition: transform 0.3s ease; z-index: 9999; }
     .toast-copy.show { transform: translateX(-50%) translateY(0); }
 
-    /* Barre de diagnostic — masquée en production */
-    #diag { display: none; }
-
     @media (max-width: 480px) {
       .container { padding: 0 16px; }
       .page-title { font-size: 1.2rem; }
@@ -128,6 +137,8 @@
       .action-btn { padding: 14px 6px 10px; }
       .action-btn .icon { font-size: 1.2rem; }
       .action-btn .label { font-size: 0.75rem; }
+      .logo img { width: 28px; height: 28px; }
+      .btn-danger { padding: 8px 14px; font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -136,11 +147,11 @@
 <nav class="navbar">
   <div class="container">
     <a href="/index.html" class="logo">
-      <span class="logo-ball">⚽</span>
+      <img src="/assets/images/logo-512.png" alt="COUPON24" />
       <span>COUPON24</span>
     </a>
     <div class="nav-right">
-      <a href="/coupons.html" class="btn btn-outline">Coupons</a>
+      <button id="logout-btn" class="btn btn-danger">Déconnexion</button>
     </div>
   </div>
 </nav>
@@ -309,12 +320,20 @@
 
 <div class="toast-copy" id="toast-copy">✅ Copié !</div>
 
-<!-- Barre de diagnostic masquée (garde les logs console) -->
-<div id="diag" style="display:none;"></div>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/assets/js/supabase-client.js"></script>
 <script src="/assets/js/auth-guard.js"></script>
 <script src="/assets/js/dashboard.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        await supabaseClient.auth.signOut();
+        window.location.href = '/index.html';
+      });
+    }
+  });
+</script>
 </body>
-          </html>
+  </html>
