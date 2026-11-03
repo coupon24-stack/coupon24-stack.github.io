@@ -1,5 +1,5 @@
 // frontend/assets/js/auth.js
-// Authentification avec support du parrainage.
+// Authentification avec support du parrainage sécurisé.
 
 function showAlert(message, type = 'error') {
   const box = document.getElementById('alert-box');
@@ -31,18 +31,23 @@ function getRedirectUrl(defaultUrl = '/tableau-de-bord.html') {
 }
 
 // ============================================================
-// VÉRIFICATION DU CODE DE PARRAINAGE (temps réel)
+// VÉRIFICATION DU CODE DE PARRAINAGE (SÉCURISÉE)
 // ============================================================
 async function checkReferralCode(code) {
   if (!code || code.length < 5) return null;
   try {
-    const { data, error } = await supabaseClient
-      .from('profiles')
-      .select('full_name')
-      .eq('referral_code', code.toUpperCase())
-      .maybeSingle();
-    if (error || !data) return null;
-    return data.full_name || 'un membre';
+    // Utilise la fonction RPC sécurisée qui contourne la RLS
+    const { data, error } = await supabaseClient.rpc('check_referral_code', {
+      p_code: code.toUpperCase().trim()
+    });
+    
+    if (error) {
+      console.warn('[referral check] RPC error:', error);
+      return null;
+    }
+    
+    if (!data || !data.valid) return null;
+    return data.referrer_name || 'un membre';
   } catch (e) {
     console.warn('[referral check]', e);
     return null;
@@ -71,46 +76,45 @@ if (signupForm) {
   const submitBtn = document.getElementById('submit-btn');
   if (submitBtn) submitBtn.dataset.originalText = submitBtn.textContent;
 
-  // Pré-remplir depuis l'URL
   initReferralFromUrl();
 
-  // Vérification temps réel du code de parrainage
   const referralInput = document.getElementById('referral_code');
   const referralFeedback = document.getElementById('referral-feedback');
   let referralTimeout;
 
-  referralInput?.addEventListener('input', (e) => {
-    e.target.value = e.target.value.toUpperCase();
-    clearTimeout(referralTimeout);
+  if (referralInput) {
+    referralInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.toUpperCase();
+      clearTimeout(referralTimeout);
 
-    const code = e.target.value.trim();
-    if (!referralFeedback) return;
+      const code = e.target.value.trim();
+      if (!referralFeedback) return;
 
-    if (!code) {
-      referralFeedback.className = 'referral-feedback';
-      referralFeedback.textContent = '';
-      return;
-    }
-
-    if (code.length < 5) {
-      referralFeedback.className = 'referral-feedback';
-      referralFeedback.textContent = '';
-      return;
-    }
-
-    referralTimeout = setTimeout(async () => {
-      const name = await checkReferralCode(code);
-      if (name) {
-        referralFeedback.className = 'referral-feedback valid';
-        referralFeedback.textContent = `✅ Parrain : ${name}`;
-      } else {
-        referralFeedback.className = 'referral-feedback invalid';
-        referralFeedback.textContent = `❌ Code invalide`;
+      if (!code) {
+        referralFeedback.className = 'referral-feedback';
+        referralFeedback.textContent = '';
+        return;
       }
-    }, 500);
-  });
 
-  // Soumission
+      if (code.length < 5) {
+        referralFeedback.className = 'referral-feedback';
+        referralFeedback.textContent = '';
+        return;
+      }
+
+      referralTimeout = setTimeout(async () => {
+        const name = await checkReferralCode(code);
+        if (name) {
+          referralFeedback.className = 'referral-feedback valid';
+          referralFeedback.textContent = `✅ Parrain : ${name}`;
+        } else {
+          referralFeedback.className = 'referral-feedback invalid';
+          referralFeedback.textContent = `❌ Code invalide`;
+        }
+      }, 500);
+    });
+  }
+
   signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideAlert();
@@ -135,7 +139,6 @@ if (signupForm) {
       return showAlert('Les deux mots de passe ne correspondent pas.');
     }
 
-    // Valider le code de parrainage s'il est renseigné
     if (referralCode) {
       const referrerName = await checkReferralCode(referralCode);
       if (!referrerName) {
