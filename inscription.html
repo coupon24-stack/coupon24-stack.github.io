@@ -4,14 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inscription — COUPON24</title>
+  
+  <link rel="icon" type="image/png" href="/assets/images/logo-512.png" />
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root { --navy:#0A1F44; --blue:#1E4FD8; --blue-gradient:linear-gradient(135deg,#0A1F44 0%,#1E4FD8 100%); --sky:#E8F0FE; --gray-text:#4A5568; --red:#E53E3E; --green:#27AE60; --gold:#F5A623; --radius:16px; --radius-pill:999px; --shadow:0 4px 20px rgba(10,31,68,0.06); }
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Inter',sans-serif; background:#F7F9FC; display:flex; justify-content:center; align-items:flex-start; min-height:100vh; padding:16px; color:var(--navy); }
-    .auth-card { background:white; width:100%; max-width:420px; border-radius:var(--radius); box-shadow:var(--shadow); padding:24px 20px; }
+    .auth-card { background:white; width:100%; max-width:420px; border-radius:var(--radius); box-shadow:var(--shadow); padding:24px 20px; margin-top: 20px; margin-bottom: 20px; }
+    
     .logo { display:flex; align-items:center; justify-content:center; gap:10px; font-family:'Poppins'; font-weight:800; font-size:1.4rem; margin-bottom:6px; }
-    .logo-ball { width:30px; height:30px; background:var(--blue-gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1rem; }
+    .logo img { width: 56px; height: 56px; border-radius: 14px; object-fit: cover; }
+    
     h1 { font-family:'Poppins'; font-size:1.25rem; text-align:center; margin-bottom:4px; }
     .subtitle { text-align:center; color:var(--gray-text); font-size:0.82rem; margin-bottom:16px; }
     .form-group { margin-bottom:10px; }
@@ -23,16 +28,22 @@
     input:focus { outline:none; border-color:var(--blue); }
     .hint { font-size:0.7rem; color:var(--gray-text); margin-top:3px; }
 
-    /* Champ parrainage compact */
+    /* Nouveau design du champ parrainage : épuré et moderne */
     .referral-box {
-      background: linear-gradient(135deg, #FFF9E6, #FFF4E5);
-      border: 1px solid #FFD98A;
-      border-radius: 10px;
-      padding: 10px 12px;
-      margin-bottom: 12px;
+      background: #F8FAFC;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      transition: all 0.2s ease;
+    }
+    .referral-box:focus-within {
+      border-color: var(--blue);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(30,79,216,0.1);
     }
     .referral-box label {
-      color: #B45309;
+      color: var(--navy);
       margin-bottom: 6px;
       display: flex;
       align-items: center;
@@ -40,15 +51,19 @@
       font-size: 0.78rem;
     }
     .referral-box input {
-      border-color: #FFD98A;
-      background: white;
+      border: none;
+      background: transparent;
+      padding: 0;
       text-transform: uppercase;
       font-family: 'Courier New', monospace;
       font-weight: 700;
       letter-spacing: 2px;
       font-size: 0.95rem;
+      color: var(--navy);
+      width: 100%;
     }
-    .referral-box input:focus { border-color: var(--gold); }
+    .referral-box input:focus { outline: none; }
+    
     .referral-box .referral-feedback {
       font-size: 0.75rem;
       margin-top: 4px;
@@ -57,11 +72,14 @@
     }
     .referral-box .referral-feedback.valid { color: var(--green); display: block; }
     .referral-box .referral-feedback.invalid { color: var(--red); display: block; }
+    
     .referral-box .referral-hint {
       font-size: 0.7rem;
-      color: #92400E;
-      margin-top: 6px;
+      color: var(--gray-text);
+      margin-top: 8px;
       line-height: 1.4;
+      padding-top: 8px;
+      border-top: 1px dashed #E2E8F0;
     }
 
     .checkbox-group { display:flex; align-items:flex-start; gap:8px; font-size:0.78rem; margin-bottom:14px; margin-top: 4px; }
@@ -87,8 +105,7 @@
 
 <div class="auth-card">
   <div class="logo">
-    <span class="logo-ball">⚽</span>
-    <span>COUPON<span style="color: var(--blue);">24</span></span>
+    <img src="/assets/images/logo-512.png" alt="COUPON24" />
   </div>
   <h1>Crée ton compte</h1>
   <p class="subtitle">Rejoins COUPON24 et accède aux coupons football.</p>
@@ -122,8 +139,9 @@
       <input type="password" id="confirm_password" placeholder="Répète ton mot de passe" required />
     </div>
 
+    <!-- Nouveau design épuré du parrainage -->
     <div class="referral-box" id="referral-box">
-      <label for="referral_code">🎁 Code de parrainage <span style="font-weight:400;font-size:0.72rem;color:#92400E;">(optionnel)</span></label>
+      <label for="referral_code">🎁 Code de parrainage <span style="font-weight:400;font-size:0.72rem;color:var(--gray-text);">(optionnel)</span></label>
       <input type="text" id="referral_code" maxlength="9" placeholder="Ex: USER-XXXX" autocomplete="off" />
       <div class="referral-feedback" id="referral-feedback"></div>
       <div class="referral-hint">
