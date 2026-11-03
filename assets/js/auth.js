@@ -1,5 +1,5 @@
 // frontend/assets/js/auth.js
-// Authentification avec support du parrainage sécurisé (mode diagnostic).
+// Authentification avec support du parrainage sécurisé.
 
 function showAlert(message, type = 'error') {
   const box = document.getElementById('alert-box');
@@ -31,7 +31,7 @@ function getRedirectUrl(defaultUrl = '/tableau-de-bord.html') {
 }
 
 // ============================================================
-// VÉRIFICATION DU CODE DE PARRAINAGE (SÉCURISÉE + DIAGNOSTIC)
+// VÉRIFICATION DU CODE DE PARRAINAGE (PROPRE)
 // ============================================================
 async function checkReferralCode(code) {
   if (!code || code.length < 5) return null;
@@ -39,32 +39,10 @@ async function checkReferralCode(code) {
     const { data, error } = await supabaseClient.rpc('check_referral_code', {
       p_code: code.toUpperCase().trim()
     });
-    
-    if (error) {
-      const feedback = document.getElementById('referral-feedback');
-      if (feedback) {
-        feedback.className = 'referral-feedback invalid';
-        feedback.textContent = '❌ Erreur : ' + error.message;
-      }
-      return null;
-    }
-    
-    if (!data || !data.valid) {
-      const feedback = document.getElementById('referral-feedback');
-      if (feedback) {
-        feedback.className = 'referral-feedback invalid';
-        feedback.textContent = '❌ Invalide (réponse : ' + JSON.stringify(data) + ')';
-      }
-      return null;
-    }
-    
+    if (error || !data || !data.valid) return null;
     return data.referrer_name || 'un membre';
   } catch (e) {
-    const feedback = document.getElementById('referral-feedback');
-    if (feedback) {
-      feedback.className = 'referral-feedback invalid';
-      feedback.textContent = '❌ Exception : ' + e.message;
-    }
+    console.warn('[referral check]', e);
     return null;
   }
 }
@@ -115,8 +93,10 @@ if (signupForm) {
         if (name) {
           referralFeedback.className = 'referral-feedback valid';
           referralFeedback.textContent = `✅ Parrain : ${name}`;
+        } else {
+          referralFeedback.className = 'referral-feedback invalid';
+          referralFeedback.textContent = `❌ Code invalide`;
         }
-        // Sinon, le message d'erreur est déjà affiché par checkReferralCode
       }, 500);
     });
   }
@@ -286,4 +266,4 @@ if (resetForm) {
       setLoading(false);
     }
   });
-      }
+        }
