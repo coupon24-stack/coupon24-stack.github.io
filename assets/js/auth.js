@@ -1,5 +1,5 @@
 // frontend/assets/js/auth.js
-// Authentification avec support du parrainage sécurisé.
+// Authentification avec support du parrainage sécurisé (mode diagnostic).
 
 function showAlert(message, type = 'error') {
   const box = document.getElementById('alert-box');
@@ -31,25 +31,40 @@ function getRedirectUrl(defaultUrl = '/tableau-de-bord.html') {
 }
 
 // ============================================================
-// VÉRIFICATION DU CODE DE PARRAINAGE (SÉCURISÉE)
+// VÉRIFICATION DU CODE DE PARRAINAGE (SÉCURISÉE + DIAGNOSTIC)
 // ============================================================
 async function checkReferralCode(code) {
   if (!code || code.length < 5) return null;
   try {
-    // Utilise la fonction RPC sécurisée qui contourne la RLS
     const { data, error } = await supabaseClient.rpc('check_referral_code', {
       p_code: code.toUpperCase().trim()
     });
     
     if (error) {
-      console.warn('[referral check] RPC error:', error);
+      const feedback = document.getElementById('referral-feedback');
+      if (feedback) {
+        feedback.className = 'referral-feedback invalid';
+        feedback.textContent = '❌ Erreur : ' + error.message;
+      }
       return null;
     }
     
-    if (!data || !data.valid) return null;
+    if (!data || !data.valid) {
+      const feedback = document.getElementById('referral-feedback');
+      if (feedback) {
+        feedback.className = 'referral-feedback invalid';
+        feedback.textContent = '❌ Invalide (réponse : ' + JSON.stringify(data) + ')';
+      }
+      return null;
+    }
+    
     return data.referrer_name || 'un membre';
   } catch (e) {
-    console.warn('[referral check]', e);
+    const feedback = document.getElementById('referral-feedback');
+    if (feedback) {
+      feedback.className = 'referral-feedback invalid';
+      feedback.textContent = '❌ Exception : ' + e.message;
+    }
     return null;
   }
 }
@@ -63,7 +78,6 @@ function initReferralFromUrl() {
   const refFromUrl = params.get('ref');
   if (refFromUrl) {
     input.value = refFromUrl.toUpperCase();
-    // Déclencher la vérification
     input.dispatchEvent(new Event('input'));
   }
 }
@@ -90,13 +104,7 @@ if (signupForm) {
       const code = e.target.value.trim();
       if (!referralFeedback) return;
 
-      if (!code) {
-        referralFeedback.className = 'referral-feedback';
-        referralFeedback.textContent = '';
-        return;
-      }
-
-      if (code.length < 5) {
+      if (!code || code.length < 5) {
         referralFeedback.className = 'referral-feedback';
         referralFeedback.textContent = '';
         return;
@@ -107,10 +115,8 @@ if (signupForm) {
         if (name) {
           referralFeedback.className = 'referral-feedback valid';
           referralFeedback.textContent = `✅ Parrain : ${name}`;
-        } else {
-          referralFeedback.className = 'referral-feedback invalid';
-          referralFeedback.textContent = `❌ Code invalide`;
         }
+        // Sinon, le message d'erreur est déjà affiché par checkReferralCode
       }, 500);
     });
   }
@@ -280,4 +286,4 @@ if (resetForm) {
       setLoading(false);
     }
   });
-}
+      }
